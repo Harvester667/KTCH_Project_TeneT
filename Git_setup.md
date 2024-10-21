@@ -107,15 +107,17 @@ Kattints a Generate token gombra, és másold ki a létrehozott tokent. Jegyezd 
 <hr>
 Ha nem szeretnéd minden push-nál beírni a PAT jelszódat, használhatod a Credential Manager-t, ami tárolja és szükség esetén beilleszti azt.<br>
 A PAT jelszót tárolhatod ideiglenesen, amíg újra nem indítod a számítógépet, vagy maradandóan a számítőgép újraindítását követően is.<br>
-
-
+<br>
 Linux/macOS
 
     git config --global credential.helper cache
+
 Ideiglenesen, vagy:<br>
 
     git config --global credential.helper store
+
 maradandóan.<br>
+
 >cache: Ez az opció csak ideiglenesen tárolja a hitelesítő adatokat, és a gép újraindításakor elfelejti azokat.<br>
 store: Ez tartósan elmenti a hitelesítő adatokat egy egyszerű szöveges file-ba, amely a .gitconfig könyvtárban található, így a gép újraindítása után is emlékezni fog rá.<br>
 
@@ -127,6 +129,4 @@ macOS
 
     git config --global credential.helper osxkeychain
 >Ez a parancs az Apple Keychain-t használja, így a PAT tárolva lesz a macOS rendszer saját kulcstartó alkalmazásában.<br>
-Windows ?
 
-    git config --global credential.helper manager-core
