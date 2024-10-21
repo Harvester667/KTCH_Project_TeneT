@@ -8,7 +8,7 @@ A commitok mellett megjelenő név
 
     git config --global user.email "a.te.email@pelda.com"
 A commitok mellett feltüntetett email cím
---global #Globális beállítások az összes repository-hoz amit a gépen létrehozunk
+	--global Globális beállítások az összes repository-hoz amit a gépen létrehozunk
 
     mkdir KTCH_Project_TeneT
 Létrehozza a KTCH_Project_TeneT nevű könyvtárat, amely a projekted lesz
@@ -35,10 +35,10 @@ Minden file-t hozzáad a stageing-, cache-hez
 A README.md file-t hozzáadja a stageing-, cache-hez
 
     git status
-Megmutatja a repository aktuális állapotát
-Mely fájlok vannak a staging, cache területen (commit-ra várva).
-Mely fájlok változtak, de még nincsenek hozzáadva a staging, cache területhez.
-Bármilyen egyéb releváns információ a repository-ról (például, ha egy fájlt töröltél, de még nem commit-oltad a törlést).
+	Megmutatja a repository aktuális állapotát
+	Mely fájlok vannak a staging, cache területen (commit-ra várva).
+	Mely fájlok változtak, de még nincsenek hozzáadva a staging, cache területhez.
+	Bármilyen egyéb releváns információ a repository-ról (például, ha egy fájlt töröltél, de még nem commit-oltad a törlést).
 
     git restore --staged .
 Az összes fájl visszavonása a staged-ről
@@ -47,19 +47,19 @@ Az összes fájl visszavonása a staged-ről
 A README.md file visszavonása a staged-ről
 
     git rm --cached README.md
-git rm: Eltávolít egy fájlt a Git nyilvántartásából (általában a fájlt törli is a fájlrendszerből).
---cached: Ez az opció azt mondja a Gitnek, hogy csak a staging területről távolítsa el a fájlt, de hagyja meg a fájlt a könyvtárban. A fájl innentől kezdve nem lesz követve a Git által, amíg újra nem adod hozzá.
+	git rm: Eltávolít egy fájlt a Git nyilvántartásából (általában a fájlt törli is a fájlrendszerből).
+	--cached: Ez az opció azt mondja a Gitnek, hogy csak a staging területről távolítsa el a fájlt, de hagyja meg a fájlt a könyvtárban. A fájl innentől kezdve nem lesz követve a Git által, amíg újra nem adod hozzá.
 
     git restore --staged README.md
-git restore: Eredetileg a fájlokat egy korábbi commit állapotára állítja vissza.
---staged: Ez az opció csak a staging területen végzi el a visszaállítást. A staging területről kivonja a fájlt, de a fájl maga a munkakönyvtárban megmarad az utolsó commit szerinti állapotában.
+>git restore: Eredetileg a fájlokat egy korábbi commit állapotára állítja vissza.
+>--staged: Ez az opció csak a staging területen végzi el a visszaállítást. A staging területről kivonja a fájlt, de a fájl maga a munkakönyvtárban megmarad az utolsó commit szerinti állapotában.
 
 Különbségek:
 
     git rm --cached
-Eltávolítja a fájlt a Git követéséből (azaz a következő commit után a Git többé nem fogja nyomon követni a fájlt).
-A fájl megmarad a könyvtárban, de a Git számára úgy fog kinézni, mintha már nem létezne.
-Akkor hasznos, ha egy fájlt már nem akarsz nyomon követni, de megtartanád a helyi fájlrendszeredben.
+>Eltávolítja a fájlt a Git követéséből (azaz a következő commit után a Git többé nem fogja nyomon követni a fájlt).
+>A fájl megmarad a könyvtárban, de a Git számára úgy fog kinézni, mintha már nem létezne.
+>Akkor hasznos, ha egy fájlt már nem akarsz nyomon követni, de megtartanád a helyi fájlrendszeredben.
 
     git restore --staged
 Csak a staging területről vonja vissza a fájlt, és az utolsó commit állapotára állítja vissza. A fájl továbbra is követve lesz.
