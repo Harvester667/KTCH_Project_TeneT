@@ -73,9 +73,9 @@ Ezek közül a git rm --cached akkor jön jól, ha végleg meg akarod szüntetni
 -m opció nélkül a Git megnyitja a szövegszerkesztőt.<br>
 
     git push -u origin main
-    <br>
+<br>
     git push -set--upstream origin main
-    <br>
+<br>
 >Beállítja az alapértelmezett upstream ágat, így nem kell minden további push-nál megadni azt.<br>
 Az origin a remote prepository neve, amivel össze kell kötni a helyi gépen található repository-t.<br>
 A main a branch/ág neve amit fel akarok tölteni.<br>
@@ -111,9 +111,9 @@ A PAT jelszót tárolhatod ideiglenesen, amíg újra nem indítod a számítóg�
 Linux/macOS
 
     git config --global credential.helper cache
-    <br>
+   <br>
     git config --global credential.helper store
-    <br>
+   <br>
 >cache: Ez az opció csak ideiglenesen tárolja a hitelesítő adatokat, és a gép újraindításakor elfelejti azokat.<br>
 store: Ez tartósan elmenti a hitelesítő adatokat egy egyszerű szöveges file-ba, amely a .gitconfig könyvtárban található, így a gép újraindítása után is emlékezni fog rá.<br>
 
