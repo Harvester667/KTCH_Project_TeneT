@@ -57,9 +57,9 @@ git restore --staged README.md
 #Különbségek:
 
     git rm --cached:
-        Eltávolítja a fájlt a Git követéséből (azaz a következő commit után a Git többé nem fogja nyomon követni a fájlt).
-        A fájl megmarad a könyvtárban, de a Git számára úgy fog kinézni, mintha már nem létezne.
-        Akkor hasznos, ha egy fájlt már nem akarsz nyomon követni, de megtartanád a helyi fájlrendszeredben.
+#Eltávolítja a fájlt a Git követéséből (azaz a következő commit után a Git többé nem fogja nyomon követni a fájlt).
+#A fájl megmarad a könyvtárban, de a Git számára úgy fog kinézni, mintha már nem létezne.
+#Akkor hasznos, ha egy fájlt már nem akarsz nyomon követni, de megtartanád a helyi fájlrendszeredben.
 
     git restore --staged:
         Csak a staging területről vonja vissza a fájlt, és az utolsó commit állapotára állítja vissza. A fájl továbbra is követve lesz.
