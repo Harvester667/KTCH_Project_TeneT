@@ -88,10 +88,54 @@ A main a branch/ág neve amit fel akarok tölteni.<br>
 >Megjeleníti a hozzáadott távoli repository-kat.<br>
 
     git push
->Feltölti a távoli repository-ba a változásokat.<br>
+>Feltölti a távoli repository-ba a local repository commit-olt változásokat.<br>
 
     git fetch
->Letölti a távoli repository-ból a változásokat.<br>
+>Letölti a távoli repository-ból a változásokat anélkül, hogy hatással lenne a helyi munka könyvtárra.<br>
+Akkor használjuk ezt a módszert ha le szeretnénk tölteni a távoli repository status-át, de meg akarjuk nézni a változásokat mielőtt frissítjük a local repository-t.<br>
+Ahhoz, hogy érvénybe léptessük a változásokat a local branch-en, futtatnunk kell a "git merge" vagy "git rebase" utasításokat.<br>
+
+    git pull
+>Ez az utasítás kombinálja a "git fetch" és a "git merge" vagy a "git rebase" utasításokat egyetlen parancsba. Így letölti a változásokat a remote repository-ból és automatikusan integrálja azt az aktuális local branch-be.<br>
+A "git pull" utasítás alkalmas a változások gyors letöltésére és integrálására a local branch-be, de ütközéseket okozhat, ezért különösen figyelni kell a használatára, főleg amikor több ember dolgozik ugyanazon a kódon.<br> 
+
+    git merge
+>https://www.atlassian.com/git/tutorials/merging-vs-rebasing<br>
+https://www.simplilearn.com/git-rebase-vs-merge-article<br>
+A "git merge" egyesíti a git branch-eket, miközben a commit-ok változatlanok maradnak.<br>
+
+    git rebase
+>https://medium.com/@turkelturk/git-rebase-explained-9f470329e942<br>
+https://education.launchcode.org/linux/git/walkthrough/merging/git-rebase/index.html<br>
+A "git rebase" szintén egyesíti a git branch-eket, de lehetőséget ad a commit-ok újraírására.<br>
+
+Különbségek:<br>
+A "git rebase" egybesűríti az összes változást és beilleszti egy új patch-be a cél ágon. Ezután végigvezeti a befejezett munkát egyik ágról a másikra, jellemzően a master ágon. A folyamat közben a "rebase" elsimítja a történetet, eltávolítva a nemkívánatos bejegyzéseket.<br>
+<br>
+Ezzel szemben a "git merge" csak a cél ágat módosítja és erről készít egy commit-ot, ezzel megőrizve az eredeti történetet. Ez sokszor átláthatatlanná teszi a sok commit-ot.<br>
+Az alapvető különbség a "git merge" és a "git rebase" között, hogy a "merge" egyesíti a változásokat egy ágból (source branc) egy másik ágba (target branch), míg a "rebase" végigvezeti a változásokat az egyik ágtól a másik ágig.<br>
+Akkor a jobb a "merge" használata ha a acél ág megosztásra kerül, míg a "rebase" ha a cél ág privát marad.<br>
+
+    git reset
+>Ez egy erős parancs amely visszavonja a változásokat, visszaállítja a repository-t az előző commit-ra, és mellőz minden változást ami ez után a commit után történt. A "reset" visszavonja a helyi változásokat.<br>
+
+    git merge --squash
+>"Take all these changes as if they happened in a single moment." [And there was light]<br>
+https://graphite.dev/guides/git-merge-squash<br>
+Ez a parancs lehetővé teszi, hogy az összes változást ami eddig a branch-en történt összepréselje egy egyszerű commit-ba azon az ágon amin éppen dolgozol. Ezzel az opcióval nem marad meg az összes eddigi commit, hanem egy commit készül, mintha minden változás most menne végbe.<br>
+Az egyik fő oka ennek a metódusnak, hogy tisztán tartsuk a projekt history-t.<br>
+Ne használd a "squash" parancsot ha meg akarod tartani a szerkezeteti változásokat a többszörös commit-tal! Ha a változások túlságosan kiterjedtek és szükség van az egyedi felülvizsgálatra.
+
+    git checkout main
+    git merge --squash <feature-branch-name>
+    git commit -m "Squashed commit from feature-branch"
+
+
+    git rebase -i
+>Mivel a --squash MINDEN commit-ot egybesűrít, szükség lehet egy olyan variációra amellyel kiválasztható a megtartani kivánt commit-ok csoportja. Itt kerül képbe a "git rebase -i" (Interactive rebase).<br>
+
+
+
 <hr>
 A git push parancsot követően a rendszer elkéri a GitHub felhasználó nevet, majd a GitHub által generált Personal Access Token-t.<br>
 Felhasználónév: a GitHub felhasználóneved<br>
