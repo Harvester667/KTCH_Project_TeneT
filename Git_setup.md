@@ -134,7 +134,24 @@ Ne használd a "squash" parancsot ha meg akarod tartani a szerkezeteti változá
     git rebase -i
 >Mivel a --squash MINDEN commit-ot egybesűrít, szükség lehet egy olyan variációra amellyel kiválasztható a megtartani kivánt commit-ok csoportja. Itt kerül képbe a "git rebase -i" (Interactive rebase).<br>
 
+    git cherry-pick
+>A művelet egy tetszőlegesen kiválasztott, múltbéli commit változtatásait alkalmazza a jelenlegi branchre.<br>
+Mivel a gitben egy commit azonosítóját a változtatás tartalma és kezdőpontja együttesen határozza meg, a git "cherry-pick" egy teljesen új commitot fog létrehozni, hiába ugyanazt a változtatást alkalmazzuk.<br>
 
+    git commit --fixup <commit azonosito>
+>Korábbi commit javítása. Ezután ha végrehajtunk például egy rebase-t később, a Git összevonja a fixup commitot az eredetivel, eltüntetve így a "szemetelő" változtatást.
+>
+    git commit -m "Az A valtoztatas elkeszult!"
+>
+    git commit -m "A B valtoztatas elkeszult!"
+>
+    git commit -m "Fix A"
+>
+
+    fe4da2a Az A valtoztatas elkeszult!
+    ac6dc87 A B valtoztatas elkeszult!
+    743e6ff Fix A
+>Letisztultabbá tehetjük a commitok történetét, ha az utolsó javítást a git commit --fixup ac6dc87 paranccsal végezzük el, így jelezve, hogy ez egy korábbi commit javítása. <br>
 
 <hr>
 A git push parancsot követően a rendszer elkéri a GitHub felhasználó nevet, majd a GitHub által generált Personal Access Token-t.<br>
