@@ -153,6 +153,16 @@ Mivel a gitben egy commit azonosítóját a változtatás tartalma és kezdőpon
     743e6ff Fix A
 >Letisztultabbá tehetjük a commitok történetét, ha az utolsó javítást a git commit --fixup ac6dc87 paranccsal végezzük el, így jelezve, hogy ez egy korábbi commit javítása. <br>
 
+    git log --oneline
+
+>Listázza az eddig végrehajtott commit-ok azonosítóját és megjegyzéseit:<br>
+86bad9b (HEAD -> main, origin/main) Adatbátis létrehozás task.md<br>
+60fd824 hairdress_air.txt és a task.md létrehozása<br>
+e9ac7ae fixup! fetch, rebase, merge, reset stb<br>
+964ed36 Update README.md<br>
+5504436 fetch, rebase, merge, reset stb<br>
+e85da7d (list) tili-toli<br>
+
 <hr>
 A git push parancsot követően a rendszer elkéri a GitHub felhasználó nevet, majd a GitHub által generált Personal Access Token-t.<br>
 Felhasználónév: a GitHub felhasználóneved<br>

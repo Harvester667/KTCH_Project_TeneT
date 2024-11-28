@@ -18,6 +18,7 @@ Diagram terv készítése<rb>
 -adatbázis létrehozása<br>
 -táblák létrehozása<br>
 -relációs kapcsolatok kialakítása<br>
+-CRUD: create/létrehozás, read/olvasás, update/módosítás delete/törlés<br>
 
 
     create database hairdress
@@ -28,7 +29,7 @@ Diagram terv készítése<rb>
 
     create table customers (
         customer_id integer not null primary key auto_increment,
-        first_name varchar(51) char() not null
+        first_name varchar(51) char() not null,
         last_name varchar(51) char() not null,
         date_of_birth date not null,
         phone integer,
@@ -37,6 +38,12 @@ Diagram terv készítése<rb>
         nickname varchar(51) null,
         active boolean not null DEFAULT 'true'
     );
+
+    create table orders (
+        order_id integer not null,
+        order_date date,
+        customer_id;
+    )
 
 
 
@@ -59,7 +66,7 @@ Diagram terv készítése<rb>
     ("", "", "", "", "", "", ""),
     ("", "", "", "", "", "", "");
 
-    
+
 >Tesztelés<br>
 Műszaki leírás készítése<br>
 Felhasználói leírás készítése<br>
