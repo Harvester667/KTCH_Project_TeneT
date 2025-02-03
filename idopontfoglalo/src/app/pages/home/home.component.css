@@ -1,0 +1,42 @@
+.carousel-container {
+    position: relative;
+    z-index: -1;
+  }
+  
+  .carousel-inner img {
+    width: 100%;  /* A képek teljes szélességet fognak elfoglalni */
+    height: auto; /* Arányos magasság */
+  }
+  
+  .container {
+    position: relative;
+    z-index: 1;
+  }
+  
+  img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+
+  .bignav {
+    display: flex;
+    justify-content: center;
+    gap: 50px; /* Képek közötti távolság */
+  }
+  
+  .nav-item img {
+    width: 500px; /* Kép mérete */
+    height: auto;
+    cursor: pointer;
+    transition: opacity 0.3s ease; /* Zökkenőmentes átmenet */
+  }
+  
+  .nav-item img.default {
+    opacity: 1;
+  }
+  
+  .nav-item img.hover {
+    opacity: 0;
+  }
+  
