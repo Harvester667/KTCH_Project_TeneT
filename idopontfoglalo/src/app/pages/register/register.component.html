@@ -1,1 +1,16 @@
-<p>register works!</p>
+<form (ngSubmit)="registerUser()">
+    <input type="text" placeholder="Teljes név" [(ngModel)]="user.fullname" name="fullname" required>
+  
+    <select [(ngModel)]="user.gender" name="gender" required>
+      <option value="male">Férfi</option>
+      <option value="female">Nő</option>
+      <option value="other">Egyéb</option>
+    </select>
+  
+    <input type="text" placeholder="Felhasználónév" [(ngModel)]="user.username" name="username" required>
+    <input type="email" placeholder="E-mail cím" [(ngModel)]="user.email" name="email" required>
+    <input type="password" placeholder="Jelszó" [(ngModel)]="user.password" name="password" required>
+  
+    <button type="submit">Regisztráció</button>
+  </form>
+  

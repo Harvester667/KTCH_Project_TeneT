@@ -1,42 +1,49 @@
+/* Carousel container: már meglévő stílusok */
 .carousel-container {
-    position: relative;
-    z-index: -1;
-  }
-  
-  .carousel-inner img {
-    width: 100%;  /* A képek teljes szélességet fognak elfoglalni */
-    height: auto; /* Arányos magasság */
-  }
-  
-  .container {
-    position: relative;
-    z-index: 1;
-  }
-  
-  img {
-    display: block;
-    max-width: 100%;
-    height: auto;
-  }
+  width: 500px; /* vagy amilyen szélesre szeretnéd */
+  margin: 0 auto;
+}
 
-  .bignav {
-    display: flex;
-    justify-content: center;
-    gap: 50px; /* Képek közötti távolság */
-  }
-  
-  .nav-item img {
-    width: 500px; /* Kép mérete */
-    height: auto;
-    cursor: pointer;
-    transition: opacity 0.3s ease; /* Zökkenőmentes átmenet */
-  }
-  
-  .nav-item img.default {
-    opacity: 1;
-  }
-  
-  .nav-item img.hover {
-    opacity: 0;
-  }
-  
+/* Button container */
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+/* Naptár konténer kisebb méretben */
+.calendar-small {
+  width: 600px;  /* Állítsd be a kívánt szélességet */
+  margin: 0 auto;
+}
+
+/* Példa a képgombokhoz */
+.image-button {
+  position: relative;
+  display: inline-block;
+  width: 300px;
+  height: auto;
+}
+
+.image-button img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.image-button .hover-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.image-button:hover .hover-img {
+  opacity: 1;
+}
+
+.image-button:hover .default-img {
+  opacity: 0;
+}

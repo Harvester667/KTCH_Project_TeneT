@@ -1,6 +1,16 @@
+<<<<<<< HEAD
+<h1>Ktch-Project-Tenet</h1>
+<h4>Az itt készülő project az év végén bemutatásra kerülő vizsgamunka lesz.</h4>
+<h2>Pál-Szabó András</h2>
+<p>Frontend fejlesztés, Angol és Spanyol fordítás</p>
+<h2>Ottó Attila György</h2>
+<p>Backend fejlesztés, Git/GitHub kezelés</p>
+<h2>Kovács Jázmin</h2>
+<p>Tesztelés</p>
+=======
 # Idopontfoglalo
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.4.
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.12.
 
 ## Development server
 
@@ -25,3 +35,4 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+>>>>>>> 4a49763 (initial commit)

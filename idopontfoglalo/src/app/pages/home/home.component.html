@@ -1,37 +1,46 @@
 <div class="container text-center mt-5">
-    <h1>Hairdress Air</h1>
-    <div class="d-flex justify-content-center gap-3 mt-3">
-      <a class="btn btn-primary" routerLink="/login">Belépés</a>
-      <a class="btn btn-primary" routerLink="/register">Regisztráció</a>
-    </div>
-  </div>
-  
+  <h1>Hairdress-Air</h1>
+</div>
 
-  <div class="carousel-container d-flex justify-content-center align-items-center min-vh-100">
-    <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
-      <div class="carousel-inner">
-        <div class="carousel-item active">
-          <img src="/assets/img/01.jpg" class="d-block w-100" alt="Első kép">
-        </div>
-        <div class="carousel-item">
-          <img src="/assets/img/02.png" class="d-block w-100" alt="Második kép">
-        </div>
-        <div class="carousel-item">
-          <img src="/assets/img/03.jpg" class="d-block w-100" alt="Harmadik kép">
-        </div>
+<!-- Carousel -->
+<div class="carousel-container mx-auto">
+  <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="/assets/img/hair01.png" class="d-block w-100" alt="Hair 1">
+      </div>
+      <div class="carousel-item">
+        <img src="/assets/img/hair02.png" class="d-block w-100" alt="Hair 2">
+      </div>
+      <div class="carousel-item">
+        <img src="/assets/img/hair03.png" class="d-block w-100" alt="Hair 3">
       </div>
     </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
   </div>
-  
- 
-  <div class="bignav">
-    <div class="nav-item">
-      <img src="/assets/img/calendar_smallbw.jpg" class="img-fluid" alt="Calendar" data-hover-src="/assets/img/calendar_small.jpg">
-    </div>
-    <div class="nav-item">
-      <img src="/assets/img/group_smallbw.jpg" class="img-fluid" alt="Group" data-hover-src="/assets/img/group_small.jpg">
-    </div>
-  </div>
-  
-  
-  
+</div>
+
+<!-- Naptár, kisebb méretben -->
+<div class="calendar-small mx-auto mt-4">
+  <app-calendar></app-calendar>
+</div>
+
+<!-- Button Container -->
+<div class="button-container mt-4">
+  <a href="#" class="image-button">
+    <img src="assets/img/calicon.jpg" alt="Calendar Icon" class="default-img">
+    <img src="assets/img/calicon2.jpg" alt="Calendar Icon Hover" class="hover-img">
+  </a>
+
+  <a href="#" class="image-button">
+    <img src="assets/img/teamicon.jpg" alt="Team Icon" class="default-img">
+    <img src="assets/img/teamicon2.jpg" alt="Team Icon Hover" class="hover-img">
+  </a>
+</div>
