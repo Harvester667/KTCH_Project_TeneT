@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <h1>Ktch-Project-Tenet</h1>
 <h4>Az itt készülő project az év végén bemutatásra kerülő vizsgamunka lesz.</h4>
 <h2>Pál-Szabó András</h2>
@@ -7,8 +6,9 @@
 <p>Backend fejlesztés, Git/GitHub kezelés</p>
 <h2>Kovács Jázmin</h2>
 <p>Tesztelés</p>
-=======
-# Idopontfoglalo
+<p></p>
+
+<h1># Idopontfoglalo</h1>
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.12.
 
