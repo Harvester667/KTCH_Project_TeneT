@@ -16,6 +16,7 @@ class Customer extends JsonResource
     {
         //return parent::toArray($request);
         return [
+            "id"=>$this->id,
             "customer"=>$this->customer
         ];
     }

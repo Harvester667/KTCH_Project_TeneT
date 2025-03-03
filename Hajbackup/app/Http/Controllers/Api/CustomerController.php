@@ -19,43 +19,55 @@ class CustomerController extends ResponseController
 
     }
 
+    public function getCustomer( Request $request){
+        $customer = Customer::where( "customer", $request[ "customer" ])->first();
+        if( is_null( $customer )){
+             return $this->sendError( "Hibás adat.", [ "Ninncs ilyen vendég."], 406 );
+        }else{
+            return $this->sendResponse( $customer, "Vendég listázva." );
+        }
+    }
+
     public function addCustomer( CustomerRequest $request ){
         //$request->validated();
 
-        $customer = Customer::create( $input );
+        $customer = new Customer();
+        $customer->customer = $request[ "customer" ];
+        $customer->save();
 
-        return $this->sendResponse( new CustomerResource( $customer ), "Sikeres rögzítés.");
+        return $this->sendResponse( new CustomerResource( $customer ), "Új vendég Rögzítve.");
     }
 
-    public function updateCustomer( CustomerAddChecker $request ){
+    public function updateCustomer( CustomerRequest $request ){
         //$request->validated();
 
-        $customer = Customer::find( $request[ "customer" ]);
+        $customer = Customer::find( $request[ "id" ]);
         if( is_null( $customer )){
 
-            return $this->sendError( "Nincs ilyen vendég" );
+            return $this->sendError( "Adathiba.", [ "Nincs ilyen vendég" ], 406 );
         }else{
             $customer->customer = $request[ "customer" ];
             $customer->update();
 
-            return $this->sendResponse( new CustomerResource( $customer ), "Vendég adatok frissítve.");
+            return $this->sendResponse( new CustomerResource( $customer ), "Vendég adatai módosítva.");
         }
     }
 
     public function deleteCustomer( Request $request ){
-        $customer = Customer::find( $request[ "customer" ]);
+        $customer = Customer::find( $request[ "id" ]);
         if( is_null( $customer )){
 
-            return $this->sendError( "Nincs ilyen vendég." );
+            return $this->sendError( "Adathiba", [ "Nincs ilyen vendég." ], 406 );
         }else{
             $customer->delete();
             return $this->sendResponse( new CustomerResource( $customer ), "Vendég törölve." );
         }
     }
 
-    public function getCustomerId( $typeName ){
-        $customer = Customer::where( "customer", $typeName )->first();
+    public function getCustomerId( $customerName ){
+        $customer = Customer::where( "customer", $customerName )->first();
+        $id = $customer->id;
 
-        return $customer->id;
+        return $id;
     }
 }
