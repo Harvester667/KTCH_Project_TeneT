@@ -18,6 +18,7 @@ class Booking extends JsonResource
         return [
             "id"=>$this->id,
             "booking"=>$this->booking,
+            "booking" =>$this->duration,
             "customer"=>$this->customer->customer,
             "employee"=>$this->employee->employee,
             "services"=>$this->service->service,

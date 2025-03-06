@@ -6,8 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Customer;
 use App\Http\Controllers\Api\ResponseController as ResponseController;
+use App\Http\Requests\CustomerRequest;
 use App\Http\Resources\Customer as CustomerResource;
-use App\Http\Requests\TypeRequest;
 
 class CustomerController extends ResponseController
 {
@@ -15,7 +15,7 @@ class CustomerController extends ResponseController
     public function getCustomers(){
         $customers = Customer::all();
 
-        return $this->sendResponse( CustomerResource::collection( $customer ), "Vendégek listázva." );
+        return $this->sendResponse( CustomerResource::collection( $customers ), "Vendégek listázva." );
 
     }
 

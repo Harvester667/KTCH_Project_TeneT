@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Service;
-use App\Htt\Request\ServiceRequest;
+use App\Http\Requests\ServiceRequest;
 use App\Http\Controllers\Api\ResponseController;
 use App\Http\Resources\Service as ServiceResource;
 
@@ -15,7 +15,7 @@ class ServiceController extends ResponseController
     public function getServices(){
         $services = Service::all();
 
-        return $this->sendResponse( ServiceResource::collection( $service ), "Szolgáltatások listázva. ");
+        return $this->sendResponse( ServiceResource::collection( $services ), "Szolgáltatások listázva. ");
     }
 
     public function getService( Request $request ){
@@ -40,7 +40,7 @@ class ServiceController extends ResponseController
     public function updateService( ServiceRequest $request ){
         //$request->validated();
         
-        $service = Service::find( $service[ "id" ]);
+        $service = Service::find( $request[ "id" ]);
         if( is_null( $service )){
             $this->sendError( "Adathiba", [ "Nincs ilyen szolgáltatás." ], 406 );
         }else{

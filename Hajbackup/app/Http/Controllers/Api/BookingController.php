@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Api\ResponseController;
 use App\Models\Booking;
-use App\Http\Resources\Booking as BookingResource;
 use App\Http\Requests\BookingRequest;
+use App\Http\Controllers\Api\ResponseController;
+use App\Http\Resources\Booking as BookingResource;
 
 class BookingController extends ResponseController
 {
@@ -15,7 +15,7 @@ class BookingController extends ResponseController
     public function getBookings(){
         $bookings = Booking::with( "customer", "employee", "service" )->get();
 
-        return $this->sendResponse( BookingResource::collection( $booking ), "Adatok Betöltve.");
+        return $this->sendResponse( BookingResource::collection( $bookings ), "Adatok Betöltve.");
     }
 
     public function getOneBooking( $request ){

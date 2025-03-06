@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Employee;
-use App\Htt\Request\EmployeeRequest;
 use App\Http\Controllers\Api\ResponseController;
+use App\Http\Requests\EmployeeRequest;
 use App\Http\Resources\Employee as EmployeeResource;
 
 class EmployeeController extends ResponseController
