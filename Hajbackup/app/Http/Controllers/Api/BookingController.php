@@ -15,7 +15,7 @@ class BookingController extends ResponseController
     public function getBookings(){
         $bookings = Booking::with( "customer", "employee", "service" )->get();
 
-        return $this->sendResponse( BookingResource::collection( $bookings ), "Adatok Betöltve.");
+        return $this->sendResponse( BookingResource::collection( $bookings ), "Adatok betöltve.");
     }
 
     public function getOneBooking( $request ){
