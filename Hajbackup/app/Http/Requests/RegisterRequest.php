@@ -50,7 +50,7 @@ class RegisterRequest extends FormRequest
             "password.required" => "A jelszó mező nem lehet üres.",
             "password.min" => "A jelszó túl rövid.",
             "password.max" => "A jelszó túl hosszú.",
-            "password.regex" => "A jelszónak tartalmaznia kell kisbetűt, nagybetűt és számot is.",
+            "password.regex" => "A jelszónakk tartalmaznia kellkisbetűt, nagybetűt és számot is.",
             "confirm_password.same" => "Nem megegyező jelszó."
         ];
     }
