@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('employees', function (Blueprint $table) {
             $table->id();
-            $table->string('employee', 51);
-            $table->string('email', 51)->comment('Egyedi email');
-            $table->string('phone', 20)->comment('Egyedi telefonszám');
+            $table->string('employee');
+            $table->string('email')->comment('Egyedi email');
+            $table->string('phone')->comment('Egyedi telefonszám');
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password', 20);
+            $table->string('password');
             $table->enum('gender', ['férfi', 'nő', 'szabadon választott']);
             $table->integer('power')->default(0);
             $table->rememberToken();
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('employes');
+        Schema::dropIfExists('employees');
     }
 };

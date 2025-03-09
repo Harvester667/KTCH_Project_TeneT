@@ -22,7 +22,7 @@ class CustomerController extends ResponseController
     public function getCustomer( Request $request){
         $customer = Customer::where( "customer", $request[ "customer" ])->first();
         if( is_null( $customer )){
-             return $this->sendError( "Hibás adat.", [ "Ninncs ilyen vendég."], 406 );
+             return $this->sendError( "Hibás adat.", [ "Nincs ilyen vendég."], 406 );
         }else{
             return $this->sendResponse( $customer, "Vendég listázva." );
         }
@@ -35,7 +35,7 @@ class CustomerController extends ResponseController
         $customer->customer = $request[ "customer" ];
         $customer->save();
 
-        return $this->sendResponse( new CustomerResource( $customer ), "Új vendég Rögzítve.");
+        return $this->sendResponse( new CustomerResource( $customer ), "Új vendég rögzítve.");
     }
 
     public function updateCustomer( CustomerRequest $request ){
@@ -44,7 +44,7 @@ class CustomerController extends ResponseController
         $customer = Customer::find( $request[ "id" ]);
         if( is_null( $customer )){
 
-            return $this->sendError( "Adathiba.", [ "Nincs ilyen vendég" ], 406 );
+            return $this->sendError( "Adathiba.", [ "Nincs ilyen vendég." ], 406 );
         }else{
             $customer->customer = $request[ "customer" ];
             $customer->update();
@@ -57,7 +57,7 @@ class CustomerController extends ResponseController
         $customer = Customer::find( $request[ "id" ]);
         if( is_null( $customer )){
 
-            return $this->sendError( "Adathiba", [ "Nincs ilyen vendég." ], 406 );
+            return $this->sendError( "Adathiba.", [ "Nincs ilyen vendég." ], 406 );
         }else{
             $customer->delete();
             return $this->sendResponse( new CustomerResource( $customer ), "Vendég törölve." );

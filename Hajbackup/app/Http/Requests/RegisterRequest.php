@@ -24,8 +24,8 @@ class RegisterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "name" => "required|min:3|max:51|unique:users, name",
-            "email" => "required|email|unique:users, email",
+            "name" => "required|min:3|max:51|unique:users,name",
+            "email" => "required|email|unique:users,email",
             "password" => [
                             "required",
                             "min:8",
@@ -33,7 +33,7 @@ class RegisterRequest extends FormRequest
                             "regex:/[a-z]/",
                             "regex:/[A-Z]/",
                             "regex:/[0-9]/"],
-                "confirm_password" => "required|same:password"
+            "confirm_password" => "required|same:password"
         ];
     }
 
@@ -42,15 +42,15 @@ class RegisterRequest extends FormRequest
             "name.required" => "A név mező nem lehet üres.",
             "name.min" => "A név túl rövid.",
             "name.max" => "A név túl hosszú.",
-            "name.unique" => "Ez a név már foglalt",
+            "name.unique" => "Ez a név már foglalt.",
             
-            "email.required" => "Az email mező  nem lehet üres.",
+            "email.required" => "Az email mező nem lehet üres.",
             "email.unique" => "Az email cím már foglalt.",
 
             "password.required" => "A jelszó mező nem lehet üres.",
             "password.min" => "A jelszó túl rövid.",
             "password.max" => "A jelszó túl hosszú.",
-            "password.regex" => "A jelszónakk tartalmaznia kellkisbetűt, nagybetűt és számot is.",
+            "password.regex" => "A jelszónak tartalmaznia kell kisbetűt, nagybetűt és számot is.",
             "confirm_password.same" => "Nem megegyező jelszó."
         ];
     }
@@ -58,7 +58,7 @@ class RegisterRequest extends FormRequest
     public function failedValidation( Validator $validator ){
         throw new HttpResponseException( response()->json([
             "success" => false,
-            "message" => "Beviteli hiba",
+            "message" => "Beviteli hiba.",
             "data" => $validator->errors()
         ]));
     }

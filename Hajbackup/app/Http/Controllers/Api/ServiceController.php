@@ -15,13 +15,13 @@ class ServiceController extends ResponseController
     public function getServices(){
         $services = Service::all();
 
-        return $this->sendResponse( ServiceResource::collection( $services ), "Szolgáltatások listázva. ");
+        return $this->sendResponse( ServiceResource::collection( $services ), "Szolgáltatások listázva.");
     }
 
     public function getService( Request $request ){
         $service = Service::where( "service", $request[ "service "])->first();
         if( is_null( $service )){
-            return $this->sendError( "Adathiba", [ "Nincs ilyen szolgálattás" ], 406);
+            return $this->sendError( "Adathiba.", [ "Nincs ilyen szolgálatás." ], 406);
         }else{
             return $this->sendResponse( $service, "Szolgáltatás listázva." );
         }
@@ -34,7 +34,7 @@ class ServiceController extends ResponseController
         $service->service = $request[ "service" ];
         $service->save();
 
-        return $this->sendResponse( new ServiceResource( $service ), " Új szolgáltatás rögzítve" );
+        return $this->sendResponse( new ServiceResource( $service ), "Új szolgáltatás rögzítve." );
     }
 
     public function updateService( ServiceRequest $request ){
@@ -42,19 +42,19 @@ class ServiceController extends ResponseController
         
         $service = Service::find( $request[ "id" ]);
         if( is_null( $service )){
-            $this->sendError( "Adathiba", [ "Nincs ilyen szolgáltatás." ], 406 );
+            $this->sendError( "Adathiba.", [ "Nincs ilyen szolgáltatás." ], 406 );
         }else{
             $service->service = $request[ "service" ];
             $service->update();
 
-            return $this->sendResponse( new Service( $service ), "Szolgáltatás adatai módosítva" );
+            return $this->sendResponse( new Service( $service ), "Szolgáltatás adatai módosítva." );
         }
     }
 
     public function deleteService( Request $request ){
         $service = Service::find( $request[ "id "]);
         if( is_null( $service )){
-            return $this->sendError( "Adathiba", [ "Szolgáltatás nem létezik."], 406 );
+            return $this->sendError( "Adathiba.", [ "Szolgáltatás nem létezik."], 406 );
         }else{
             $service->delete();
 

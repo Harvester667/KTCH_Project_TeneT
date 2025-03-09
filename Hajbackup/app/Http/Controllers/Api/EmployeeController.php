@@ -21,9 +21,9 @@ class EmployeeController extends ResponseController
     public function getEmployee( Request $request ){
         $employee = Employee::where( "employee", $request[ "employee" ])->first();
         if( is_null( $employee )){
-            return $this->sendError( "Adathiba", [ "Nincs ilyen dolgozó." ], 406 );
+            return $this->sendError( "Adathiba.", [ "Nincs ilyen dolgozó." ], 406 );
         }else{
-            return $this->sendResponse( $employee, "Dolgozó listázva" );
+            return $this->sendResponse( $employee, "Dolgozó listázva." );
         }
     }
 
@@ -42,7 +42,7 @@ class EmployeeController extends ResponseController
         
         $employee = Employee::find( $request[ "id" ]);
         if( is_null( $employee )){
-            return $this->sendError( "Adathiba", [ "Nincs ilyen dolgozó."], 406 );
+            return $this->sendError( "Adathiba.", [ "Nincs ilyen dolgozó."], 406 );
         }else{
             $employee->employee = $request[ "employee" ];
             $employee->update();
@@ -54,7 +54,7 @@ class EmployeeController extends ResponseController
     public function deleteEmployee( Request $request ){
         $employee = Employee::find( $request[ "id" ]);
         if( is_null( $employee )){
-            return $this->sendError( "Adathiba", [ "Nincs ilyen dolgozó" ], 406 );
+            return $this->sendError( "Adathiba.", [ "Nincs ilyen dolgozó." ], 406 );
         }else{
             $employee->delete();
 

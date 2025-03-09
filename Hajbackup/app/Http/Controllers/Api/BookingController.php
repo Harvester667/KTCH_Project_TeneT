@@ -15,7 +15,7 @@ class BookingController extends ResponseController
     public function getBookings(){
         $bookings = Booking::with( "customer", "employee", "service" )->get();
 
-        return $this->sendResponse( BookingResource::collection( $bookings ), "Adatok Betöltve.");
+        return $this->sendResponse( BookingResource::collection( $bookings ), "Adatok betöltve.");
     }
 
     public function getOneBooking( $request ){
@@ -25,7 +25,7 @@ class BookingController extends ResponseController
             return $this->sendError( "Nincs ilyen foglalás.");
         }
 
-        return $this->sendResponse( new BookingResource( $booking ), "Foglalás kiválasztva." );
+        return $this->sendResponse( new BookingResource( $booking ), "Foglalás betöltve." );
     }
 
     public function addBooking( BookingRequest $request ){
@@ -64,7 +64,7 @@ class BookingController extends ResponseController
         $booking = Booking::find( $request[ "Booking" ]);
         
         if( is_null( $booking )){
-            return $this->sendError( "Nincs ilyen foglalás" );
+            return $this->sendError( "Nincs ilyen foglalás." );
         }else{
             $booking->delete();
             return $this->sendResponse( new BookingResource( $booking ), "A foglalás törölve." );
