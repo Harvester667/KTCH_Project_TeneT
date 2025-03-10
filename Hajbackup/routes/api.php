@@ -6,10 +6,15 @@ use App\Http\Controllers\Api\BookingController;
 use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\EmployeeController;
 use App\Http\Controllers\Api\ServiceController;
+use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\AuthController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
+Route::middleware( "auth:sanctum" )->group( function(){
+    Route::post( "/logout", [ UserController::class, "logout" ]);
+});
 
 Route::get("/bookings", [BookingController::class, "getBookings"]);
 Route::get("/onebooking/{id}", [BookingController::class, "getOneBooking"]);
@@ -38,3 +43,6 @@ Route::post("/addservice", [ServiceController::class, "addService"]);
 Route::put("/updateservice/{id}", [ServiceController::class, "updateService"]);
 Route::delete("/deleteservice/{id}", [ServiceController::class, "deleteService"]);
 Route::get("/getserviceid", [ServiceController::class, "getServiceId"]);
+
+Route::post("/register", [UserController::class, "register"]);
+Route::get("/getusers", [AuthController::class, "getUsers"]);

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->enum('gender', ['férfi', 'nő', 'szabadon választott']);
-            $table->integer('power')->default(0);
+            //$table->integer('power')->default(0);
             $table->rememberToken();
             //$table->timestamps();
         });
