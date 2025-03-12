@@ -13,13 +13,14 @@ return new class extends Migration
     {
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
-            $table->string('customer');
-            $table->string('email')->comment('Egyedi email');
+            $table->foreignId('user_id')->constrained();
             $table->string('phone')->comment('Egyedi telefonszám');
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
             $table->enum('gender', ['férfi', 'nő', 'szabadon választott']);
-            //$table->integer('power')->default(0);
+            $table->string('invoice_address')->nullable();
+            $table->string('invoice_postcode')->nullable();
+            $table->string('invoice_city')->nullable();
+            // $table->foreignId('invoice_country_id')->nullable()->constrained('countries');
+            $table->date('birth_date')->nullable();
             $table->rememberToken();
             //$table->timestamps();
         });

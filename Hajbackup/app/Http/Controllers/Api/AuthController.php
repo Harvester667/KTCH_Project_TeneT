@@ -52,7 +52,7 @@ class AuthController extends ResponseController {
         return $this->sendResponse( $user, "Felhasználó frissítve." );
     }
 
-    public function destroyUser( Request $request ) {
+    public function deleteUser( Request $request ) {
 
         if( !Gate::allows( "super" )) {
 

@@ -29,7 +29,7 @@ class BookingController extends ResponseController
     }
 
     public function addBooking( BookingRequest $request ){
-        //$request->validated();
+        $request->validated();
 
         $booking = new Booking;
         $booking -> booking = $request[ "booking" ];
@@ -43,7 +43,7 @@ class BookingController extends ResponseController
     }
 
     public function updateBooking( BookingRequest $request ){
-        //$request->validated();
+        $request->validated();
 
         $booking = Booking::find( $request[ "booking" ]);
         if( is_null( $booking )){

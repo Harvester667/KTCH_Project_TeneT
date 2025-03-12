@@ -28,7 +28,7 @@ class EmployeeController extends ResponseController
     }
 
     public function addEmployee( EmployeeRequest $request ){
-        //$request->validated;
+        $request->validated;
 
         $employee = new Employee();
         $employee->employee = $request[ "employee" ];
@@ -38,7 +38,7 @@ class EmployeeController extends ResponseController
     }
 
     public function updateEmployee( EmployeeRequest $request ){
-        //$request->validated();
+        $request->validated();
         
         $employee = Employee::find( $request[ "id" ]);
         if( is_null( $employee )){

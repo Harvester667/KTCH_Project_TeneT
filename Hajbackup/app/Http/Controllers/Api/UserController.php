@@ -10,13 +10,12 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
-use App\Http\Controllers\Api\ResponseController;
 
 class UserController extends ResponseController
 {
     public function register( RegisterRequest $request ) {
 
-        //$request->validated();
+        $request->validated();
 
         $user = User::create([
 

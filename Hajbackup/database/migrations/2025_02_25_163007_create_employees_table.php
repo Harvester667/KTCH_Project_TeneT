@@ -13,13 +13,10 @@ return new class extends Migration
     {
         Schema::create('employees', function (Blueprint $table) {
             $table->id();
-            $table->string('employee');
-            $table->string('email')->comment('Egyedi email');
+            $table->foreignId('user_id')->constrained();
             $table->string('phone')->comment('Egyedi telefonszám');
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
             $table->enum('gender', ['férfi', 'nő', 'szabadon választott']);
-            //$table->integer('power')->default(0);
+            $table->text('description')->nullable();
             $table->rememberToken();
             //$table->timestamps();
         });

@@ -28,7 +28,7 @@ class ServiceController extends ResponseController
     }
 
     public function addService( ServiceRequest $request ){
-        //$request->validated();
+        $request->validated();
 
         $service = new Service();
         $service->service = $request[ "service" ];
@@ -38,7 +38,7 @@ class ServiceController extends ResponseController
     }
 
     public function updateService( ServiceRequest $request ){
-        //$request->validated();
+        $request->validated();
         
         $service = Service::find( $request[ "id" ]);
         if( is_null( $service )){

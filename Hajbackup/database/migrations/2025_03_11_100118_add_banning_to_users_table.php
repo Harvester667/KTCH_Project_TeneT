@@ -11,13 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('services', function (Blueprint $table) {
-            $table->id();
-            $table->string('service');
-            $table->integer('duration');
-            $table->integer('price');
-            $table->string('description', 300);
-            //$table->timestamps();
+        Schema::table('users', function (Blueprint $table) {
+            $table->integer( "login_counter" )->default( 0 )->after( "remember_token" );
+            $table->timestamp( "banning_time")->nullable()->default( null )->after( "login_counter" );
         });
     }
 
@@ -26,6 +22,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('services');
+        Schema::table('users', function (Blueprint $table) {
+            //
+        });
     }
 };

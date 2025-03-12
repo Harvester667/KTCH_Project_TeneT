@@ -29,7 +29,7 @@ class CustomerController extends ResponseController
     }
 
     public function addCustomer( CustomerRequest $request ){
-        //$request->validated();
+        $request->validated();
 
         $customer = new Customer();
         $customer->customer = $request[ "customer" ];
@@ -39,7 +39,7 @@ class CustomerController extends ResponseController
     }
 
     public function updateCustomer( CustomerRequest $request ){
-        //$request->validated();
+        $request->validated();
 
         $customer = Customer::find( $request[ "id" ]);
         if( is_null( $customer )){
