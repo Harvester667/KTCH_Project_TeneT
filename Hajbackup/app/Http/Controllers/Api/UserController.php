@@ -45,10 +45,10 @@ class UserController extends ResponseController
 
                 ( new BannerController )->resetBannedTime( $authUser->name );
                 $token = $authUser->createToken( $authUser->name."Token" )->plainTextToken;
-                $data["user"] = [ "user" => $authUser->name ];
+                $data[ "user" ] = [ "user" => $authUser->name ];
                 $data[ "time" ] = $bannedTime;
                 $data[ "admin" ] = $authUser->admin;
-                $data["token"] = $token;
+                $data[ "token" ] = $token;
 
                 return $this->sendResponse( $data, "Sikeres bejelentkezés.");
 

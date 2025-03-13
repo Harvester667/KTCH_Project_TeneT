@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\EmployeeController;
 use App\Http\Controllers\Api\ServiceController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\api\ProfileController;
 use App\Http\Controllers\Api\AuthController;
 
 Route::get('/user', function (Request $request) {
@@ -37,7 +38,7 @@ Route::middleware( "auth:sanctum" )->group( function(){
     // Route::put( "/updatepassword", [ ProfileController::class, "setPassword" ]);
     // Route::post("/deleteprofile", [ ProfileController::class, "deleteProfile" ]);
 
-    Route::get( "/users", [ AuthController::class, "getUsers" ]);
+    Route::get( "/getusers", [ AuthController::class, "getUsers" ]);
     Route::put( "/admin", [ AuthController::class, "setAdmin" ]);
     Route::put( "updateuser", [ AuthController::class, "updateUser" ]);
     Route::delete( "/deleteuser", [ AuthController::class, "deleteUser" ]);
@@ -57,6 +58,8 @@ Route::get( "/customers", [ CustomerController::class, "getCustomers" ]);
 Route::get( "/onecustomer", [ CustomerController::class, "getCustomer" ]);
 
 Route::get( "/tokens", [ UserController::class, "getTokens" ]);
+
+//Route::get( "/seed", [ BookingController::class, "runSeeder" ]);
 
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
