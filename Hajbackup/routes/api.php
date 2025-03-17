@@ -16,8 +16,6 @@ Route::get('/user', function (Request $request) {
 
 Route::middleware( "auth:sanctum" )->group( function(){
 
-    Route::post( "/logout", [ UserController::class, "logout" ]);
-
     Route::post( "/addbooking", [ BookingController::class, "addBooking" ]);
     Route::put( "/updatebooking", [ BookingController::class, "updateBooking" ]);
     Route::delete( "/deletebooking", [ BookingController::class, "deleteBooking" ]);
@@ -38,10 +36,14 @@ Route::middleware( "auth:sanctum" )->group( function(){
     // Route::put( "/updatepassword", [ ProfileController::class, "setPassword" ]);
     // Route::post("/deleteprofile", [ ProfileController::class, "deleteProfile" ]);
 
+    Route::post( "/logout", [ UserController::class, "logout" ]);
     Route::get( "/getusers", [ AuthController::class, "getUsers" ]);
-    Route::put( "/admin", [ AuthController::class, "setAdmin" ]);
-    Route::put( "updateuser", [ AuthController::class, "updateUser" ]);
-    Route::delete( "/deleteuser", [ AuthController::class, "deleteUser" ]);
+    Route::put( "/admin/{id}", [ AuthController::class, "setAdmin" ]);
+    Route::put( "/polymorph/{id}", [ AuthController::class, "demotivate" ]);
+    Route::put( "/updateuser/{id}", [ AuthController::class, "updateUser" ]);
+    Route::delete( "/voldemort/{id}", [ AuthController::class, "avadaKedavra" ]);
+
+    Route::get( "/tokens", [ UserController::class, "getTokens" ]);
 });
 
 Route::post( "/register", [ UserController::class, "register" ]);
@@ -57,7 +59,7 @@ Route::get( "/oneemployee", [ EmployeeController::class, "getEmployee" ]);
 Route::get( "/customers", [ CustomerController::class, "getCustomers" ]);
 Route::get( "/onecustomer", [ CustomerController::class, "getCustomer" ]);
 
-Route::get( "/tokens", [ UserController::class, "getTokens" ]);
+
 
 //Route::get( "/seed", [ BookingController::class, "runSeeder" ]);
 

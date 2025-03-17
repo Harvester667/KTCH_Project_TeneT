@@ -17,13 +17,25 @@ class UserController extends ResponseController
 
         $request->validated();
 
+        $adminLevel = User::count() === 0 ? 2 : 0;  // Ellenőrzi a felhasználók számát, Ha az első felhasználó, adminisztrátor szint 2, Ha már van felhasználó, adminisztrátor szint 0.
+
+        // $isFirstUser = User::count() === 0;  // Ellenőrzi, hogy van e már user az adatbázisban.
+        // $adminLevel = $isFirstUser ? 2 : 0;  // Ha az első felhasználó, adminisztrátor szint 2, Ha már van felhasználó, adminisztrátor szint 0.
+
+        // $isFirstUser = User::count() === 0;
+        //     if ($isFirstUser) {
+        //         $adminLevel = 2; // Ha az első felhasználó, adminisztrátor szint 2
+        //     } else {
+        //         $adminLevel = 0; // Ha már van felhasználó, adminisztrátor szint 0
+        //     }
+
         $user = User::create([
 
             "name" => $request["name"],
             "email" => $request["email"],
             "password" => bcrypt( $request["password"]),
             //"city_id" => ( new CityController )->getCityId( $request[ "city" ]),
-            "admin" => 0
+            "admin" => $adminLevel
 
         ]);
 

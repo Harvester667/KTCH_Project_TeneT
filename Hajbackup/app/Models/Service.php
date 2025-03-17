@@ -11,7 +11,11 @@ class Service extends Model
 
     public $timestamp=false;
 
-    public function  booking(){
-        return $this->hasMany(Booking::class);
+    public function bookings()
+    {
+        return $this->belongsToMany(Booking::class, 'booking_service');
     }
+    // public function  booking(){
+    //     return $this->hasMany(Booking::class);
+    // }
 }

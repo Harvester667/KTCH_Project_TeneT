@@ -9,6 +9,15 @@ class Booking extends Model
 {
     use HasFactory;
 
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'booking_user');
+    }
+
+    public function services()
+    {
+        return $this->belongsToMany(Service::class, 'booking_service');
+    }
     // public function customer(){
     //     return $this->belongsTo(Customer::class);
     // }
@@ -16,12 +25,12 @@ class Booking extends Model
     // public function employee(){
     //     return $this->belongsTo(Employee::class);
     // }
+//
+    // public function user(){
+    //     return $this->belongsTo(User::class);
+    // }
 
-    public function user(){
-        return $this->belongsTo(User::class);
-    }
-
-    public function service(){
-        return $this->belongsTo(Service::class);
-    }
+    // public function service(){
+    //     return $this->belongsTo(Service::class);
+    // }
 }

@@ -29,11 +29,28 @@ class AuthController extends ResponseController {
         }
 
         $user = User::find( $request[ "id" ]);
-        $user->admin = $request[ "admin" ];
+        // $user->admin = $request[ "admin" ]; //Hibás minta!!?
+        $user->admin = 1;
 
         $user->update();
 
         return $this->sendResponse( $user->name, "Admin jog megadva." );
+    }
+
+    public function demotivate( Request $request ) {
+
+        if ( !Gate::allows( "super" )) {
+
+            return $this->sendError( "Autentikációs hiba.", "Nincs jogosultsága.", 401 );
+        }
+
+        $user = User::find( $request[ "id" ]);
+        // $user->admin = $request[ "admin" ]; //Hibás minta!!?
+        $user->admin = 0;
+
+        $user->update();
+
+        return $this->sendResponse( $user->name, "Admin jog megvonva." );
     }
 
     public function updateUser( Request $request ) {
@@ -52,7 +69,7 @@ class AuthController extends ResponseController {
         return $this->sendResponse( $user, "Felhasználó frissítve." );
     }
 
-    public function deleteUser( Request $request ) {
+    public function avadaKedavra( Request $request ) {
 
         if( !Gate::allows( "super" )) {
 

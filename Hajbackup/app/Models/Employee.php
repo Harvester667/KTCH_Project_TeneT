@@ -11,7 +11,16 @@ class Employee extends Model
 
     public $timestamp=false;
 
-    public function booking(){
-        return $this->hasMany(Booking::class);
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
+
+    public function bookings()
+    {
+        return $this->belongsToMany(Booking::class, 'booking_user');
+    }
+    // public function booking(){
+    //     return $this->hasMany(Booking::class);
+    // }
 }
