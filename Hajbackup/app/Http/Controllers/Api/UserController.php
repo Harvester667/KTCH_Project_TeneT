@@ -46,7 +46,7 @@ class UserController extends ResponseController
 
         $request->validated();
 
-        if( Auth::attempt([ "name" => $request["name"], "password" => $request["password"]])) {
+        if( Auth::attempt([ "email" => $request["email"], "password" => $request["password"]])) {
 
             $actualTime = Carbon::now();
             $authUser = Auth::user();
@@ -102,10 +102,10 @@ class UserController extends ResponseController
 
 
 
-        public function getTokens() {
+    //     public function getTokens() {
 
-        $tokens = DB::table( "personal_access_tokens" )->get();
+    //     $tokens = DB::table( "personal_access_tokens" )->get();
 
-        return $tokens;
-    }
+    //     return $tokens;
+    // }
 }

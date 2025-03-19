@@ -43,7 +43,9 @@ Route::middleware( "auth:sanctum" )->group( function(){
     Route::put( "/updateuser/{id}", [ AuthController::class, "updateUser" ]);
     Route::delete( "/voldemort/{id}", [ AuthController::class, "avadaKedavra" ]);
 
-    Route::get( "/tokens", [ UserController::class, "getTokens" ]);
+    Route::post("/newuser", [ AuthController::class, "newUser"]);
+
+    Route::get( "/tokens", [ AuthController::class, "getTokens" ]);
 });
 
 Route::post( "/register", [ UserController::class, "register" ]);

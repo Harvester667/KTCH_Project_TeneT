@@ -24,14 +24,14 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "name" => "required",
+            "email" => "required",
             "password" => "required"
         ];
     }
 
     public function message(){
         return [
-                "name.required" => "Név megadása elvárt.",
+                "email.required" => "Név megadása elvárt.",
                 "password.required" => "Jelszó megadása elvárt."
         ];
     }
