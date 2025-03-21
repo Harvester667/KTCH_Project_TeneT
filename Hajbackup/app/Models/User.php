@@ -34,12 +34,15 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
+
+    //Kitölthető mezők. Ha nincs itt NULL értéket ad!
     protected $fillable = [
         'name',
         'email',
         'password',
         //'city_id',
-        "admin"
+        'admin',
+        'login_counter',
     ];
 
     /**

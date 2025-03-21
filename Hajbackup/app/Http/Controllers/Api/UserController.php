@@ -50,14 +50,14 @@ class UserController extends ResponseController
 
             $actualTime = Carbon::now();
             $authUser = Auth::user();
-            $bannedTime = ( new BannerController )->getBannedTime( $authUser->name );
-            ( new BannerController )->reSetLoginCounter( $authUser->name );
+            $bannedTime = ( new BannerController )->getBannedTime( $authUser->email );
+            ( new BannerController )->reSetLoginCounter( $authUser->email );
 
             if( $bannedTime < $actualTime ) {
 
-                ( new BannerController )->resetBannedTime( $authUser->name );
-                $token = $authUser->createToken( $authUser->name."Token" )->plainTextToken;
-                $data[ "user" ] = [ "user" => $authUser->name ];
+                ( new BannerController )->resetBannedTime( $authUser->email );
+                $token = $authUser->createToken( $authUser->email."Token" )->plainTextToken;
+                $data[ "user" ] = [ "user" => $authUser->email ];
                 $data[ "time" ] = $bannedTime;
                 $data[ "admin" ] = $authUser->admin;
                 $data[ "token" ] = $token;
@@ -70,18 +70,19 @@ class UserController extends ResponseController
             }
         }else {
 
-            $loginCounter = ( new BannerController )->getLoginCounter( $request[ "name" ]);
+            $loginCounter = ( new BannerController )->getLoginCounter( $request[ "email" ]);
             if( $loginCounter < 3 ) {
 
-                ( new BannerController )->setLoginCounter( $request[ "name" ]);
+                ( new BannerController )->setLoginCounter( $request[ "email" ]);
 
-                return $this->sendError( "Autentikációs hiba.", "Hibás felhasználónév vagy jelszó.", 401 );
+                return $this->sendError( "Autentikációs hiba.", [ "Hibás felhasználónév vagy jelszó.", "Hibák száma: " .$loginCounter], 401 ); 
+
 
             }else {
 
-                ( new BannerController )->setBannedTime( $request[ "name" ]);
-                $bannedTime = ( new BannerController )->getBannedTime( $request[ "name" ]);
-                ( new MailController )->sendMail( $request[ "name" ], $bannedTime );
+                ( new BannerController )->setBannedTime( $request[ "email" ]);
+                $bannedTime = ( new BannerController )->getBannedTime( $request[ "email" ]);
+                ( new MailController )->sendMail( $request[ "email" ], $bannedTime );
 
                 $errorMessage = [ "message" => "Következő lehetőség: ", "time" => $bannedTime ];
 

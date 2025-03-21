@@ -17,10 +17,11 @@ class ResponseController extends Controller
         return response()->json( $response, 200 );
     }
 
-    public function sendError( $error, $errorMessage=[], $code = 404 ){
+    public function sendError( $error, $errorMessages=[], $code ){
         $response = [
             "success"=> false,
-            "error"=> $error
+            "error"=> $error,
+            "code"=> $code
         ];
 
         if(!empty( $errorMessages )) {

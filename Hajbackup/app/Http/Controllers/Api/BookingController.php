@@ -25,7 +25,7 @@ class BookingController extends ResponseController
         $booking = Booking::where( "booking", $request[ "booking" ])->first();
 
         if( !$booking){
-            return $this->sendError( "Adathiba.", "Nincs ilyen foglalás.");
+            return $this->sendError( "Adathiba.", [ "Nincs ilyen foglalás." ], 400 );
         }
 
         return $this->sendResponse( new BookingResource( $booking ), "Foglalás betöltve." );
@@ -40,7 +40,7 @@ class BookingController extends ResponseController
             }
         });
         if( !Gate::allows( "admin" )){
-            return $this->sendError( "Autentikációs hiba.", "Nincs jogosultsága.", 401 );
+            return $this->sendError( "Autentikációs hiba.", [ "Nincs jogosultsága." ], 401 );
         }
 
         $request->validated();
@@ -69,14 +69,14 @@ class BookingController extends ResponseController
         });
         if ( !Gate::allows( "admin" )) {
 
-            return $this->sendError( "Autentikációs hiba.", "Nincs jogosultsága.", 401 );
+            return $this->sendError( "Autentikációs hiba.", [ "Nincs jogosultsága." ], 401 );
         }
 
         $request->validated();
 
         $booking = Booking::find( $request[ "id" ]);
         if( is_null( $booking )){
-            return $this->sendError( "Adathiba.", [ "Nincs ilyen foglalás." ]);
+            return $this->sendError( "Adathiba.", [ "Nincs ilyen foglalás." ], 400 );
         }else{
             $booking->booking = $request[ "booking" ];
             //$booking-> datetime = $request[ "" ];
@@ -103,7 +103,7 @@ class BookingController extends ResponseController
         });
         if ( !Gate::allows( "admin" )) {
 
-            return $this->sendError( "Autentikációs hiba.", "Nincs jogosultsága.", 401 );
+            return $this->sendError( "Autentikációs hiba.", [ "Nincs jogosultsága." ], 401 );
         }
 
         $booking = Booking::find( $request[ "id" ]);

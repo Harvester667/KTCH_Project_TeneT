@@ -16,7 +16,7 @@ class AuthController extends ResponseController {
 
         if ( !Gate::allows( "super" )) {
 
-            return $this->sendError( "Autentikációs hiba.", "Nincs jogosultsága.", 401 );
+            return $this->sendError( "Autentikációs hiba.", ["Nincs jogosultsága."], 401 );
         }
 
         $users = User::all();
@@ -27,7 +27,7 @@ class AuthController extends ResponseController {
 
         if ( !Gate::allows( "super" )) {
 
-            return $this->sendError( "Autentikációs hiba.", "Nincs jogosultsága.", 401 );
+            return $this->sendError( "Autentikációs hiba.", ["Nincs jogosultsága."], 401 );
         }
 
         $user = User::find( $request[ "id" ]);
@@ -43,7 +43,7 @@ class AuthController extends ResponseController {
 
         if ( !Gate::allows( "super" )) {
 
-            return $this->sendError( "Autentikációs hiba.", "Nincs jogosultsága.", 401 );
+            return $this->sendError( "Autentikációs hiba.", ["Nincs jogosultsága."], 401 );
         }
 
         $user = User::find( $request[ "id" ]);
@@ -59,7 +59,7 @@ class AuthController extends ResponseController {
 
         if( !Gate::allows( "super" )) {
 
-            return $this->sendError( "Autentikációs hiba.", "Nincs jogosultság.", 401 );
+            return $this->sendError( "Autentikációs hiba.", ["Nincs jogosultsága."], 401 );
         }
 
         $user = User::find( $request[ "id" ]);
@@ -75,7 +75,7 @@ class AuthController extends ResponseController {
 
         if( !Gate::allows( "admin" )) {
 
-            return $this->sendError( "Autentikációs hiba.", "Nincs jogosultság.", 401 );
+            return $this->sendError( "Autentikációs hiba.", ["Nincs jogosultsága."], 401 );
         }
         $request->validated();
 
@@ -99,7 +99,7 @@ class AuthController extends ResponseController {
 
         if ( !Gate::allows( "super" )) {
 
-            return $this->sendError( "Autentikációs hiba.", "Nincs jogosultsága.", 401 );
+            return $this->sendError( "Autentikációs hiba.", ["Nincs jogosultsága."], 401 );
         }
         
         $tokens = DB::table( "personal_access_tokens" )->get();
@@ -111,7 +111,7 @@ class AuthController extends ResponseController {
 
         if( !Gate::allows( "super" )) {
 
-            return $this->sendError( "Autentikációs hiba.", "Nincs jogosultsága.", 401 );
+            return $this->sendError( "Autentikációs hiba.", ["Nincs jogosultsága."], 401 );
         }
 
         $user =  User::find( $request[ "id" ]);

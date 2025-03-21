@@ -9,46 +9,46 @@ use Carbon\Carbon;
 
 class BannerController extends Controller {
 
-    public function getLoginCounter( $name ) {
+    public function getLoginCounter( $email ) {
 
-        $user = User::where( "name", $name )->first();
+        $user = User::where( "email", $email )->first();
         $counter = $user->login_counter;
 
         return $counter;
     }
 
-    public function resetLoginCounter( $name ) {
+    public function resetLoginCounter( $email ) {
 
-        $user = User::where( "name", $name )->first();
+        $user = User::where( "email", $email )->first();
         $user->login_counter = 0;
 
         $user->update();
     }
 
-    public function setLoginCounter( $name ) {
+    public function setLoginCounter( $email ) {
 
-        User::where( "name", $name )->increment( "login_counter" );
+        User::where( "email", $email )->increment( "login_counter" );
     }
 
-    public function getBannedTime( $name ) {
+    public function getBannedTime( $email ) {
 
-         $user = User::where( "name", $name )->first();
+         $user = User::where( "email", $email )->first();
          $bannedTime = $user->banning_time;
 
          return $bannedTime;
     }
 
-    public function setBannedTime( $name ) {
+    public function setBannedTime( $email ) {
 
-        $user = User::where( "name", $name )->first();
+        $user = User::where( "email", $email )->first();
         $user->banning_time = Carbon::now()->addSeconds( 60 );
 
         $user->update();
     }
 
-    public function resetBannedTime( $name ) {
+    public function resetBannedTime( $email ) {
 
-        $user = User::where( "name", $name )->first();
+        $user = User::where( "email", $email )->first();
         $user->banning_time = null;
 
         $user->update();
