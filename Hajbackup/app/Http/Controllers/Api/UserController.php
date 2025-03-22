@@ -57,7 +57,7 @@ class UserController extends ResponseController
 
                 ( new BannerController )->resetBannedTime( $authUser->email );
                 $token = $authUser->createToken( $authUser->email."Token" )->plainTextToken;
-                $data[ "user" ] = [ "user" => $authUser->email ];
+                $data[ "user" ] = [ "email" => $authUser->email ];
                 $data[ "time" ] = $bannedTime;
                 $data[ "admin" ] = $authUser->admin;
                 $data[ "token" ] = $token;
