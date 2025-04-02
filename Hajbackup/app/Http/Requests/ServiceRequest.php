@@ -24,13 +24,21 @@ class ServiceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "service" => "required"
+            "service" => "required",
+            "duration"=>"required|regex:/[0-9]/",
+            "price"=>"required|regex:/[0-9]/",
+            "description"=>"max:300"
         ];
     }
 
     public function messages(){
         return [
- 
+            "service.required" => "A szolgáltatás neve elvárt.",
+            "duration.required" => "Az időtartam elvárt.",
+            "duration.regex" => "Csak szám elfogadható",
+            "price.required" => "Az ár elvárt.",
+            "price.regex" => "Csak szám elfogadható.",
+            "description.max" => "300 karaktert meghaladó."
         ];
     }
 

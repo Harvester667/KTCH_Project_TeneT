@@ -21,7 +21,7 @@ class ServiceController extends ResponseController
     public function getService( Request $request ){
         $service = Service::where( "service", $request[ "service "])->first();
         if( is_null( $service )){
-            return $this->sendError( "Adathiba.", [ "Nincs ilyen szolgálatás." ], 406);
+            return $this->sendError( "Beviteli hiba.", [ "Nincs ilyen szolgálatás." ], 406);
         }else{
             return $this->sendResponse( $service, "Szolgáltatás listázva." );
         }
@@ -32,6 +32,9 @@ class ServiceController extends ResponseController
 
         $service = new Service();
         $service->service = $request[ "service" ];
+        $service->duration = $request[ "duration" ];
+        $service->price = $request[ "price" ];
+        $service->description = $request[ "description" ];
         $service->save();
 
         return $this->sendResponse( new ServiceResource( $service ), "Új szolgáltatás rögzítve." );
@@ -42,7 +45,7 @@ class ServiceController extends ResponseController
         
         $service = Service::find( $request[ "id" ]);
         if( is_null( $service )){
-            $this->sendError( "Adathiba.", [ "Nincs ilyen szolgáltatás." ], 406 );
+            $this->sendError( "Beviteli hiba.", [ "Nincs ilyen szolgáltatás." ], 406 );
         }else{
             $service->service = $request[ "service" ];
             $service->update();
@@ -54,7 +57,7 @@ class ServiceController extends ResponseController
     public function deleteService( Request $request ){
         $service = Service::find( $request[ "id "]);
         if( is_null( $service )){
-            return $this->sendError( "Adathiba.", [ "Szolgáltatás nem létezik."], 406 );
+            return $this->sendError( "Beviteli hiba.", [ "Szolgáltatás nem létezik."], 406 );
         }else{
             $service->delete();
 

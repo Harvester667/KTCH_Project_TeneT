@@ -17,7 +17,13 @@ class Customer extends JsonResource
         //return parent::toArray($request);
         return [
             "id"=>$this->id,
-            "customer"=>$this->customer
+            "user_id"=>$this->user_id,
+            "phone"=>$this->phone,
+            "gender"=>$this->gender,
+            "invoice_address"=>$this->invoice_address,
+            "invoice_postcode"=>$this->invoice_postcode,
+            "invoice_city"=>$this->invoice_city,
+            "birth_date"=>$this->birth_date
         ];
     }
 }

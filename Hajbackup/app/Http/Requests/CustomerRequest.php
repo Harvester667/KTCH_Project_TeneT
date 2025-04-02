@@ -24,13 +24,24 @@ class CustomerRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "customer" => "required"
+            "phone" => "required",
+            "gender" => "regex:/^(férfi|nő|szabadon választott)$/",
+            "invoice_address" => "required",
+            "invoice_postcode" => "required",
+            "invoice_city" => "required",
+            "birth_date" => "required|date"
         ];
     }
 
     public function messages(){
         return [
- 
+            "phone.required" => "A telefonszám megadása elvárt.",
+            "gender.regex" => "A gender mezőnek a következő értékek egyikét kell tartalmaznia: férfi, nő, szabadon választott.",
+            "invoice_address.required" => "A cím elvárt.",
+            "invoice_postcode.required" => "Az irányítószám elvárt.",
+            "invoice_city.required" => "A város elvárt.",
+            "birth_date.required" => "A születési időpont elvárt.",
+            "birth_date.date" => "Év-hónap-nap formátum elvárt."
         ];
     }
 

@@ -24,16 +24,19 @@ class BookingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "booking" => "required|unique:bookings,id",
-            "customer" => "required",
-            "employee" => "required",
+            // "booking" => "required|unique:bookings,id",
+            "datetime" => "required",
+            // "customer" => "required",
+            // "employee" => "required",
             "service" => "required"
         ];
     }
 
     public function messages(){
         return [
-            "booking.required" => "Foglalás azonosító elvárt.",
+            // "booking.required" => "Foglalás azonosító elvárt.",
+            "datetime.required" => "Foglalás időpontja elvárt.",
+            "datetime.datetime" => "Év-hónap-nap, óra-perc-másodperc elvárt.",
             "customer.required" => "Vendég név elvárt.",
             "employee.required" => "Dolgozó név elvárt.",
             "service.required" => "Szolgáltatás elvárt."

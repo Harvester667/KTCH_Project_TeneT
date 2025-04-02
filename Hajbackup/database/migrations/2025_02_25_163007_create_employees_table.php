@@ -16,9 +16,10 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('phone')->comment('Egyedi telefonszám');
             $table->enum('gender', ['férfi', 'nő', 'szabadon választott']);
+            $table->text('qualifications')->nullable();
             $table->text('description')->nullable();
             $table->rememberToken();
-            //$table->timestamps();
+            $table->timestamps();
         });
     }
 

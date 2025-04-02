@@ -14,9 +14,19 @@ class AuthController extends ResponseController {
 
     public function getUsers() {
 
-        if ( !Gate::allows( "super" )) {
+        // if ( !Gate::allows( "super" )) {
+        //     return $this->sendError( "Autentikációs hiba.", ["Nincs jogosultsága."], 401 );
+        // }
+        // Először ellenőrizd, hogy a felhasználó super admin jogosultsággal rendelkezik
+        if (Gate::allows("super")) {
+        // Ha super admin, akkor engedélyezd a működést
+        $users = User::all();
+        return $this->sendResponse($users, "Betöltve.");
+        }
 
-            return $this->sendError( "Autentikációs hiba.", ["Nincs jogosultsága."], 401 );
+        // Ha nem super admin, ellenőrizd, hogy admin jogosultsággal rendelkezik-e
+        if (!Gate::allows("admin")) {
+        return $this->sendError("Autentikációs hiba.", ["Nincs jogosultsága."], 401);
         }
 
         $users = User::all();
@@ -31,8 +41,13 @@ class AuthController extends ResponseController {
         }
 
         $user = User::find( $request[ "id" ]);
-        // $user->admin = $request[ "admin" ]; //Hibás minta!!?
-        $user->admin = 1;
+        
+            // Ellenőrizzük, hogy a felhasználó létezik-e
+        if (!$user) {
+        return $this->sendError("Beviteli hiba.", ["A megadott felhasználó nem található."], 406);
+    }
+
+        $user->admin = 3;
 
         $user->update();
 
@@ -79,7 +94,7 @@ class AuthController extends ResponseController {
         }
         $request->validated();
 
-        $adminLevel = User::count() === 0 ? 2 : 0;
+        $adminLevel = User::count() === 0 ? 4 : 0;
         $user = User::create([
 
             "name" => $request["name"],

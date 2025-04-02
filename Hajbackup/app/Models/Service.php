@@ -9,7 +9,14 @@ class Service extends Model
 {
     use HasFactory;
 
-    public $timestamp=false;
+    protected $fillable = [
+        'service',
+        'duration',
+        'price',
+        'description'
+    ];
+
+    public $timestamp=true;
 
     public function bookings()
     {

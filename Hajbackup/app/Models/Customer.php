@@ -9,7 +9,17 @@ class Customer extends Model
 {
     use HasFactory;
 
-    public $timestamp=false;
+    protected $fillable = [
+        'user_id',
+        'phone',
+        'gender',
+        'invoice_address',
+        'invoice_postcode',
+        'invoice_city',
+        'birth_date'
+    ];
+
+    public $timestamp=true;
 
     public function user()
     {

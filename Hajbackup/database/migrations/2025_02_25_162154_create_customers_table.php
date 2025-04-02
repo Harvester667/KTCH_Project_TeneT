@@ -22,7 +22,7 @@ return new class extends Migration
             // $table->foreignId('invoice_country_id')->nullable()->constrained('countries');
             $table->date('birth_date')->nullable();
             $table->rememberToken();
-            //$table->timestamps();
+            $table->timestamps();
         });
     }
 

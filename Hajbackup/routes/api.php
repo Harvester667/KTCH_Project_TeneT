@@ -14,6 +14,7 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
+//Végpont csoport aminek eléréséhez minimum bejelentkezés szükséges.
 Route::middleware( "auth:sanctum" )->group( function(){
 
     Route::post( "/addbooking", [ BookingController::class, "addBooking" ]);
@@ -28,7 +29,8 @@ Route::middleware( "auth:sanctum" )->group( function(){
     Route::post( "/addcustomer", [ CustomerController::class, "addCustomer" ]);
     Route::put( "/updatecustomer", [ CustomerController::class, "updateCustomer" ]);
     Route::delete( "/destcustomer", [ CustomerController::class, "deleteCustomer" ]);
-    
+
+    Route::post( "/addservice", [ ServiceController::class, "addService" ]);
 
     //Route::post( "/addcity", [ CityController::class, "addCity" ]);
     // Route::get( "/userprofile", [ ProfileController::class, "getProfile" ]);
@@ -51,6 +53,8 @@ Route::middleware( "auth:sanctum" )->group( function(){
 Route::post( "/register", [ UserController::class, "register" ]);
 Route::post( "/login", [ UserController::class, "login" ]);
 
+Route::get( "/services", [ ServiceController::class, "getServices" ]);
+
 Route::get( "/bookings", [ BookingController::class, "getBookings" ]);
 Route::get( "/booking", [ BookingController::class, "getOneBooking" ]);
 //Route::get( "/amount", [ BookingController::class, "getAmount" ]);
@@ -60,6 +64,8 @@ Route::get( "/oneemployee", [ EmployeeController::class, "getEmployee" ]);
 
 Route::get( "/customers", [ CustomerController::class, "getCustomers" ]);
 Route::get( "/onecustomer", [ CustomerController::class, "getCustomer" ]);
+
+
 
 
 

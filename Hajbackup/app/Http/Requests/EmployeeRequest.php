@@ -24,13 +24,19 @@ class EmployeeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "employee" => "required"
+            "phone" => "required",
+            "gender" => "regex:/^(férfi|nő|szabadon választott)$/",
+            "qualifications" => "max:300",
+            "description" => "max:300"
         ];
     }
 
     public function messages(){
         return [
- 
+            "phone.required" => "A telefonszám megadása elvárt.",
+            "gender.regex" => "A gender mezőnek a következő értékek egyikét kell tartalmaznia: férfi, nő, szabadon választott.",
+            "qualifications.max" => "Több mint 300 karakter.",
+            "description" => "Több mint 300 karakter."
         ];
     }
 

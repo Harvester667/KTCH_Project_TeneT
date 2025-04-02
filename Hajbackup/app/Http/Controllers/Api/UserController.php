@@ -17,7 +17,7 @@ class UserController extends ResponseController
 
         $request->validated();
 
-        $adminLevel = User::count() === 0 ? 2 : 0;  // Ellenőrzi a felhasználók számát, Ha az első felhasználó, adminisztrátor szint 2, Ha már van felhasználó, adminisztrátor szint 0.
+        $adminLevel = User::count() === 0 ? 4 : 0;  // Ellenőrzi a felhasználók számát, Ha az első felhasználó, adminisztrátor szint 2, Ha már van felhasználó, adminisztrátor szint 0.
 
         // $isFirstUser = User::count() === 0;  // Ellenőrzi, hogy van e már user az adatbázisban.
         // $adminLevel = $isFirstUser ? 2 : 0;  // Ha az első felhasználó, adminisztrátor szint 2, Ha már van felhasználó, adminisztrátor szint 0.
