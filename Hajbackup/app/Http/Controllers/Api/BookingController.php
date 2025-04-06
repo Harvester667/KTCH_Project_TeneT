@@ -36,7 +36,7 @@ class BookingController extends ResponseController
     // Auth és jogosultsági ellenőrzés
     Gate::before(function () {
         $user = auth("sanctum")->user();
-        if ($user->admin == 2) {
+        if ($user->admin == 4) {
             return true;
         }
     });

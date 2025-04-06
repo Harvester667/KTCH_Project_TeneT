@@ -20,16 +20,16 @@ return new class extends Migration
         // Pivot tábla a bookings és users között
         Schema::create('booking_user', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('booking_id')->constrained()->onDelete('cascade'); // Kapcsolat a bookings táblával
-            $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Kapcsolat a users táblával
+            $table->foreignId('booking_id')->onDelete('cascade'); // Kapcsolat a bookings táblával
+            $table->foreignId('user_id')->onDelete('cascade'); // Kapcsolat a users táblával
             $table->timestamps();
         });
 
         // Pivot tábla a bookings és services között
         Schema::create('booking_service', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('booking_id')->constrained()->onDelete('cascade'); // Kapcsolat a bookings táblával
-            $table->foreignId('service_id')->constrained()->onDelete('cascade'); // Kapcsolat a services táblával
+            $table->foreignId('booking_id')->onDelete('cascade'); // Kapcsolat a bookings táblával
+            $table->foreignId('service_id')->onDelete('cascade'); // Kapcsolat a services táblával
             $table->timestamps();
         });  
         // Schema::create('bookings', function (Blueprint $table) {

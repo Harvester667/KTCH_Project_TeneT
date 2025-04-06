@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('employees', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->onDelete('cascade');
             $table->string('phone')->comment('Egyedi telefonszám');
             $table->enum('gender', ['férfi', 'nő', 'szabadon választott']);
             $table->text('qualifications')->nullable();
