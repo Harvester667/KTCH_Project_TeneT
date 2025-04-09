@@ -34,14 +34,14 @@ class AppServiceProvider extends ServiceProvider
             return $user->admin == 0;
         });
 
-        Gate::define( "employee", function( $user ) {
+        // Gate::define( "employee", function( $user ) {
 
-            return $user->role == 1;
-        });
+        //     return $user->role == 1;
+        // });
 
-        Gate::define( "customer", function( $user ) {
+        // Gate::define( "customer", function( $user ) {
 
-            return $user->role == 0;
-        });
+        //     return $user->role == 0;
+        // });
     }
 }

@@ -107,7 +107,7 @@ class UserController extends ResponseController
     }
 
 
-
+    //Csak tesztelésre használva, TÖRÖLNI KELL
     //     public function getTokens() {
 
     //     $tokens = DB::table( "personal_access_tokens" )->get();

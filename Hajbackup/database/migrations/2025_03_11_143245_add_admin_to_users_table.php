@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
 
-            $table->integer( 'admin' )->after( "remember_token" );
-            $table->integer( 'role' );
+            // $table->integer( 'admin' )->after( "remember_token" );
+            // $table->integer( 'role' );
         });
     }
 
@@ -25,8 +25,8 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
 
-            $table->dropColumn( 'admin' );
-            $table->dropColumn( 'role' );
+            // $table->dropColumn( 'admin' );
+            // $table->dropColumn( 'role' );
         });
     }
 };

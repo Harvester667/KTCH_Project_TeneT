@@ -54,6 +54,22 @@ class AuthController extends ResponseController {
         return $this->sendResponse( $user->name, "Admin jog megadva." );
     }
 
+    public function demotivate( Request $request ) {
+
+        if ( !Gate::allows( "super" )) {
+
+            return $this->sendError( "Autentikációs hiba.", ["Nincs jogosultsága."], 401 );
+        }
+
+        $user = User::find( $request[ "id" ]);
+        // $user->admin = $request[ "admin" ]; //Hibás minta!!?
+        $user->admin = 0;
+
+        $user->update();
+
+        return $this->sendResponse( $user->name, "Admin jog megvonva." );
+    }
+
     public function setEmployee( Request $request ) {
 
         if ( !Gate::allows( "super" )) {
@@ -96,22 +112,6 @@ class AuthController extends ResponseController {
         return $this->sendResponse( $user->name, "Customer jog megadva." );
     }
 
-    public function demotivate( Request $request ) {
-
-        if ( !Gate::allows( "super" )) {
-
-            return $this->sendError( "Autentikációs hiba.", ["Nincs jogosultsága."], 401 );
-        }
-
-        $user = User::find( $request[ "id" ]);
-        // $user->admin = $request[ "admin" ]; //Hibás minta!!?
-        $user->admin = 0;
-
-        $user->update();
-
-        return $this->sendResponse( $user->name, "Admin jog megvonva." );
-    }
-
     public function updateUser( Request $request ) {
 
         if( !Gate::allows( "super" )) {
@@ -152,18 +152,18 @@ class AuthController extends ResponseController {
 
         return $this->sendResponse( $user, "Felhasználó létrehozva." );
     }
+    //Csak tesztelésre használva
+    // public function getTokens() {
 
-    public function getTokens() {
+    //     if ( !Gate::allows( "super" )) {
 
-        if ( !Gate::allows( "super" )) {
-
-            return $this->sendError( "Autentikációs hiba.", ["Nincs jogosultsága."], 401 );
-        }
+    //         return $this->sendError( "Autentikációs hiba.", ["Nincs jogosultsága."], 401 );
+    //     }
         
-        $tokens = DB::table( "personal_access_tokens" )->get();
+    //     $tokens = DB::table( "personal_access_tokens" )->get();
 
-        return $tokens;
-    }
+    //     return $tokens;
+    // }
 
     public function avadaKedavra( Request $request ) {
 

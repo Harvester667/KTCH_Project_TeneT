@@ -19,19 +19,14 @@ class Booking extends Model
 
     public $timestamp=true;
 
-    public function employees()
+    public function users()
     {
-        return $this->belongsTo(User::class, 'user_id');
-    }
-
-    public function customers()
-    {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class );
     }
 
     public function services()
     {
-        return $this->belongsTo(Service::class, 'service_id');
+        return $this->belongsTo(Service::class );
     }
 
     // public function users()

@@ -33,40 +33,51 @@ class BookingController extends ResponseController
 
     public function addBooking(BookingRequest $request)
 {
-    // Auth és jogosultsági ellenőrzés
-    Gate::before(function () {
-        $user = auth("sanctum")->user();
-        if ($user->admin == 0) {
-            return true;
-        }
-    });
 
-    if (!Gate::allows("admin")) {
-        return $this->sendError("Autentikációs hiba.", ["Nincs jogosultsága."], 401);
-    }
+    // // Auth és jogosultsági ellenőrzés TÖRÖLNI   
+    // Gate::before(function () {
+    //     $user = auth("sanctum")->user();
+    //     if ($user->admin == 0) {
+    //         return true;
+    //     }
+    // });
 
-    // Kérés validálása
+    // if (!Gate::allows("admin")) {
+    //     return $this->sendError("Autentikációs hiba.", ["Nincs jogosultsága."], 401);
+    // }
+
+    //Felhasználó validálása
+
     $request->validated();
 
     $booking = new Booking();
-    $booking->booking_time = $request["booking_time"]; // Időpont
-    // $booking->save(); // Foglalás mentése
+    // $booking->booking_time = $request["booking_time"]; // Időpont
+    $booking = Booking::create([
+        "booking_time" => $request["booking_time"],
+        "employee_id" => $request["employee_id"],
+        "customer_id" => auth("sanctum")->user()->id,
+        "service_id" => $request["service_id"],
+        
+ ]);
 
-    // Felhasználók és szolgáltatások hozzárendelése
-    if (!empty($request["employee_id"])) {
-        $booking->users()->attach($request["user_id"]); // Felhasználók hozzárendelése
-    }
-
-    if (!empty($request["customer_id"])) {
-        $booking->users()->attach($request["user_id"]); // Felhasználók hozzárendelése
-    }
-
-    if (!empty($request["service_ids"])) {
-        $booking->services()->attach($request["service_ids"]); // Szolgáltatások hozzárendelése
-    }
-
-    return $this->sendResponse(new BookingResource($booking), "A foglalás rögzítve.");
+    $booking->save(); // Foglalás mentése
 }
+
+//     // Felhasználók és szolgáltatások hozzárendelése
+//     if (!empty($request["employee_id"])) {
+//         $booking->users()->attach($request["user_id"]); // Felhasználók hozzárendelése
+//     }
+
+//     if (!empty($request["customer_id"])) {
+//         $booking->users()->attach($request["user_id"]); // Felhasználók hozzárendelése
+//     }
+
+//     if (!empty($request["service_ids"])) {
+//         $booking->services()->attach($request["service_ids"]); // Szolgáltatások hozzárendelése
+//     }
+
+//     return $this->sendResponse(new BookingResource($booking), "A foglalás rögzítve.");
+// }
 
     // public function addBooking( BookingRequest $request ){
         
