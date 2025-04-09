@@ -1,0 +1,32 @@
+/* Kép beállítások */
+.card-body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.card-body .col-xl-5 {
+  background-size: cover;
+  background-position: center;
+  height: 100%;
+  border-radius: 25px;
+}
+
+/* Képeknek dinamikus beállítások */
+.form-control {
+  border: 1px solid black !important;
+}
+
+.form-select {
+  border: 1px solid black !important;
+}
+
+/* Ha nincs kiválasztott fodrász, akkor az üres háttér */
+.form-select:disabled {
+  color: #999;
+}
+
+#hal{
+  background-color: white;
+}

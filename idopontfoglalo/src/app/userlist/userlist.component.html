@@ -1,0 +1,28 @@
+<div class="container mt-4">
+    <h2>Felhasználók listája</h2>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Név</th>
+          <th>E-mail</th>
+          <th>Szerepkör</th>
+          <th>Akciók</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users">
+          <td>{{ user.id }}</td>
+          <td>{{ user.name }}</td>
+          <td>{{ user.email }}</td>
+          <td>{{ user.admin === 2 ? 'Superadmin' : user.admin === 1 ? 'Fodrász' : 'Vendég' }}</td>
+          <td>
+            <button *ngIf="user.admin === 0" class="btn btn-dark btn-sm" (click)="setAdmin(user.id)">Feljogosít</button>
+            <button *ngIf="user.admin === 1" class="btn btn-danger btn-sm" (click)="demotivate(user.id)">Lefokoz</button>
+            <button class="btn btn-info btn-sm" (click)="addEmployee(user.id)">Hozzáadás dolgozókhoz</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  

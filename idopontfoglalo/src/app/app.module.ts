@@ -1,44 +1,38 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HomeComponent } from './pages/home/home.component';
-import { LoginComponent } from './pages/login/login.component';
-import { RegisterComponent } from './pages/register/register.component';
-import { DashboardComponent } from './admin/dashboard/dashboard.component';
-import { CalendarModule } from '@syncfusion/ej2-angular-calendars';
-import { CalendarComponent } from './calendar/calendar.component';
-import { FullCalendarModule } from '@fullcalendar/angular';
-import { HttpClientModule } from '@angular/common/http';
+import { NewAppointmentComponent } from './pages/new-appointment/new-appointment.component';
+import { AppointmentListComponent } from './pages/appointment-list/appointment-list.component';
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { FormsModule } from '@angular/forms';
-import { ReactiveFormsModule } from '@angular/forms'
-
+import { HttpClientModule } from '@angular/common/http';
+import { RegisterComponent } from './register/register.component';
+import { LoginComponent } from './login/login.component';
+import { HomeComponent } from './home/home.component';
+import { UserlistComponent } from './userlist/userlist.component';
+import { ServicesListComponent } from './services-list/services-list.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent,
-    LoginComponent,
-    RegisterComponent,
+    NewAppointmentComponent,
+    AppointmentListComponent,
     DashboardComponent,
-    CalendarComponent
+    RegisterComponent,
+    LoginComponent,
+    HomeComponent,
+    UserlistComponent,
+    ServicesListComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    // CalendarModule,
-    FullCalendarModule,
-    HttpClientModule,
     FormsModule,
-    ReactiveFormsModule,
-    
+    HttpClientModule,
   ],
-  providers: [
-    provideClientHydration()
-  ],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  bootstrap: [AppComponent],
-  
+  providers: [],
+  bootstrap: [AppComponent]
 })
 export class AppModule { }
