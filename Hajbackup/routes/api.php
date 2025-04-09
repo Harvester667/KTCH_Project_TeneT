@@ -3,8 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\BookingController;
-use App\Http\Controllers\Api\CustomerController;
-use App\Http\Controllers\Api\EmployeeController;
+// use App\Http\Controllers\Api\CustomerController;
+// use App\Http\Controllers\Api\EmployeeController;
 use App\Http\Controllers\Api\ServiceController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\api\ProfileController;
@@ -21,14 +21,14 @@ Route::middleware( "auth:sanctum" )->group( function(){
     Route::put( "/updatebooking", [ BookingController::class, "updateBooking" ]);
     Route::delete( "/deletebooking", [ BookingController::class, "deleteBooking" ]);
     
-    Route::post( "/addemployee", [ EmployeeController::class, "addEmployee" ]);
-    Route::put( "/updateemployee", [ EmployeeController::class, "updateEmployee" ]);
-    Route::delete( "/destemployee", [ EmployeeController::class, "deleteEmployee" ]);
+    // Route::post( "/addemployee", [ EmployeeController::class, "addEmployee" ]);
+    // Route::put( "/updateemployee", [ EmployeeController::class, "updateEmployee" ]);
+    // Route::delete( "/destemployee", [ EmployeeController::class, "deleteEmployee" ]);
     
 
-    Route::post( "/addcustomer", [ CustomerController::class, "addCustomer" ]);
-    Route::put( "/updatecustomer", [ CustomerController::class, "updateCustomer" ]);
-    Route::delete( "/destcustomer", [ CustomerController::class, "deleteCustomer" ]);
+    // Route::post( "/addcustomer", [ CustomerController::class, "addCustomer" ]);
+    // Route::put( "/updatecustomer", [ CustomerController::class, "updateCustomer" ]);
+    // Route::delete( "/destcustomer", [ CustomerController::class, "deleteCustomer" ]);
 
     Route::post( "/addservice", [ ServiceController::class, "addService" ]);
 
@@ -46,7 +46,8 @@ Route::middleware( "auth:sanctum" )->group( function(){
     Route::delete( "/voldemort/{id}", [ AuthController::class, "avadaKedavra" ]);
 
     Route::post("/newuser", [ AuthController::class, "newUser"]);
-
+    Route::put( "/employee/{id}", [ AuthController::class, "setEmployee" ]);
+    Route::put( "/customer/{id}", [ AuthController::class, "setCustomer" ]);
     Route::get( "/tokens", [ AuthController::class, "getTokens" ]);
 });
 

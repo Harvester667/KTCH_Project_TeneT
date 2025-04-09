@@ -15,23 +15,27 @@ return new class extends Migration
             $table->id();
             $table->dateTime('booking_time'); // Időpont
             $table->timestamps();
+            $table->foreignId('employee_id')->onDelete('cascade')->unsigned();
+            $table->foreignId('customer_id')->nullable()->onDelete('cascade')->unsigned();
+            $table->foreignId('service_id')->nullable()->onDelete('cascade')->unsigned();
+
         });
 
-        // Pivot tábla a bookings és users között
-        Schema::create('booking_user', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('booking_id')->onDelete('cascade'); // Kapcsolat a bookings táblával
-            $table->foreignId('user_id')->onDelete('cascade'); // Kapcsolat a users táblával
-            $table->timestamps();
-        });
+        // // Pivot tábla a bookings és users között
+        // Schema::create('booking_user', function (Blueprint $table) {
+        //     $table->id();
+        //     $table->foreignId('booking_id')->onDelete('cascade'); // Kapcsolat a bookings táblával
+        //     $table->foreignId('user_id')->onDelete('cascade'); // Kapcsolat a users táblával
+        //     $table->timestamps();
+        // });
 
-        // Pivot tábla a bookings és services között
-        Schema::create('booking_service', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('booking_id')->onDelete('cascade'); // Kapcsolat a bookings táblával
-            $table->foreignId('service_id')->onDelete('cascade'); // Kapcsolat a services táblával
-            $table->timestamps();
-        });  
+        // // Pivot tábla a bookings és services között
+        // Schema::create('booking_service', function (Blueprint $table) {
+        //     $table->id();
+        //     $table->foreignId('booking_id')->onDelete('cascade'); // Kapcsolat a bookings táblával
+        //     $table->foreignId('service_id')->onDelete('cascade'); // Kapcsolat a services táblával
+        //     $table->timestamps();
+        // });  
         // Schema::create('bookings', function (Blueprint $table) {
         //     $table->id();
         //     $table->foreignId('customer_id')->constrained();

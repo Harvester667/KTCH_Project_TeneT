@@ -47,11 +47,53 @@ class AuthController extends ResponseController {
         return $this->sendError("Beviteli hiba.", ["A megadott felhasználó nem található."], 406);
     }
 
-        $user->admin = 3;
+        $user->admin = 1;
 
         $user->update();
 
         return $this->sendResponse( $user->name, "Admin jog megadva." );
+    }
+
+    public function setEmployee( Request $request ) {
+
+        if ( !Gate::allows( "super" )) {
+
+            return $this->sendError( "Autentikációs hiba.", ["Nincs jogosultsága."], 401 );
+        }
+
+        $user = User::find( $request[ "id" ]);
+        
+            // Ellenőrizzük, hogy a felhasználó létezik-e
+        if (!$user) {
+        return $this->sendError("Beviteli hiba.", ["A megadott felhasználó nem található."], 406);
+    }
+
+        $user->role = 1;
+
+        $user->update();
+
+        return $this->sendResponse( $user->name, "Employee jog megadva." );
+    }
+
+    public function setCustomer( Request $request ) {
+
+        if ( !Gate::allows( "super" )) {
+
+            return $this->sendError( "Autentikációs hiba.", ["Nincs jogosultsága."], 401 );
+        }
+
+        $user = User::find( $request[ "id" ]);
+        
+            // Ellenőrizzük, hogy a felhasználó létezik-e
+        if (!$user) {
+        return $this->sendError("Beviteli hiba.", ["A megadott felhasználó nem található."], 406);
+    }
+
+        $user->role = 0;
+
+        $user->update();
+
+        return $this->sendResponse( $user->name, "Customer jog megadva." );
     }
 
     public function demotivate( Request $request ) {
@@ -94,14 +136,15 @@ class AuthController extends ResponseController {
         }
         $request->validated();
 
-        $adminLevel = User::count() === 0 ? 4 : 0;
+        $adminLevel = User::count() === 0 ? 2 : 0;
         $user = User::create([
 
             "name" => $request["name"],
             "email" => $request["email"],
             "password" => bcrypt( $request["password"]),
             //"city_id" => ( new CityController )->getCityId( $request[ "city" ]),
-            "admin" => $adminLevel
+            "admin" => $adminLevel,
+            "role" => 0
 
         ]);
         //$user->city_id = ( new CityController )->getCityId( $request[ "city" ]);

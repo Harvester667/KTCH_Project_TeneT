@@ -28,7 +28,9 @@ class BookingRequest extends FormRequest
             "datetime" => "required",
             // "customer" => "required",
             // "employee" => "required",
-            "service" => "required"
+            "employee_id" => "required",
+            // "customer_id" => "required",
+            // "service" => "required"
         ];
     }
 
@@ -37,9 +39,9 @@ class BookingRequest extends FormRequest
             // "booking.required" => "Foglalás azonosító elvárt.",
             "datetime.required" => "Foglalás időpontja elvárt.",
             "datetime.datetime" => "Év-hónap-nap, óra-perc-másodperc elvárt.",
-            "customer.required" => "Vendég név elvárt.",
-            "employee.required" => "Dolgozó név elvárt.",
-            "service.required" => "Szolgáltatás elvárt."
+            // "customer.required" => "Vendég név elvárt.",
+            "employee_id.required" => "Dolgozó azonosító elvárt.",
+            // "service.required" => "Szolgáltatás elvárt."
         ];
     }
 

@@ -17,7 +17,7 @@ class UserController extends ResponseController
 
         $request->validated();
 
-        $adminLevel = User::count() === 0 ? 4 : 0;  // Ellenőrzi a felhasználók számát, Ha az első felhasználó, adminisztrátor szint 2, Ha már van felhasználó, adminisztrátor szint 0.
+        $adminLevel = User::count() === 0 ? 2 : 0;  // Ellenőrzi a felhasználók számát, Ha az első felhasználó, adminisztrátor szint 2, Ha már van felhasználó, adminisztrátor szint 0.
 
         // $isFirstUser = User::count() === 0;  // Ellenőrzi, hogy van e már user az adatbázisban.
         // $adminLevel = $isFirstUser ? 2 : 0;  // Ha az első felhasználó, adminisztrátor szint 2, Ha már van felhasználó, adminisztrátor szint 0.
@@ -29,13 +29,17 @@ class UserController extends ResponseController
         //         $adminLevel = 0; // Ha már van felhasználó, adminisztrátor szint 0
         //     }
 
+        // $roleLevel = 0;
+
+
         $user = User::create([
 
             "name" => $request["name"],
             "email" => $request["email"],
             "password" => bcrypt( $request["password"]),
             //"city_id" => ( new CityController )->getCityId( $request[ "city" ]),
-            "admin" => $adminLevel
+            "admin" => $adminLevel,
+            "role" => 0
 
         ]);
 
@@ -60,6 +64,7 @@ class UserController extends ResponseController
                 $data[ "user" ] = [ "email" => $authUser->email ];
                 $data[ "time" ] = $bannedTime;
                 $data[ "admin" ] = $authUser->admin;
+                $data[ "role" ] = $authUser->role;
                 $data[ "token" ] = $token;
 
                 return $this->sendResponse( $data, "Sikeres bejelentkezés.");

@@ -22,22 +22,26 @@ class AppServiceProvider extends ServiceProvider
 
         Gate::define( "super", function( $user ) {
 
-            return $user->admin == 4;
+            return $user->admin == 2;
         });
 
         Gate::define( "admin", function( $user ) {
 
-            return $user->admin == 3;
+            return $user->admin == 1;
+        });
+
+        Gate::define( "user", function( $user ){
+            return $user->admin == 0;
         });
 
         Gate::define( "employee", function( $user ) {
 
-            return $user->admin == 2;
+            return $user->role == 1;
         });
 
         Gate::define( "customer", function( $user ) {
 
-            return $user->admin == 1;
+            return $user->role == 0;
         });
     }
 }

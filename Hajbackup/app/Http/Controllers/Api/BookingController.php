@@ -15,7 +15,7 @@ class BookingController extends ResponseController
     //C.R.U.D.
     public function getBookings(){
 
-        $bookings = Booking::with( "customer", "employee", "service" )->get();
+        $bookings = Booking::with( "employee_id", "customer_id", "service_id" )->get();
 
         return $this->sendResponse( BookingResource::collection( $bookings ), "Adatok betöltve.");
     }
@@ -36,7 +36,7 @@ class BookingController extends ResponseController
     // Auth és jogosultsági ellenőrzés
     Gate::before(function () {
         $user = auth("sanctum")->user();
-        if ($user->admin == 4) {
+        if ($user->admin == 0) {
             return true;
         }
     });
@@ -50,11 +50,15 @@ class BookingController extends ResponseController
 
     $booking = new Booking();
     $booking->booking_time = $request["booking_time"]; // Időpont
-    $booking->save(); // Foglalás mentése
+    // $booking->save(); // Foglalás mentése
 
     // Felhasználók és szolgáltatások hozzárendelése
-    if (!empty($request["user_ids"])) {
-        $booking->users()->attach($request["user_ids"]); // Felhasználók hozzárendelése
+    if (!empty($request["employee_id"])) {
+        $booking->users()->attach($request["user_id"]); // Felhasználók hozzárendelése
+    }
+
+    if (!empty($request["customer_id"])) {
+        $booking->users()->attach($request["user_id"]); // Felhasználók hozzárendelése
     }
 
     if (!empty($request["service_ids"])) {

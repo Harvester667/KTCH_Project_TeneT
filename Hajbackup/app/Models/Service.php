@@ -20,8 +20,12 @@ class Service extends Model
 
     public function bookings()
     {
-        return $this->belongsToMany(Booking::class, 'booking_service');
+        return $this->hasMany(Booking::class, 'service_id');
     }
+    // public function bookings()
+    // {
+    //     return $this->belongsToMany(Booking::class, 'booking_service');
+    // }
     // public function  booking(){
     //     return $this->hasMany(Booking::class);
     // }

@@ -34,7 +34,7 @@ class ProfileController extends ResponseController
         return $this->sendResponse( $user, "Profil módosítva.");
     }
 
-    public function setPAssword( Request $request ){
+    public function setPassword( Request $request ){
 
         $user = auth( "sanctum" )->user();
         $user->password = bcrypt( $request[ "password" ]);
