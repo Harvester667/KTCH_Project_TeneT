@@ -18,96 +18,48 @@ Route::get('/user', function (Request $request) {
 Route::middleware( "auth:sanctum" )->group( function(){
 
     Route::post( "/addbooking", [ BookingController::class, "addBooking" ]);
-    Route::put( "/updatebooking", [ BookingController::class, "updateBooking" ]);
-    Route::delete( "/deletebooking", [ BookingController::class, "deleteBooking" ]);
+    Route::patch( "/updatebooking/{id}", [ BookingController::class, "updateBooking" ]);
+    Route::get( "/bookings", [ BookingController::class, "getBookings" ]);
+    Route::get( "/whoisbooking", [ BookingController::class, "whoIsBooking" ]);
+    Route::post( "/forcebooking", [ BookingController::class, "forceBooking" ]);
+    Route::put( "/toggleActive/{id}", [ BookingController::class, "toggleBookingActive" ]); 
+    Route::delete( "/delbooking/{id}", [ BookingController::class, "delBooking" ]);
     
-    // Route::post( "/addemployee", [ EmployeeController::class, "addEmployee" ]);
-    // Route::put( "/updateemployee", [ EmployeeController::class, "updateEmployee" ]);
-    // Route::delete( "/destemployee", [ EmployeeController::class, "deleteEmployee" ]);
-    
-
-    // Route::post( "/addcustomer", [ CustomerController::class, "addCustomer" ]);
-    // Route::put( "/updatecustomer", [ CustomerController::class, "updateCustomer" ]);
-    // Route::delete( "/destcustomer", [ CustomerController::class, "deleteCustomer" ]);
-
     Route::post( "/addservice", [ ServiceController::class, "addService" ]);
-
-    //Route::post( "/addcity", [ CityController::class, "addCity" ]);
+    Route::get( "/services", [ ServiceController::class, "getServices" ]);
+    Route::patch("/updateservice/{id}", [ ServiceController::class, "updateService" ]);
+    Route::put( "/toggleActive/{id}", [ ServiceController::class, "toggleServiceActive" ]);
+    Route::delete( "/delservice/{id}", [ ServiceController::class, "delService" ]);
     // Route::get( "/userprofile", [ ProfileController::class, "getProfile" ]);
     // Route::put( "/updateprofile", [ ProfileController::class, "setProfile" ]);
-    // Route::put( "/updatepassword", [ ProfileController::class, "setPassword" ]);
+    Route::put( "/updatepassword", [ ProfileController::class, "setPassword" ]);
     // Route::post("/deleteprofile", [ ProfileController::class, "deleteProfile" ]);
 
     Route::post( "/logout", [ UserController::class, "logout" ]);
+
     Route::get( "/getusers", [ AuthController::class, "getUsers" ]);
     Route::put( "/admin/{id}", [ AuthController::class, "setAdmin" ]);
     Route::put( "/polymorph/{id}", [ AuthController::class, "demotivate" ]);
     Route::put( "/updateuser/{id}", [ AuthController::class, "updateUser" ]);
+    Route::put( "/toggleActive/{id}", [ BookingController::class, "toggleBookingActive" ]);
+    // Route::put( "/activate", [ AuthController::class, "activated" ]);
+    // Route::put( "/inactivate", [ AuthController::class, "inActivated" ]);
     Route::delete( "/voldemort/{id}", [ AuthController::class, "avadaKedavra" ]);
+    Route::post( "/newuser", [ AuthController::class, "newUser" ]);
+    Route::put( "/employee/{id}", [ AuthController::class, "employee" ]);
+    Route::put( "/customer/{id}", [ AuthController::class, "customer" ]);
 
-    Route::post("/newuser", [ AuthController::class, "newUser"]);
-    Route::put( "/employee/{id}", [ AuthController::class, "setEmployee" ]);
-    Route::put( "/customer/{id}", [ AuthController::class, "setCustomer" ]);
-    Route::get( "/tokens", [ AuthController::class, "getTokens" ]);
+    Route::get( "/booking", [ BookingController::class, "getOneBooking" ]);
+
+    //Route::get( "/seed", [ BookingController::class, "runSeeder" ]);
 });
 
 Route::post( "/register", [ UserController::class, "register" ]);
 Route::post( "/login", [ UserController::class, "login" ]);
 
-Route::get( "/services", [ ServiceController::class, "getServices" ]);
-
-Route::get( "/bookings", [ BookingController::class, "getBookings" ]);
-Route::get( "/booking", [ BookingController::class, "getOneBooking" ]);
-//Route::get( "/amount", [ BookingController::class, "getAmount" ]);
-
-Route::get( "/employees", [ EmployeeController::class, "getEmployees" ]);
-Route::get( "/oneemployee", [ EmployeeController::class, "getEmployee" ]);
-
-Route::get( "/customers", [ CustomerController::class, "getCustomers" ]);
-Route::get( "/onecustomer", [ CustomerController::class, "getCustomer" ]);
-
-
-
-
-
-//Route::get( "/seed", [ BookingController::class, "runSeeder" ]);
-
-// Route::get('/user', function (Request $request) {
-//     return $request->user();
-// })->middleware('auth:sanctum');
-// Route::middleware( "auth:sanctum" )->group( function(){
-//     Route::post( "/logout", [ UserController::class, "logout" ]);
-// });
-
-// Route::get("/bookings", [BookingController::class, "getBookings"]);
-// Route::get("/onebooking/{id}", [BookingController::class, "getOneBooking"]);
-// Route::post("/addbooking", [BookingController::class, "addBooking"]);
-// Route::put("/updatebooking/{id}", [BookingController::class, "updateBooking"]);
-// Route::delete("/deletebooking/{id}", [BookingController::class, "deleteBooking"]);
-// Route::get("/getbookingid", [BookingController::class, "getBookingId"]);
-
-// Route::get("/customers", [CustomerController::class, "getCustomers"]);
-// Route::get("/onecustomer/{id}", [CustomerController::class, "getOneCustomer"]);
-// Route::post("/addcustomer", [CustomerController::class, "addCustomer"]);
-// Route::put("/updatecustomer/{id}", [CustomerController::class, "updateCustomer"]);
-// Route::delete("/deletecustomer/{id}", [CustomerController::class, "deleteCustomer"]);
-// Route::get("/getcustomerid", [CustomerController::class, "getCustomerId"]);
-
-// Route::get("/employees", [EmployeeController::class, "getEmployees"]);
-// Route::get("/oneemployee/{id}", [EmployeeController::class, "getOneEmployee"]);
-// Route::post("/addemployee", [EmployeeController::class, "addEmployee"]);
-// Route::put("/updateemployee/{id}", [EmployeeController::class, "updateEmployee"]);
-// Route::delete("/deleteemployee/{id}", [EmployeeController::class, "deleteEmployee"]);
-// Route::get("/getemployeeid", [EmployeeController::class, "getEmployeeId"]);
-
 // Route::get("/services", [ServiceController::class, "getServices"]);
 // Route::get("/oneservice/{id}", [ServiceController::class, "getOneService"]);
 // Route::post("/addservice", [ServiceController::class, "addService"]);
-// Route::put("/updateservice/{id}", [ServiceController::class, "updateService"]);
-// Route::delete("/deleteservice/{id}", [ServiceController::class, "deleteService"]);
-// Route::get("/getserviceid", [ServiceController::class, "getServiceId"]);
 
-// Route::post("/register", [UserController::class, "register"]);
-// Route::get("/getusers", [AuthController::class, "getUsers"]);
-// Route::post("/login", [UserController::class, "login"]);
-// Route::post("/logout", [UserController::class, "logout"]);
+// Route::delete("/deleteservice/{id}", [ServiceController::class, "deleteService"]);
+

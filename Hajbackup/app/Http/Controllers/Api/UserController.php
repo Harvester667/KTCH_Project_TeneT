@@ -29,18 +29,16 @@ class UserController extends ResponseController
         //         $adminLevel = 0; // Ha már van felhasználó, adminisztrátor szint 0
         //     }
 
-        // $roleLevel = 0;
-
+        $roleLevel = User::count() === 0 ? 1 : 0;
+        $active = true;
 
         $user = User::create([
-
             "name" => $request["name"],
             "email" => $request["email"],
             "password" => bcrypt( $request["password"]),
-            //"city_id" => ( new CityController )->getCityId( $request[ "city" ]),
             "admin" => $adminLevel,
-            "role" => 0
-
+            "role" => $roleLevel,
+            "active" => $active
         ]);
 
         return $this->sendResponse( $user->name, "Sikeres regisztráció.");
@@ -57,14 +55,15 @@ class UserController extends ResponseController
             $bannedTime = ( new BannerController )->getBannedTime( $authUser->email );
             ( new BannerController )->reSetLoginCounter( $authUser->email );
 
-            if( $bannedTime < $actualTime ) {
+            if( $bannedTime <= $actualTime ) {
 
                 ( new BannerController )->resetBannedTime( $authUser->email );
                 $token = $authUser->createToken( $authUser->email."Token" )->plainTextToken;
                 $data[ "user" ] = [ "email" => $authUser->email ];
-                $data[ "time" ] = $bannedTime;
+                $data[ "bannedTime" ] = $bannedTime;
                 $data[ "admin" ] = $authUser->admin;
                 $data[ "role" ] = $authUser->role;
+                $data[ "active" ] = $authUser->active;
                 $data[ "token" ] = $token;
 
                 return $this->sendResponse( $data, "Sikeres bejelentkezés.");
@@ -76,12 +75,11 @@ class UserController extends ResponseController
         }else {
 
             $loginCounter = ( new BannerController )->getLoginCounter( $request[ "email" ]);
-            if( $loginCounter < 3 ) {
+            if( $loginCounter <= 3 ) {
 
                 ( new BannerController )->setLoginCounter( $request[ "email" ]);
 
                 return $this->sendError( "Autentikációs hiba.", [ "Hibás felhasználónév vagy jelszó.", "Hibák száma: " .$loginCounter], 401 ); 
-
 
             }else {
 
@@ -93,8 +91,6 @@ class UserController extends ResponseController
 
                 return $this->sendError( "Autentikációs hiba.", [$errorMessage], 401 );
             }
-
-
         }
     }
 
@@ -105,13 +101,4 @@ class UserController extends ResponseController
 
         return $this->sendResponse( $name, "Sikeres kijelentkezés.");
     }
-
-
-    //Csak tesztelésre használva, TÖRÖLNI KELL
-    //     public function getTokens() {
-
-    //     $tokens = DB::table( "personal_access_tokens" )->get();
-
-    //     return $tokens;
-    // }
 }

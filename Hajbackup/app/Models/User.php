@@ -15,24 +15,10 @@ class User extends Authenticatable
     use HasFactory, Notifiable, HasApiTokens;
     
 
-    public function bookings(){
+    public function booking(){
 
-        return $this->hasMany(Booking::class, 'employee_id', 'customer_id');
+        return $this->hasMany(Booking::class);
     }
-    // public function customer()
-    // {
-    //     return $this->hasOne(Customer::class);
-    // }
-
-    // public function employee()
-    // {
-    //     return $this->hasOne(Employee::class);
-    // }
-
-    // public function bookings()
-    // {
-    //     return $this->belongsToMany(Booking::class);
-    // }
 
     /**
      * The attributes that are mass assignable.
@@ -45,11 +31,21 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        //'city_id',
         'admin',
+        'role',
+        'active',
         'login_counter',
-        'role'
-    ];
+        'phone',
+        'gender',
+        'invoice_address',
+        'invoice_postcode',
+        'invoice_city',
+        'birth_date',
+        'qualifications',
+        'description',
+        'login_counter',
+        'banning_time'
+       ];
 
     /**
      * The attributes that should be hidden for serialization.

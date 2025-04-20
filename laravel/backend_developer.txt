@@ -1,0 +1,166 @@
+Fejlesztői dokumentáció
+
+	Az adatokat egy Mysql adatbázisban kezeljük.
+	FA működéshez szükséges migrációs file-ok.	
+	Users table:
+		Schema::create('users', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('email')->unique();
+            $table->timestamp('email_verified_at')->nullable();
+            $table->string('password');
+            $table->rememberToken();
+            $table->timestamps();
+        });
+
+	Services table:
+		Schema::create('services', function (Blueprint $table) {
+            $table->id();
+            $table->string('service');
+            $table->integer('duration');
+            $table->integer('price');
+            $table->string('description', 300)->nullable();
+            $table->timestamps();
+        });
+	
+	Bookings table:
+	    Schema::create('bookings', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id_1')->constrained()->onDelete('cascade')->unsigned();		//Dolgozó ID
+            $table->foreignId('user_id_0')->constrained()->onDelete('cascade')->unsigned();		//Vendég ID
+            $table->foreignId('service_id')->constrained()->onDelete('cascade')->unsigned();	//Szoldáltatás ID
+            $table->dateTime('booking_time');													//Foglalás ideje
+            $table->timestamps();
+	    });
+	    
+	Kiegészítő mezők hozzáadása a Users táblához:
+		Schema::table('users', function (Blueprint $table) {
+            $table->integer( 'admin' )->after( "remember_token" );
+            $table->integer( 'role' );
+            $table->string('phone')->nullable();
+            $table->enum('gender',['férfi','nő','szabadon választott'])->nullable();
+            $table->string('invoice_address')->nullable();
+            $table->string('invoice_postcode')->nullable();
+            $table->string('invoice_city')->nullable();
+            $table->date('birth_date')->nullable();
+            $table->string('qualifications')->nullable();
+            $table->string('description')->nullable();
+            $table->integer( 'login_counter' )->default( 0 )->after( "remember_token" );
+            $table->timestamp( 'banning_time' )->nullable()->default( null )->after( "login_counter" );
+        });
+	    
+	    
+	_Validáció
+namespace App\Http\Controllers\Api;
+Validáción mennek keresztül azok a folyamatok, amelyenek során adatbevitelre kerül sor.
+A ResponseController-ben van összeállítva a sendRespponse és a sendError funkció.
+
+	_Regisztráció
+Route: /api/register
+	A "namespace App\Http\Controllers\Api;"-ban található "register" funkciót hívja meg.
+	A regisztráció során az adminLevel-t kettes értéket állít be az első user-nek, a többiek pedig nullás értéket kapnak.
+		$adminLevel = User::count() === 0 ? 2 : 0;
+		
+	A "name", "email", password" mezők kitöltése kötelező és minden regisztráló nullás "role" értéket kap.
+		    "name" => $request["name"],
+            "email" => $request["email"],
+            "password" => bcrypt( $request["password"]),	//A jelszót titkosítva tárolja az adatbázis
+            "admin" => $adminLevel,
+            "role" => 0
+            
+    
+	A RegisterRequest-ben található követelmények és hibaüzenetek:
+	A regisztráció kitöltéséhez tartozó követelmények:
+	        "name" => "required|min:3|max:51",
+            "email" => "required|email|unique:users,email",
+            "password" => [ "required",
+                            "min:8",
+                            "max:20",
+                            "regex:/[a-z]/",
+                            "regex:/[A-Z]/",
+                            "regex:/[0-9]/"],
+            "confirm_password" => "required|same:password"
+            
+    A hibaüzenetek és a hozzá tartozó triggerek:
+			"name.required" => "A név mező nem lehet üres.",
+            "name.min" => "A név túl rövid.",
+            "name.max" => "A név túl hosszú.",
+            //"name.unique" => "Ez a név már foglalt.", //|unique:users,name
+            //Amennyiben inkább felhasználó neveket szeretnénk használni.
+            
+            "email.required" => "Az email mező nem lehet üres.",
+            "email.unique" => "Az email cím már foglalt.",
+
+            "password.required" => "A jelszó mező nem lehet üres.",
+            "password.min" => "A jelszó túl rövid.",
+            "password.max" => "A jelszó túl hosszú.",
+            "password.regex" => "A jelszónak tartalmaznia kell kisbetűt, nagybetűt és számot is.",
+            "confirm_password" => "Nem megegyező jelszó."
+            
+	_Belépés
+Route: /api/login
+	A "namespace App\Http\Controllers\Api;"-ban található "login" funkciót hívja meg.
+	A login azonosítás "email" és "password" megadásával történik.
+		    "email" => "required",
+            "password" => "required"
+    A hibaüzenetek és a hozzá tartozó triggerek:
+			"email.required" => "Email megadása elvárt.",
+            "password.required" => "Jelszó megadása elvárt."
+             
+	A belépés során a Laravel lekérdezi az aktuális időt a Carbon összetevőjén keresztül.
+	Az Auth összetevő azonosítja a user-t. Létrehozza a $bannedTime-ot és tárolja benne a user-hez tartozó értéket.
+	Ha a $bannedTime kevesebb vagy egyenlő a Carbon által lekérdezett idővel, törli a bannedTime-ot és tokent hoz létre a user-nak.
+		$token = $authUser->createToken( $authUser->email."Token" )->plainTextToken;
+	A frontendnek visszaküldi az adatokat és egy "Sikeres bejelentkezés." üzenetet.
+	Ha a bejelentkezés sikertelen, lefut a loginCounter és amennyiben kevesebb vagy egyennlő a számláló értéke, hibaüzenetet ad és a hibás próbálkozások számát.
+	
+	
+
+
+
+    //Csak tesztelésre használva, TÖRÖLNI KELL
+    //     public function getTokens() {
+
+    //     $tokens = DB::table( "personal_access_tokens" )->get();
+
+    //     return $tokens;
+    // }
+    
+    
+	"name":"Staub József",
+	"email":"staubjoci@gmail.com",
+	"password":"Adult12345",
+	"confirm_password":"Adult12345"
+
+	"name":"Ottó Attila",
+	"email":"harvester667@gmail.com",
+	"password":"Adult12345",
+	"confirm_password":"Adult12345"
+	
+
+	
+	"name":"Pál-Szabó András",
+	"email":"andras.palszabo@gmail.com",
+	"password":"Adult12345",
+	"confirm_password":"Adult12345"
+	
+	"name":"Benzink Út",
+	"email":"kamu@gmail.com",
+	"password":"Adult12345",
+	"confirm_password":"Adult12345"
+	
+	"name":"BIpa Fa",
+	"email":"kamufa@gmail.com",
+	"password":"Adult12345",
+	"confirm_password":"Adult12345"
+	
+	"name":"Kri Fa",
+	"email":"kmamia@gmail.com",
+	"password":"Adult12345",
+	"confirm_password":"Adult12345"
+	
+	"name":"Kupa df",
+	"email":"krumpé@gmail.com",
+	"password":"Adult12345",
+	"confirm_password":"Adult12345"
+

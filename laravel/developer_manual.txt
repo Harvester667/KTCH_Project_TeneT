@@ -1,0 +1,174 @@
+API Végpontok és HTTP Metódusok
+Autentikáció és Felhasználói Műveletek
+
+    POST /register: Felhasználó regisztráció
+    POST /login: Felhasználó bejelentkezés
+    GET /user: Jelenlegi felhasználó adatainak lekérése (auth: sanctum)
+    POST /logout: Felhasználó kijelentkezése
+    PUT /updatepassword: Jelszó frissítése (auth: sanctum)
+    GET /getusers: Felhasználók listázása (auth: sanctum)
+    PUT /admin/{id}: Felhasználó admin jogosultságának beállítása (auth: sanctum)
+    PUT /updateuser/{id}: Felhasználó adatainak frissítése (auth: sanctum)
+
+Szolgáltatások
+
+    POST /addservice: Szolgáltatás hozzáadása (auth: sanctum)
+    GET /services: Szolgáltatások listázása (auth: sanctum)
+    DELETE /delservice: Szolgáltatás törlése (auth: sanctum)
+
+Foglalások
+
+    POST /addbooking: Új foglalás hozzáadása (auth: sanctum)
+    PUT /updatebooking: Foglalás frissítése (auth: sanctum)
+    DELETE /deletebooking: Foglalás törlése (auth: sanctum)
+    GET /bookings: Foglalások listázása (auth: sanctum)
+    GET /booking: Egy konkrét foglalás lekérése (auth: sanctum)
+    POST /forcebooking: Kényszerített foglalás (auth: sanctum)
+
+Egyéb
+
+    PUT /polymorph/{id}: Felhasználó állapotának módosítása (auth: sanctum)
+    PUT /activate: Felhasználó aktiválása (auth: sanctum)
+    PUT /inactivate: Felhasználó inaktiválása (auth: sanctum)
+    DELETE /voldemort/{id}: Felhasználó törlése (auth: sanctum)
+
+UserController Részletezés
+Funkciók és Működés
+1. Felhasználó Regisztráció
+
+    Metódus: register
+    HTTP Metódus: POST
+    Endpoint: /register
+    Leírás: Új felhasználó regisztrálása. Ha ez az első felhasználó, akkor adminisztrátori szintet kap (2); a többi új felhasználó normál szintet (0).
+		$adminLevel = User::count() === 0 ? 2 : 0;
+		$roleLevel = (0);
+		$user = User::create([
+			"name" => $request["name"],
+			"email" => $request["email"],
+			"password" => bcrypt( $request["password"]),
+			"admin" => $adminLevel,
+			"role" => $roleLevel]);
+    Validálás: A regisztrációs kérelem validációját a RegisterRequest végzi.
+    Válasz: Sikeresen regisztrált felhasználó neve és üzenete.
+
+2. Felhasználó Bejelentkezés
+
+    Metódus: login
+    HTTP Metódus: POST
+    Endpoint: /login
+    Leírás: A felhasználó bejelentkezik. Ellenőrzi a felhasználó e-mail címét és jelszavát, és a sikeres bejelentkezés után token-t ad vissza.
+		{"email": "string (érvényes email formátum)",
+		"password": "string"}
+    Validálás: A bejelentkezési kérelem validációját a LoginRequest végzi.
+    Bannolás kezelése: Ha a felhasználó túl sokszor hibásan adja meg a jelszót, egy időre blokkolásra kerül.
+    Válasz: Visszaadja a felhasználó adatokat (e-mail, admin jogosultság, szerepkör, token).
+
+3. Felhasználó Kijelentkezés
+
+    Metódus: logout
+    HTTP Metódus: POST
+    Endpoint: /logout
+    Leírás: A felhasználó kijelentkezik, a jelenlegi hozzáférési token törlésre kerül.
+		auth( "sanctum" )->user()->currentAccessToken()->delete();
+        $name = auth( "sanctum" )->user()->name;
+    Válasz: Visszaadja a felhasználó nevét és sikeres kijelentkezési üzenetet.
+
+4. (Teszt) Tokenek Lekérdezése
+
+    Metódus: getTokens
+    HTTP Metódus: Nincs megadva, csak belső tesztelésre használják.
+    Leírás: Visszaadja az összes személyes hozzáférési tokent az adatbázisból. (Ezt a metódust el kell távolítani a végleges verzióból.)
+
+ServiceController Részletezés
+Funkciók és Működés
+1. Szolgáltatások Listázása
+
+    Metódus: getServices
+    HTTP Metódus: GET
+    Endpoint: /services
+    Leírás: Visszaadja az összes szolgáltatást az adatbázisból.
+    Válasz: A szolgáltatások listáját JSON formátumban adja vissza, a ServiceResource segítségével struktúrált választ biztosít.
+
+2. Szolgáltatás Lekérdezése
+
+    Metódus: getService
+    HTTP Metódus: GET
+    Endpoint: /getservice
+    Leírás: Lekérdezi az adatbázisból a megadott nevű szolgáltatást.
+    Paraméter: service (szolgáltatás neve)
+    Válasz: JSON formátumban visszaadja a szolgáltatás adatait, ha létezik, különben hibaüzenetet küld.
+
+3. Szolgáltatás Hozzáadása
+
+    Metódus: addService
+    HTTP Metódus: POST
+    Endpoint: /addservice
+    Leírás: Új szolgáltatás rögzítése az adatbázisban.
+        $service = new Service();
+        $service->service = $request[ "service" ];
+        $service->duration = $request[ "duration" ];
+        $service->price = $request[ "price" ];
+        $service->description = $request[ "description" ];
+    Validálás: A ServiceRequest végzi a szükséges validációt.
+    Válasz: Visszaadja az újonnan létrehozott szolgáltatás adatait JSON formátumban.
+
+4. Szolgáltatás Frissítése
+
+    Metódus: updateService
+    HTTP Metódus: PUT
+    Endpoint: /updateservice
+    Leírás: Létező szolgáltatás adatainak módosítása.
+    Validálás: A ServiceRequest végzi a szükséges validációt.
+    Válasz: Visszaadja a frissített szolgáltatás adatait JSON formátumban, ha a szolgáltatás létezik, ellenkező esetben hibaüzenetet küld.
+
+5. Szolgáltatás Törlése
+
+    Metódus: deleteService
+    HTTP Metódus: DELETE
+    Endpoint: /delservice
+    Leírás: Létező szolgáltatás törlése az adatbázisból.
+    Válasz: JSON formátumban visszaadja a törölt szolgáltatás adatait, ha a szolgáltatás létezik, ellenkező esetben hibaüzenetet küld.
+
+6. Szolgáltatás ID Lekérdezése
+
+    Metódus: getServiceId
+    HTTP Metódus: GET
+    Endpoint: /getserviceid/{serviceName}
+    Leírás: Visszaadja a megadott nevű szolgáltatás ID-ját.
+    Paraméter: serviceName (a szolgáltatás neve).
+    Válasz: A megfelelő ID-t adja vissza, ha a szolgáltatás létezik.
+
+BookingController Részletezés
+Funkciók és Működés
+1. Foglalások Listázása
+
+    Metódus: getBookings
+    HTTP Metódus: GET
+    Endpoint: /bookings
+    Leírás: Visszaadja az összes foglalást az adatbázisból.
+    Válasz: A foglalások listáját JSON formátumban adja vissza, a BookingResource segítségével.
+
+2. Foglalás Keresése
+
+    Metódus: whoIsBooking
+    HTTP Metódus: GET
+    Endpoint: /whoisbooking
+    Leírás: Visszaadja a foglalás adatait a megadott vevő vagy alkalmazott azonosítója alapján. Az user_id_0 vagy user_id_1 szükséges a kereséshez.
+    Válasz: JSON formátumban visszaadja a foglalást, ha létezik, ellenkező esetben hibaüzenetet küld.
+
+3. Foglalás Hozzáadása
+
+    Metódus: addBooking
+    HTTP Metódus: POST
+    Endpoint: /booking
+    Leírás: Új foglalás rögzítése az adatbázisban.
+    Validálás: A BookingRequest végzi a szükséges validációt.
+    Válasz: Visszaadja az újonnan létrehozott foglalás adatait JSON formátumban.
+
+4. Foglalás Törlése
+
+    Metódus: deleteBooking
+    HTTP Metódus: DELETE
+    Endpoint: /booking/{id}
+    Leírás: Létező foglalás törlése az adatbázisból. Csak admin felhasználók számára elérhető.
+    Válasz: Visszaadja a törölt foglalás adatait JSON formátumban.

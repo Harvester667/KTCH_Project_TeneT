@@ -14,25 +14,28 @@ class Booking extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        //return parent::toArray($request);
+        return parent::toArray($request);
         return [
             "id"=>$this->id,
-            // "booking"=>$this->booking,
-            "booking" =>$this->duration,
-            // "customer"=>$this->customer->customer,
-            // "employee"=>$this->employee->employee,
-            "service"=>$this->service->service,
 
-            "employee_id"=>$this->employee_id,
+            "booking_time"=>$this->booking_time,
+
             "service_id"=>$this->service_id,
+
+            "user_id_1"=>$this->user_id_1,
             "phone"=>$this->phone,
+            "qualifications"=>$this->qualifications,
+            "description"=>$this->description,
+
+            "user_id_0"=>$this->user_id_0,
+            "phone"=>$this->phone,
+            "birth_date"=>$this->birth_date,
             "gender"=>$this->gender,
             "invoice_address"=>$this->invoice_address,
             "invoice_postcode"=>$this->invoice_postcode,
             "invoice_city"=>$this->invoice_city,
-            "birth_date"=>$this->birth_date,
-            "qualifications"=>$this->qualifications,
-            "description"=>$this->description
+
+            "active"=>$this->active
         ];
     }
 }

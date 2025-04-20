@@ -15,98 +15,59 @@ class BookingController extends ResponseController
     //C.R.U.D.
     public function getBookings(){
 
-        $bookings = Booking::with( "employee_id", "customer_id", "service_id" )->get();
+        $bookings = Booking::all();
 
         return $this->sendResponse( BookingResource::collection( $bookings ), "Adatok betöltve.");
     }
 
-    public function getOneBooking( Request $request ){
+    public function whoIsBooking(Request $request) {
+        // $bookings = null;
 
-        $booking = Booking::where( "booking", $request[ "booking" ])->first();
-
-        if( !$booking){
-            return $this->sendError( "Adathiba.", [ "Nincs ilyen foglalás." ], 400 );
+        // Foglalások lekérdezése többféle szűrési lehetőséggel
+        if (isset($request['user_id_0'])) {
+            $bookings = Booking::where('user_id_0', $request['user_id_0'])
+                              ->when(isset($request['booking_time']), function ($query) use ($request) {
+                                  return $query->where('booking_time', $request['booking_time']);
+                              })->get();
+        } elseif (isset($request['user_id_1'])) {
+            $bookings = Booking::where('user_id_1', $request['user_id_1'])
+                              ->when(isset($request['booking_time']), function ($query) use ($request) {
+                                  return $query->where('booking_time', $request['booking_time']);
+                              })->get();
+        } elseif (isset($request['booking_time'])) {
+            // Ha csak a booking_time van megadva
+            $bookings = Booking::where('booking_time', $request['booking_time'])->get();
+        } elseif (isset($request['active'])) {
+            // Ha csak az active van megadva
+            $bookings = Booking::where('active', $request['active'])->get();
+        } else {
+            return $this->sendError("Adathiba.", ["Kérjük, adja meg a vendég vagy az alkalmazott azonosítóját, vagy a foglalás idejét."], 400);
         }
+    
+        if ($bookings->isEmpty()) {
+            return $this->sendError("Adathiba.", ["Nincs ilyen foglalás."], 400);
+        }
+    
+        return $this->sendResponse(BookingResource::collection($bookings), "Foglalások betöltve.");
+    }
+    
+    public function addBooking(BookingRequest $request){
+        //Felhasználó validálása
+        $request->validated();
+        $active = true;
 
-        return $this->sendResponse( new BookingResource( $booking ), "Foglalás betöltve." );
+        $booking = Booking::create([
+            "booking_time" => $request["booking_time"],
+            "user_id_1" => $request["user_id_1"],
+            "user_id_0" => auth("sanctum")->user()->id,
+            "service_id" => $request["service_id"],
+            "active" => $active     
+    ]);
+
+        return $this->sendResponse( new BookingResource( $booking ), "Foglalás rögzítve." );
     }
 
-    public function addBooking(BookingRequest $request)
-{
-
-    // // Auth és jogosultsági ellenőrzés TÖRÖLNI   
-    // Gate::before(function () {
-    //     $user = auth("sanctum")->user();
-    //     if ($user->admin == 0) {
-    //         return true;
-    //     }
-    // });
-
-    // if (!Gate::allows("admin")) {
-    //     return $this->sendError("Autentikációs hiba.", ["Nincs jogosultsága."], 401);
-    // }
-
-    //Felhasználó validálása
-
-    $request->validated();
-
-    $booking = new Booking();
-    // $booking->booking_time = $request["booking_time"]; // Időpont
-    $booking = Booking::create([
-        "booking_time" => $request["booking_time"],
-        "employee_id" => $request["employee_id"],
-        "customer_id" => auth("sanctum")->user()->id,
-        "service_id" => $request["service_id"],
-        
- ]);
-
-    $booking->save(); // Foglalás mentése
-}
-
-//     // Felhasználók és szolgáltatások hozzárendelése
-//     if (!empty($request["employee_id"])) {
-//         $booking->users()->attach($request["user_id"]); // Felhasználók hozzárendelése
-//     }
-
-//     if (!empty($request["customer_id"])) {
-//         $booking->users()->attach($request["user_id"]); // Felhasználók hozzárendelése
-//     }
-
-//     if (!empty($request["service_ids"])) {
-//         $booking->services()->attach($request["service_ids"]); // Szolgáltatások hozzárendelése
-//     }
-
-//     return $this->sendResponse(new BookingResource($booking), "A foglalás rögzítve.");
-// }
-
-    // public function addBooking( BookingRequest $request ){
-        
-    //     Gate::before( function(){
-    //         $user = auth( "sanctum" )->user();
-    //         if( $user->admin == 2 ){
-    //             return true;
-    //         }
-    //     });
-    //     if( !Gate::allows( "admin" )){
-    //         return $this->sendError( "Autentikációs hiba.", [ "Nincs jogosultsága." ], 401 );
-    //     }
-
-    //     $request->validated();
-
-    //     $booking = new Booking;
-    //     // $booking -> booking = $request[ "booking" ];
-    //     $booking-> datetime = $request[ "datetime" ];
-    //     // $booking -> customer_id = ( new CustomerController )->getCustomerId( $request[ "customer" ]);
-    //     // $booking -> employee_id = ( new EmployeeController )->getEmployeeId( $request[ "employee" ]);
-    //     $booking -> service_id = ( new ServiceController )->getServiceId( $request[ "service" ]);
-
-    //     $booking->save();
-
-    //     return $this->sendResponse( new BookingResource( $booking ), "A foglalás rögzítve." );
-    // }
-
-    public function updateBooking(BookingRequest $request)
-    {
+    public function forceBooking(BookingRequest $request){
         // Auth és jogosultsági ellenőrzés
         Gate::before(function () {
             $user = auth("sanctum")->user();
@@ -118,89 +79,82 @@ class BookingController extends ResponseController
         if (!Gate::allows("admin")) {
             return $this->sendError("Autentikációs hiba.", ["Nincs jogosultsága."], 401);
         }
-    
-        // Kérés validálása
+
         $request->validated();
-    
-        $booking = Booking::find($request["id"]);
-        if (is_null($booking)) {
-            return $this->sendError("Adathiba.", ["Nincs ilyen foglalás."], 400);
-        } else {
-            $booking->booking_time = $request["booking_time"];
-            $booking->save(); // Foglalás mentése
-    
-            // Felhasználók és szolgáltatások szinkronizálása
-            if (!empty($request["user_ids"])) {
-                $booking->users()->sync($request["user_ids"]); // Felhasználók frissítése
-            }
-    
-            if (!empty($request["service_ids"])) {
-                $booking->services()->sync($request["service_ids"]); // Szolgáltatások frissítése
-            }
-    
-            return $this->sendResponse(new BookingResource($booking), "A foglalás módosítva.");
-        }
+
+        $booking = new Booking();
+        $booking->booking_time = $request[ "booking_time" ];
+        $booking->user_id_1 = $request[ "user_id_1" ];
+        $booking->user_id_0 = $request[ "user_id_0" ];
+        $booking->service_id = $request[ "service_id" ];
+        $booking->active = $request[ "active" ];
+        $booking->save();
+
+        return $this->sendResponse( new BookingResource( $booking ), "Új szolgáltatás rögzítve." );
     }
 
-    // public function updateBooking( BookingRequest $request ){
+    public function updateBooking(BookingRequest $request, $id) {
 
-    //     Gate::before( function(){
+        $request->validated();
+    
+        // Foglalás megkeresése
+        $booking = Booking::find($id);
+    
+        if (!$booking) {
+            return $this->sendError("Adathiba", ["Nem található foglalás ezzel az azonosítóval."], 404);
+        }
+    
+        // // Jogosultság ellenőrzése (ha kell)
+        // if ($booking->user_id_0 !== auth("sanctum")->user()->id) {
+        //     return $this->sendError("Hozzáférés megtagadva", ["Nem módosíthatod ezt a foglalást."], 403);
+        // }
+    
+        // Módosítás
+        $booking->fill($request->only(['booking_time', 'user_id_0', 'service_id']))->update();
+    
+        return $this->sendResponse(new BookingResource($booking), "Foglalás módosítva.");
+    }
+    
 
-    //         $user = auth( "sanctum" )->user();
-    //         if( $user->admin == 2 ){
+    public function toggleBookingActive($id){
+        if( !Gate::allows( "super" )) {
 
-    //             return true;
-    //         }
-    //     });
-    //     if ( !Gate::allows( "admin" )) {
+            return $this->sendError( "Autentikációs hiba.", ["Nincs jogosultsága."], 401 );
+        }
+        $booking = Booking::find($id);
 
-    //         return $this->sendError( "Autentikációs hiba.", [ "Nincs jogosultsága." ], 401 );
-    //     }
+        if (!$booking) {
+        return $this->sendError("Nincs ilyen foglalás.", [], 404);
+        }
 
-    //     $request->validated();
+        // Aktív érték váltása
+        $booking->active = !$booking->active;
+        $booking->save();
 
-    //     $booking = Booking::find( $request[ "id" ]);
-    //     if( is_null( $booking )){
-    //         return $this->sendError( "Adathiba.", [ "Nincs ilyen foglalás." ], 400 );
-    //     }else{
-    //         $booking->booking = $request[ "booking" ];
-    //         //$booking-> datetime = $request[ "" ];
-    //         $booking -> customer_id = ( new CustomerController )->getCustomerId( $request[ "customer" ]);
-    //         $booking -> employee_id = ( new EmployeeController )->getEmployeeId( $request[ "employee" ]);
-    //         $booking -> service_id = ( new ServiceController )->getServiceId( $request[ "service" ]);
+        return $this->sendResponse(new BookingResource($booking), "A foglalás státusza frissítve.");
+    }
 
-    //         $booking->update();
+    public function delBooking( Request $request ){
 
-    //         //return $this->sendResponse( new BookingResource( $booking ), "A foglalás módosítva." ); SZIT.HU verzio?
-    //         return $this->sendResponse( $booking, "A foglalás módosítva." );
-    //     }
-    // }
+        Gate::before(function () {
 
-    public function deleteBooking( Request $request ){
-
-        Gate::before( function(){
-
-            $user = auth( "sanctum" )->user();
-            if( $user->admin == 2 ){
-
+            $user = auth("sanctum")->user();
+            if ($user->admin == 2) {
                 return true;
             }
         });
-        if ( !Gate::allows( "admin" )) {
 
-            return $this->sendError( "Autentikációs hiba.", [ "Nincs jogosultsága." ], 401 );
+        if (!Gate::allows("admin")) {
+            return $this->sendError("Autentikációs hiba.", ["Nincs jogosultsága."], 401);
         }
 
         $booking = Booking::find( $request[ "id" ]);
-        $booking->delete();
+        if(!$booking){ //Ellenőrizni kell, hogy van-e booking, mielőtt törölnénk
+            return $this->sendError( "Adathiba.", [ "Nincs ilyen foglalás." ], 406); //Hibaüzenetet adunk vissza, ha nincs foglalás
+        }else{
+            $booking->delete();
 
-        return $this->sendResponse( $booking, "A foglalás törölve." );
-
-        // if( is_null( $booking )){
-        //     return $this->sendError( "Nincs ilyen foglalás." );
-        // }else{
-        //     $booking->delete();
-        //     return $this->sendResponse( new BookingResource( $booking ), "A foglalás törölve." );
-        // }
+            return $this->sendResponse( $booking, "A foglalás törölve." );
+        }
     }
 }

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->integer('duration');
             $table->integer('price');
             $table->string('description', 300)->nullable();
+            $table->boolean('active');
             $table->timestamps();
         });
     }

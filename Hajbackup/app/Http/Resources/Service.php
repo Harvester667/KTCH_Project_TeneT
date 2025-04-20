@@ -20,7 +20,8 @@ class Service extends JsonResource
             "service"=>$this->service,
             "duration"=>$this->duration,
             "price"=>$this->price,
-            "description"=>$this->description
+            "description"=>$this->description,
+            "active"=>$this->active
         ];
     }
 }

@@ -13,20 +13,14 @@ class Service extends Model
         'service',
         'duration',
         'price',
-        'description'
+        'description',
+        'active'
     ];
 
     public $timestamp=true;
 
-    public function bookings()
+    public function booking()
     {
-        return $this->hasMany(Booking::class );
+        return $this->hasMany(Booking::class);
     }
-    // public function bookings()
-    // {
-    //     return $this->belongsToMany(Booking::class, 'booking_service');
-    // }
-    // public function  booking(){
-    //     return $this->hasMany(Booking::class);
-    // }
 }

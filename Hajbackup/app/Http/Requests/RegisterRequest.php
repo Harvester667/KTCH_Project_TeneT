@@ -24,10 +24,9 @@ class RegisterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "name" => "required|min:3|max:51|unique:users,name",
+            "name" => "required|min:3|max:51",
             "email" => "required|email|unique:users,email",
-            "password" => [
-                            "required",
+            "password" => [ "required",
                             "min:8",
                             "max:20",
                             "regex:/[a-z]/",
@@ -42,7 +41,7 @@ class RegisterRequest extends FormRequest
             "name.required" => "A név mező nem lehet üres.",
             "name.min" => "A név túl rövid.",
             "name.max" => "A név túl hosszú.",
-            "name.unique" => "Ez a név már foglalt.",
+            // "name.unique" => "Ez a név már foglalt.", //|unique:users,name
             
             "email.required" => "Az email mező nem lehet üres.",
             "email.unique" => "Az email cím már foglalt.",

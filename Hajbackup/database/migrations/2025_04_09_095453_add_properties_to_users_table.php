@@ -12,8 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->integer( 'admin' )->after( "remember_token" );
-            $table->integer( 'role' );
+            $table->integer('admin');
+            $table->integer('role');
+            $table->boolean('active');
             $table->string('phone')->nullable();
             $table->enum('gender',['férfi','nő','szabadon választott'])->nullable();
             $table->string('invoice_address')->nullable();
@@ -22,8 +23,8 @@ return new class extends Migration
             $table->date('birth_date')->nullable();
             $table->string('qualifications')->nullable();
             $table->string('description')->nullable();
-            $table->integer( "login_counter" )->default( 0 )->after( "remember_token" );
-            $table->timestamp( "banning_time")->nullable()->default( null )->after( "login_counter" );
+            $table->integer('login_counter')->default( 0 );
+            $table->timestamp('banning_time')->nullable()->default(null);
         });
     }
 
@@ -32,19 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn( 'admin' );
-            $table->dropColumn( 'role' );
-            $table->dropColumn( 'phone' );
-            $table->dropColumn( 'gender' );
-            $table->dropColumn( 'invoice_address' );
-            $table->dropColumn( 'invoice_postcode' );
-            $table->dropColumn( 'invoice_city' );
-            $table->dropColumn( 'birth_date' );
-            $table->dropColumn( 'qualifications' );
-            $table->dropColumn( 'description' );
-            $table->dropColumn( "login_counter" );
-            $table->dropColumn( "banning_time");           
-        });
+        Schema::dropIfExists('users');
     }
 };

@@ -10,60 +10,22 @@ class Booking extends Model
     use HasFactory;
 
     protected $fillable = [
-        // 'user_id',
-        'employee_id',
-        'customer_id',
+        'user_id_1',
+        'user_id_0',
         'service_id',
-        'booking_time'
+        'booking_time',
+        'active'
     ];
 
     public $timestamp=true;
 
-    public function users()
+    public function user()
     {
-        return $this->belongsTo(User::class );
+        return $this->belongsTo(User::class);
     }
 
-    public function services()
+    public function service()
     {
-        return $this->belongsTo(Service::class );
+        return $this->belongsTo(Service::class);
     }
-
-    // public function users()
-    // {
-    //     return $this->belongsToMany(User::class, 'booking_user', 'booking_id', 'user_id');
-    // }
-
-    // public function services()
-    // {
-    //     return $this->belongsToMany(Service::class, 'booking_service', 'booking_id', 'service_id');
-    // }
-
-    // public function users()
-    // {
-    //     return $this->belongsToMany(User::class, 'booking_user');
-    // }
-
-    // public function services()
-    // {
-    //     return $this->belongsToMany(Service::class, 'booking_service');
-    // }
-
-
-
-    // public function customer(){
-    //     return $this->belongsTo(Customer::class);
-    // }
-
-    // public function employee(){
-    //     return $this->belongsTo(Employee::class);
-    // }
-//
-    // public function user(){
-    //     return $this->belongsTo(User::class);
-    // }
-
-    // public function service(){
-    //     return $this->belongsTo(Service::class);
-    // }
 }

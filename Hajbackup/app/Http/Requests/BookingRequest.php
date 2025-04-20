@@ -24,24 +24,28 @@ class BookingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            // "booking" => "required|unique:bookings,id",
-            "datetime" => "required",
-            // "customer" => "required",
-            // "employee" => "required",
-            "employee_id" => "required",
-            // "customer_id" => "required",
-            // "service" => "required"
+
+            "booking_time" => "sometimes|required|date_format:Y-m-d H:i:s",
+            "user_id_1" => "sometimes|required|exists:users,id",
+            "user_id_0" => "sometimes|required|exists:users,id",
+            "service_id" => "sometimes|required|exists:services,id",
+            "active"=>"sometimes|required|regex:/[0-1]/"
         ];
     }
 
     public function messages(){
         return [
-            // "booking.required" => "Foglalás azonosító elvárt.",
-            "datetime.required" => "Foglalás időpontja elvárt.",
-            "datetime.datetime" => "Év-hónap-nap, óra-perc-másodperc elvárt.",
-            // "customer.required" => "Vendég név elvárt.",
-            "employee_id.required" => "Dolgozó azonosító elvárt.",
-            // "service.required" => "Szolgáltatás elvárt."
+
+            "booking_time.required" => "Foglalás időpontja elvárt.",
+            "booking_time.date_format" => "Év-hónap-nap óra:perc:másodperc forma elvárt.",
+            "user_id_0.required" => "Vendég azonosító elvárt.",
+            "user_id_1.required" => "Dolgozó azonosító elvárt.",
+            "service_id.required" => "Szolgáltatás azonosító elvárt.",
+            "user_id_1.exists" => "Nincs ilyen felhasználó.",
+            "user_id_0.exists" => "Nincs ilyen felhasználó.",
+            "service_id.exists" => "Nincs ilyen szolgáltatás.",
+            "active.required" => "Az aktiv mező kötelező.",
+            "active.regex" => "Csak 0 vagy 1 elfogadott."
         ];
     }
 

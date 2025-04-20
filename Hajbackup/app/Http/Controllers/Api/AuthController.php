@@ -5,10 +5,11 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Http\Resources\User as UserResource;
 use App\Http\Controllers\Api\ResponseController;
 use App\Http\Requests\RegisterRequest;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\DB;
+// use Illuminate\Support\Facades\DB;
 
 class AuthController extends ResponseController {
 
@@ -21,16 +22,15 @@ class AuthController extends ResponseController {
         if (Gate::allows("super")) {
         // Ha super admin, akkor engedélyezd a működést
         $users = User::all();
-        return $this->sendResponse($users, "Betöltve.");
+        return $this->sendResponse($users, "Felhasználók betöltve.");
         }
-
         // Ha nem super admin, ellenőrizd, hogy admin jogosultsággal rendelkezik-e
         if (!Gate::allows("admin")) {
         return $this->sendError("Autentikációs hiba.", ["Nincs jogosultsága."], 401);
         }
 
         $users = User::all();
-        return $this->sendResponse( $users, "Betöltve." );
+        return $this->sendResponse( $users, "Felhasználók betöltve." );
     }
 
     public function setAdmin( Request $request ) {
@@ -44,7 +44,7 @@ class AuthController extends ResponseController {
         
             // Ellenőrizzük, hogy a felhasználó létezik-e
         if (!$user) {
-        return $this->sendError("Beviteli hiba.", ["A megadott felhasználó nem található."], 406);
+        return $this->sendError( "Beviteli hiba.", ["A megadott felhasználó nem található."], 406);
     }
 
         $user->admin = 1;
@@ -62,7 +62,12 @@ class AuthController extends ResponseController {
         }
 
         $user = User::find( $request[ "id" ]);
-        // $user->admin = $request[ "admin" ]; //Hibás minta!!?
+
+        // Ellenőrizzük, hogy a felhasználó létezik-e
+        if (!$user) {
+        return $this->sendError( "Beviteli hiba.", ["A megadott felhasználó nem található." ], 406);
+        }
+
         $user->admin = 0;
 
         $user->update();
@@ -70,7 +75,7 @@ class AuthController extends ResponseController {
         return $this->sendResponse( $user->name, "Admin jog megvonva." );
     }
 
-    public function setEmployee( Request $request ) {
+    public function employee( Request $request ) {
 
         if ( !Gate::allows( "super" )) {
 
@@ -79,9 +84,9 @@ class AuthController extends ResponseController {
 
         $user = User::find( $request[ "id" ]);
         
-            // Ellenőrizzük, hogy a felhasználó létezik-e
+        // Ellenőrizzük, hogy a felhasználó létezik-e
         if (!$user) {
-        return $this->sendError("Beviteli hiba.", ["A megadott felhasználó nem található."], 406);
+        return $this->sendError( "Beviteli hiba.", ["A megadott felhasználó nem található."], 406);
     }
 
         $user->role = 1;
@@ -91,7 +96,7 @@ class AuthController extends ResponseController {
         return $this->sendResponse( $user->name, "Employee jog megadva." );
     }
 
-    public function setCustomer( Request $request ) {
+    public function customer( Request $request ) {
 
         if ( !Gate::allows( "super" )) {
 
@@ -100,7 +105,7 @@ class AuthController extends ResponseController {
 
         $user = User::find( $request[ "id" ]);
         
-            // Ellenőrizzük, hogy a felhasználó létezik-e
+        // Ellenőrizzük, hogy a felhasználó létezik-e
         if (!$user) {
         return $this->sendError("Beviteli hiba.", ["A megadott felhasználó nem található."], 406);
     }
@@ -109,20 +114,30 @@ class AuthController extends ResponseController {
 
         $user->update();
 
-        return $this->sendResponse( $user->name, "Customer jog megadva." );
+        return $this->sendResponse( $user->name, "Customer jog beállítva." );
     }
 
     public function updateUser( Request $request ) {
 
-        if( !Gate::allows( "super" )) {
+        // Gate::before(function () {
 
-            return $this->sendError( "Autentikációs hiba.", ["Nincs jogosultsága."], 401 );
-        }
+        //     $user = auth("sanctum")->user();
+        //     if ($user->admin == 2) {
+        //         return true;
+        //     }
+        // });
+
+        // if (!Gate::allows("admin")) {
+        //     return $this->sendError("Autentikációs hiba.", ["Nincs jogosultsága."], 401);
+        // }
+
+        $request->validated();
 
         $user = User::find( $request[ "id" ]);
         $user->name = $request[ "name" ];
         $user->email = $request[ "email" ];
-        //$user->city_id = ( new CityController )->getCityId( $request[ "city" ]);
+        $user->password = bcrypt( $request[ "password" ]);
+
         $user->update();
 
         return $this->sendResponse( $user, "Felhasználó frissítve." );
@@ -130,40 +145,49 @@ class AuthController extends ResponseController {
 
     public function newUser( RegisterRequest $request ) {
 
-        if( !Gate::allows( "admin" )) {
-
-            return $this->sendError( "Autentikációs hiba.", ["Nincs jogosultsága."], 401 );
+        // Auth és jogosultsági ellenőrzés
+        Gate::before(function () {
+            $user = auth("sanctum")->user();
+            if ($user->admin == 2) {
+                return true;
+            }
+        });
+    
+        if (!Gate::allows("admin")) {
+            return $this->sendError("Autentikációs hiba.", ["Nincs jogosultsága."], 401);
         }
+        
         $request->validated();
-
-        $adminLevel = User::count() === 0 ? 2 : 0;
+        
         $user = User::create([
-
-            "name" => $request["name"],
-            "email" => $request["email"],
-            "password" => bcrypt( $request["password"]),
-            //"city_id" => ( new CityController )->getCityId( $request[ "city" ]),
-            "admin" => $adminLevel,
-            "role" => 0
-
+            "name" => $request[ "name" ],
+            "email" => $request[ "email" ],
+            "password" => bcrypt( $request[ "password" ]),
+            "admin" => $request[ "admin" ],
+            "role" => $request[ "role" ],
+            "active" => $request[ "active" ]
         ]);
-        //$user->city_id = ( new CityController )->getCityId( $request[ "city" ]);
-        $user->update();
 
         return $this->sendResponse( $user, "Felhasználó létrehozva." );
     }
-    //Csak tesztelésre használva
-    // public function getTokens() {
 
-    //     if ( !Gate::allows( "super" )) {
+    public function toggleUserActive($id){
+        if( !Gate::allows( "super" )) {
 
-    //         return $this->sendError( "Autentikációs hiba.", ["Nincs jogosultsága."], 401 );
-    //     }
-        
-    //     $tokens = DB::table( "personal_access_tokens" )->get();
+            return $this->sendError( "Autentikációs hiba.", ["Nincs jogosultsága."], 401 );
+        }
+        $user = User::find($id);
 
-    //     return $tokens;
-    // }
+        if (!$user) {
+        return $this->sendError("Nincs ilyen felhasználó.", [], 404);
+        }
+
+        // Aktív érték váltása
+        $user->active = !$user->active;
+        $user->save();
+
+    return $this->sendResponse(new UserResource($user), "A felhasználó státusza frissítve.");
+    }
 
     public function avadaKedavra( Request $request ) {
 

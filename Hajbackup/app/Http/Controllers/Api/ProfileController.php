@@ -13,11 +13,9 @@ class ProfileController extends ResponseController
     public function getProfile(){
 
         $user = auth( "sanctum" )->user();
-        //$cityName = ( new CityController )->getCity( $user->city_id )->city;
         $data = [
             "name" => $user->name,
             "email" => $user->email,
-            //"city" => $cityName
         ];
         return $this->sendResponse( $data, "Felhasználó profil.");
     }
@@ -27,7 +25,6 @@ class ProfileController extends ResponseController
         $user = auth( "sanctum" )->user();
         $user->name = $request[ "name" ];
         $user->email = $request[ "email" ];
-        //$user->city_id = ( new CityController )->getCityId( $request[ "city" ]);
 
         $user->update();
 
