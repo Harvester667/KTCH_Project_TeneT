@@ -15,18 +15,16 @@ class AuthController extends ResponseController {
 
     public function getUsers() {
 
-        // if ( !Gate::allows( "super" )) {
-        //     return $this->sendError( "Autentikációs hiba.", ["Nincs jogosultsága."], 401 );
-        // }
-        // Először ellenőrizd, hogy a felhasználó super admin jogosultsággal rendelkezik
-        if (Gate::allows("super")) {
-        // Ha super admin, akkor engedélyezd a működést
-        $users = User::all();
-        return $this->sendResponse($users, "Felhasználók betöltve.");
-        }
-        // Ha nem super admin, ellenőrizd, hogy admin jogosultsággal rendelkezik-e
+        Gate::before(function () {
+
+            $user = auth("sanctum")->user();
+            if ($user->admin == 2) {
+                return true;
+            }
+        });
+
         if (!Gate::allows("admin")) {
-        return $this->sendError("Autentikációs hiba.", ["Nincs jogosultsága."], 401);
+            return $this->sendError("Autentikációs hiba.", ["Nincs jogosultsága."], 401);
         }
 
         $users = User::all();
@@ -45,7 +43,11 @@ class AuthController extends ResponseController {
             // Ellenőrizzük, hogy a felhasználó létezik-e
         if (!$user) {
         return $this->sendError( "Beviteli hiba.", ["A megadott felhasználó nem található."], 406);
-    }
+        }
+
+        if ($user->admin == 2) {
+            return $this->sendError("Tiltott művelet.", ["Ez a felhasználó védett admin jogosultsággal rendelkezik."], 403);
+        }
 
         $user->admin = 1;
 
@@ -66,6 +68,10 @@ class AuthController extends ResponseController {
         // Ellenőrizzük, hogy a felhasználó létezik-e
         if (!$user) {
         return $this->sendError( "Beviteli hiba.", ["A megadott felhasználó nem található." ], 406);
+        }
+
+        if ($user->admin == 2) {
+            return $this->sendError("Tiltott művelet.", ["Ez a felhasználó védett admin jogosultsággal rendelkezik."], 403);
         }
 
         $user->admin = 0;
@@ -182,6 +188,9 @@ class AuthController extends ResponseController {
         return $this->sendError("Nincs ilyen felhasználó.", [], 404);
         }
 
+        if ($user->admin == 2) {
+            return $this->sendError("Tiltott művelet.", ["Ez a felhasználó védett admin jogosultsággal rendelkezik."], 403);
+        }
         // Aktív érték váltása
         $user->active = !$user->active;
         $user->save();
@@ -197,6 +206,13 @@ class AuthController extends ResponseController {
         }
 
         $user =  User::find( $request[ "id" ]);
+        if(!$user){
+            return $this->sendError( "Adathiba.", [ "Nincs ilyen felhasználó." ], 406);
+        }
+
+        if ($user->admin == 2) {
+            return $this->sendError("Tiltott művelet.", ["Ez a felhasználó védett admin jogosultsággal rendelkezik."], 403);
+        }
         $user->delete();
 
         return $this->sendResponse( $user->name, "Felhasználó törölve." );

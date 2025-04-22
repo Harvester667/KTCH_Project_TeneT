@@ -58,6 +58,10 @@ class UserController extends ResponseController
             if( $bannedTime <= $actualTime ) {
 
                 ( new BannerController )->resetBannedTime( $authUser->email );
+
+                // // Korábbi token(ek) törlése
+                $authUser->tokens()->delete();
+
                 $token = $authUser->createToken( $authUser->email."Token" )->plainTextToken;
                 $data[ "user" ] = [ "email" => $authUser->email ];
                 $data[ "bannedTime" ] = $bannedTime;

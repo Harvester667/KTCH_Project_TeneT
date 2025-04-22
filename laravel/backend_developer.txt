@@ -137,7 +137,7 @@ Route: /api/login
 	"password":"Adult12345",
 	"confirm_password":"Adult12345"
 	
-
+	6|bEfS5FwN9VefktI7L8Yo6LOCOj2RZAYAO7Zt86L1204bd7ea
 	
 	"name":"Pál-Szabó András",
 	"email":"andras.palszabo@gmail.com",
@@ -163,4 +163,10 @@ Route: /api/login
 	"email":"krumpé@gmail.com",
 	"password":"Adult12345",
 	"confirm_password":"Adult12345"
-
+	
+	"name":"Süki Gyöngyi",
+	"email":"sukigyongyi@gmail.com",
+	"password":"Adult12345",
+	"confirm_password":"Adult12345",
+	
+	5|CVwYjAxIOUuWT8kmFLopF2QjXbp23T6wh25ScYZ75b759d5e
