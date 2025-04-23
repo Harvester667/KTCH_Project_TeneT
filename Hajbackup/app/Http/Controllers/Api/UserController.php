@@ -79,17 +79,22 @@ class UserController extends ResponseController
         }else {
 
             $loginCounter = ( new BannerController )->getLoginCounter( $request[ "email" ]);
-            if( $loginCounter <= 3 ) {
+            if( $loginCounter < 3 ) {
 
                 ( new BannerController )->setLoginCounter( $request[ "email" ]);
 
-                return $this->sendError( "Autentikációs hiba.", [ "Hibás felhasználónév vagy jelszó.", "Hibák száma: " .$loginCounter], 401 ); 
+                return $this->sendError( "Autentikációs hiba.", [ "Hibás felhasználónév vagy jelszó.", "Hibák száma: " .$loginCounter+1], 401 ); 
 
             }else {
 
                 ( new BannerController )->setBannedTime( $request[ "email" ]);
                 $bannedTime = ( new BannerController )->getBannedTime( $request[ "email" ]);
-                ( new MailController )->sendMail( $request[ "email" ], $bannedTime );
+
+                $user = User::where('email', $request['email'])->first();
+                if ($user) {
+                    (new MailController)->sendMail($user->email, $user->name, $bannedTime);
+                }
+                // ( new MailController )->sendMail( $request[ "email" ], $bannedTime );
 
                 $errorMessage = [ "message" => "Következő lehetőség: ", "time" => $bannedTime ];
 

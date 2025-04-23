@@ -70,7 +70,7 @@ class ServiceController extends ResponseController
 
         $request->validated();
     
-        // Foglalás megkeresése
+        // Szolgáltatás megkeresése
         $service = Service::find($id);
     
         if (!$service) {
@@ -79,7 +79,7 @@ class ServiceController extends ResponseController
     
         // // Jogosultság ellenőrzése (ha kell)
         // if ($service->user_id_0 !== auth("sanctum")->user()->id) {
-        //     return $this->sendError("Hozzáférés megtagadva", ["Nem módosíthatod ezt a foglalást."], 403);
+        //     return $this->sendError("Hozzáférés megtagadva", ["Nem módosíthatod ezt a szolgáltatást."], 403);
         // }
     
         // Módosítás
@@ -103,8 +103,7 @@ class ServiceController extends ResponseController
     //     if(!$service){
     //         return $this->sendError( "Beviteli hiba.", [ "Nincs ilyen szolgáltatás." ], 406 );
     //     }
-    //     $request->validated();
-        
+    //     $request->validated();        
 
     //         $service->service = $request[ "service" ];
     //         $service->duration = $request[ "duration" ];
@@ -113,8 +112,7 @@ class ServiceController extends ResponseController
     //         $service->active = $request[ "active" ];
     //         $service->update();
 
-    //         return $this->sendResponse( $service, "Szolgáltatás adatai módosítva." );
-        
+    //         return $this->sendResponse( $service, "Szolgáltatás adatai módosítva." );        
     // }
 
     public function toggleServiceActive($id){

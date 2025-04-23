@@ -137,7 +137,7 @@ Route: /api/login
 	"password":"Adult12345",
 	"confirm_password":"Adult12345"
 	
-	6|bEfS5FwN9VefktI7L8Yo6LOCOj2RZAYAO7Zt86L1204bd7ea
+	17|N4UgBL2usYtOHRh8RJxfVU0btCtT0MUP50SN7po3810ee9d9
 	
 	"name":"Pál-Szabó András",
 	"email":"andras.palszabo@gmail.com",

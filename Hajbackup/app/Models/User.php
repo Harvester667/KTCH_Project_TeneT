@@ -69,4 +69,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function isProtectedAdmin(): bool
+    {
+        return $this->admin == 2;
+    }
 }

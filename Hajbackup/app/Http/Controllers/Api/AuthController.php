@@ -45,9 +45,12 @@ class AuthController extends ResponseController {
         return $this->sendError( "Beviteli hiba.", ["A megadott felhasználó nem található."], 406);
         }
 
-        if ($user->admin == 2) {
+        if ($user->isProtectedAdmin()) {
             return $this->sendError("Tiltott művelet.", ["Ez a felhasználó védett admin jogosultsággal rendelkezik."], 403);
         }
+        // // if ($user->admin == 2) {
+        // //     return $this->sendError("Tiltott művelet.", ["Ez a felhasználó védett admin jogosultsággal rendelkezik."], 403);
+        // // }
 
         $user->admin = 1;
 
@@ -70,9 +73,12 @@ class AuthController extends ResponseController {
         return $this->sendError( "Beviteli hiba.", ["A megadott felhasználó nem található." ], 406);
         }
 
-        if ($user->admin == 2) {
+        if ($user->isProtectedAdmin()) {
             return $this->sendError("Tiltott művelet.", ["Ez a felhasználó védett admin jogosultsággal rendelkezik."], 403);
         }
+        // // if ($user->admin == 2) {
+        // //     return $this->sendError("Tiltott művelet.", ["Ez a felhasználó védett admin jogosultsággal rendelkezik."], 403);
+        // // }
 
         $user->admin = 0;
 
@@ -93,7 +99,7 @@ class AuthController extends ResponseController {
         // Ellenőrizzük, hogy a felhasználó létezik-e
         if (!$user) {
         return $this->sendError( "Beviteli hiba.", ["A megadott felhasználó nem található."], 406);
-    }
+        }
 
         $user->role = 1;
 
@@ -114,7 +120,7 @@ class AuthController extends ResponseController {
         // Ellenőrizzük, hogy a felhasználó létezik-e
         if (!$user) {
         return $this->sendError("Beviteli hiba.", ["A megadott felhasználó nem található."], 406);
-    }
+        }
 
         $user->role = 0;
 
@@ -137,7 +143,7 @@ class AuthController extends ResponseController {
         //     return $this->sendError("Autentikációs hiba.", ["Nincs jogosultsága."], 401);
         // }
 
-        $request->validated();
+        // $request->validated();
 
         $user = User::find( $request[ "id" ]);
         $user->name = $request[ "name" ];
@@ -188,9 +194,13 @@ class AuthController extends ResponseController {
         return $this->sendError("Nincs ilyen felhasználó.", [], 404);
         }
 
-        if ($user->admin == 2) {
+        if ($user->isProtectedAdmin()) {
             return $this->sendError("Tiltott művelet.", ["Ez a felhasználó védett admin jogosultsággal rendelkezik."], 403);
         }
+        // // if ($user->admin == 2) {
+        // //     return $this->sendError("Tiltott művelet.", ["Ez a felhasználó védett admin jogosultsággal rendelkezik."], 403);
+        // // }
+
         // Aktív érték váltása
         $user->active = !$user->active;
         $user->save();
@@ -210,9 +220,13 @@ class AuthController extends ResponseController {
             return $this->sendError( "Adathiba.", [ "Nincs ilyen felhasználó." ], 406);
         }
 
-        if ($user->admin == 2) {
+        if ($user->isProtectedAdmin()) {
             return $this->sendError("Tiltott művelet.", ["Ez a felhasználó védett admin jogosultsággal rendelkezik."], 403);
         }
+        // // if ($user->admin == 2) {
+        // //     return $this->sendError("Tiltott művelet.", ["Ez a felhasználó védett admin jogosultsággal rendelkezik."], 403);
+        // // }
+
         $user->delete();
 
         return $this->sendResponse( $user->name, "Felhasználó törölve." );

@@ -3,11 +3,9 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\BookingController;
-// use App\Http\Controllers\Api\CustomerController;
-// use App\Http\Controllers\Api\EmployeeController;
 use App\Http\Controllers\Api\ServiceController;
 use App\Http\Controllers\Api\UserController;
-use App\Http\Controllers\api\ProfileController;
+use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\AuthController;
 
 Route::get('/user', function (Request $request) {
@@ -30,9 +28,9 @@ Route::middleware( "auth:sanctum" )->group( function(){
     Route::patch("/updateservice/{id}", [ ServiceController::class, "updateService" ]);
     Route::put( "/toggleServiceActive/{id}", [ ServiceController::class, "toggleServiceActive" ]);
     Route::delete( "/delservice/{id}", [ ServiceController::class, "delService" ]);
-    // Route::get( "/userprofile", [ ProfileController::class, "getProfile" ]);
-    // Route::put( "/updateprofile", [ ProfileController::class, "setProfile" ]);
-    Route::put( "/updatepassword", [ ProfileController::class, "setPassword" ]);
+    Route::get( "/userprofile", [ ProfileController::class, "getProfile" ]);
+    Route::put( "/setprofile", [ ProfileController::class, "setProfile" ]);
+    Route::put( "/changepassword", [ ProfileController::class, "setPassword" ]);
     // Route::post("/deleteprofile", [ ProfileController::class, "deleteProfile" ]);
 
     Route::post( "/logout", [ UserController::class, "logout" ]);

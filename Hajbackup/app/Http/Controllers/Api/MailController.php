@@ -10,8 +10,8 @@ use App\Models\User;
 
 class MailController extends Controller {
 
-    public function sendMail( $userName, $bannedTime ) { //tesztelni a másik formát $user
-        // public function sendMail( User $user, $bannedTime ) {
+    public function sendMail($userEmail, $userName, $bannedTime) {
+    // public function sendMail( $userName, $bannedTime ) { 
 
         $content = [
             "title" => "Felhasználó blokkolása",
@@ -21,6 +21,7 @@ class MailController extends Controller {
         ];
 
         Mail::to( "harvester667@gmail.com" )->send( new BannerMail( $content ));
-        //Mail::to( $user->email )->send( new BannerMail( $content )); tesztelésre vár
+        // Felhasználó saját e-mail címére
+        Mail::to($userEmail)->send(new BannerMail($content));
     }
 }
