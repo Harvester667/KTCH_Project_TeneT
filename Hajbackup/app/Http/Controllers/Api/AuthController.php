@@ -16,17 +16,17 @@ class AuthController extends ResponseController {
 
     public function getUsers() {
 
-        Gate::before(function () {
+        // Gate::before(function () {
 
-            $user = auth("sanctum")->user();
-            if ($user->admin == 2) {
-                return true;
-            }
-        });
+        //     $user = auth("sanctum")->user();
+        //     if ($user->admin == 2) {
+        //         return true;
+        //     }
+        // });
 
-        if (!Gate::allows("admin")) {
-            return $this->sendError("Autentikációs hiba.", ["Nincs jogosultsága."], 401);
-        }
+        // if (!Gate::allows("admin")) {
+        //     return $this->sendError("Autentikációs hiba.", ["Nincs jogosultsága."], 401);
+        // }
 
         $users = User::all();
         return $this->sendResponse( $users, "Felhasználók betöltve." );

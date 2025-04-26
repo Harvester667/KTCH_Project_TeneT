@@ -64,11 +64,22 @@ export class AuthService {
   }
 
   getUsers(): Observable<any[]> {
-    const headers = this.getAuthHeaders();
+    const storedUser = localStorage.getItem('user');
+    const user = storedUser ? JSON.parse(storedUser) : null;
+  
+    let headers = new HttpHeaders();
+  
+    if (user && (user.admin === 1 || user.admin === 2)) {
+      const token = localStorage.getItem('token');
+      if (token) {
+        headers = headers.set('Authorization', `Bearer ${token}`);
+      }
+    }
+    
     return this.http.get<any>(`${this.apiUrl}/getusers`, { headers }).pipe(
       map(response => {
-        console.log('Felhasználók válasza:', response); // Naplózás
-        return response.data || []; // Biztosítsuk, hogy egy üres tömböt adunk vissza, ha nincs 'data'
+        console.log('Felhasználók válasza:', response);
+        return response.data || [];
       })
     );
   }
@@ -87,6 +98,18 @@ export class AuthService {
     return this.http.post(`${this.apiUrl}/add-employee/${userId}`, {}, { headers });
   }
 
+  employee(id: number) {
+    const token = localStorage.getItem('token'); // vagy ott, ahol tárolod
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.put<any>(`${this.apiUrl}/employee/${id}`, {}, { headers });
+  }
+  
+  customer(id: number) {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.put<any>(`${this.apiUrl}/customer/${id}`, {}, { headers });
+  }
+
   removeEmployee(userId: number): Observable<any> {
     const headers = this.getAuthHeaders();
     return this.http.post(`${this.apiUrl}/remove-employee/${userId}`, {}, { headers });
@@ -103,37 +126,50 @@ export class AuthService {
   }
 
   bookAppointment(bookingData: any) {
-    const token = localStorage.getItem('token')
-    return this.http.post(`${this.apiUrl}/addbooking`, bookingData, {
-      headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    }}   
-    );
+    const token = localStorage.getItem('token');
+  
+    if (!token) {
+      console.error('Nincs token!');
+      // Ilyenkor is visszaadunk egy hibás Observable-t, hogy ne legyen típushiba
+      return new Observable(observer => {
+        observer.error('Nincs token a localStorage-ban.');
+      });
+    }
+  
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  
+    return this.http.post('http://localhost:8000/api/addbooking', bookingData, { headers });
   }
 
-  getServices(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/services`);
-  }
-
-  addService(serviceData: { service: string, price: number }): Observable<any> {
+  forceBookAppointment(bookingData: any): Observable<any> {
     const headers = this.getAuthHeaders();
-    return this.http.post(`${this.apiUrl}/addservice`, serviceData, { headers });
-  }
-
-  updateService(id: number, service: { service: string, price: number }): Observable<any> {
-    const updatedService = {
-      service: service.service,
-      price: service.price
-    };
-    const headers = this.getAuthHeaders(); // Ha szükséges, adj hozzá authentikációs fejléceket
-    return this.http.patch(`${this.apiUrl}/updateservice/${id}`, updatedService, { headers });
+    return this.http.post(`${this.apiUrl}/forcebooking`, bookingData, { headers });
   }
   
+   
 
-  deleteService(serviceId: number): Observable<any> {
-    const headers = this.getAuthHeaders(true);
-    return this.http.delete(`${this.apiUrl}/deleteservice/${serviceId}`, { headers });
+  getServices() {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.get<any>(`${this.apiUrl}/services`, { headers });
+  }
+  
+  addService(service: any) {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.post<any>(`${this.apiUrl}/addservice`, service, { headers });
+  }
+  
+  updateService(id: number, service: any) {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.patch<any>(`${this.apiUrl}/updateservice/${id}`, service, { headers });
+  }
+  
+  deleteService(id: number) {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.delete<any>(`${this.apiUrl}/delservice/${id}`, { headers });
   }
 
   getEmployees(): Observable<any> {

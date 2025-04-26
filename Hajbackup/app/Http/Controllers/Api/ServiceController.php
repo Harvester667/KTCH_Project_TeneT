@@ -46,9 +46,9 @@ class ServiceController extends ResponseController
 
         $service = new Service();
         $service->service = $request[ "service" ];
-        $service->duration = $request[ "duration" ];
+        // $service->duration = $request[ "duration" ];
         $service->price = $request[ "price" ];
-        $service->description = $request[ "description" ];
+        // $service->description = $request[ "description" ];
         $service->active = $request[ "active" ];
         $service->save();
 

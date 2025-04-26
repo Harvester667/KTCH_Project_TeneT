@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../auth.service';
 import { Router } from '@angular/router';
 import { AppointmentService } from '../../models/appointment-service.model';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 declare var bootstrap: any; // Importáljuk az interfészt
 
@@ -37,20 +37,36 @@ export class NewAppointmentComponent implements OnInit {
   }
 
   loadEmployees() {
-    this.authService.getEmployees().subscribe({
-      next: (response) => {
-        console.log("Dolgozók API válasza:", response);
-        if (response.success) {
-          this.employees = response.data;
+    const storedUser = localStorage.getItem('user');
+    const user = storedUser ? JSON.parse(storedUser) : null;
+  
+    let headers = new HttpHeaders();
+  
+    if (user && (user.admin === 1 || user.admin === 2)) {
+      const token = localStorage.getItem('token');
+      if (token) {
+        headers = headers.set('Authorization', `Bearer ${token}`);
+      }
+    }
+  
+    this.http.get<any>('http://localhost:8000/api/getusers', { headers }).subscribe({
+      next: (response: any) => {
+        console.log('Lekért felhasználók:', response);
+        if (response && Array.isArray(response.data)) {
+          this.employees = response.data.filter((user: any) => user.admin === 1);
         } else {
-          console.error("Hiba a dolgozók lekérésekor:", response);
+          console.error('Nem megfelelő formátumú válasz:', response);
         }
       },
-      error: (err) => {
-        console.error("Hálózati vagy API hiba:", err);
+      error: (error) => {
+        console.error('Hiba a fodrászok lekérésekor', error);
       }
     });
   }
+  
+  
+  
+  
   
   loadUserData() {
     const storedUser = localStorage.getItem('user');
@@ -137,53 +153,74 @@ export class NewAppointmentComponent implements OnInit {
       return;
     }
   
-    let userId = this.user.id;
+    let userId0 = this.user.id; // alapértelmezetten a bejelentkezett felhasználó
+    let useForceBooking = false;
   
-    // Superadmin e-mail alapján választ másik felhasználót
+    // Superadmin más nevében is tud foglalni
     if (this.user.admin === 2 && email) {
-      const selectedUser = this.users.find(user => user.email === email);
+      const selectedUser = this.users.find(u => u.email === email);
       if (!selectedUser) {
         alert('A kiválasztott e-mail cím nem található!');
         return;
       }
-      userId = selectedUser.id;
+      userId0 = selectedUser.id;
+      useForceBooking = true;
     }
   
-    // Booking adatcsomag
+    const bookingDateTime = `${appointmentDate} ${appointmentTime}:00`;
+  
     const bookingData = {
-      user_id: userId,
-      employee_id: stylist,
-      service_id: service,
-      appointment_date: appointmentDate,
-      appointment_time: appointmentTime
+      user_id_0: Number(userId0),
+      user_id_1: Number(stylist),
+      service_id: Number(service),
+      booking_time: bookingDateTime,
+      active: 1
     };
   
     console.log('📦 BookingData elküldésre:', bookingData);
   
-    this.authService.bookAppointment(bookingData).subscribe({
-      next: (res: any) => {
-        console.log('✅ Foglalás sikeres:', res);
-  
-        const modalElement = document.getElementById('bookingSuccessModal');
-        if (modalElement) {
-          new bootstrap.Modal(modalElement).show();
+    if (useForceBooking) {
+      // Admin más nevében foglal -> forceBooking hívás
+      this.authService.forceBookAppointment(bookingData).subscribe({
+        next: (res: any) => {
+          console.log('✅ ForceBooking sikeres:', res);
+          this.showSuccessModal();
+          this.updateAvailableTimes();
+        },
+        error: (error) => {
+          console.error('❌ ForceBooking hiba:', error);
+          this.showErrorModal();
         }
-  
-        this.updateAvailableTimes();
-      },
-      error: (error) => {
-        console.error('❌ Hiba a foglalás mentésekor:', error);
-  
-        const errorModalElement = document.getElementById('bookingErrorModal');
-        if (errorModalElement) {
-          new bootstrap.Modal(errorModalElement).show();
+      });
+    } else {
+      // Saját nevében foglal -> normál booking
+      this.authService.bookAppointment(bookingData).subscribe({
+        next: (res: any) => {
+          console.log('✅ Foglalás sikeres:', res);
+          this.showSuccessModal();
+          this.updateAvailableTimes();
+        },
+        error: (error) => {
+          console.error('❌ Hiba a foglalás mentésekor:', error);
+          this.showErrorModal();
         }
-      }
-    });
+      });
+    }
+  }
+
+  showSuccessModal() {
+    const modalElement = document.getElementById('bookingSuccessModal');
+    if (modalElement) {
+      new bootstrap.Modal(modalElement).show();
+    }
   }
   
-  
-  
+  showErrorModal() {
+    const modalElement = document.getElementById('bookingErrorModal');
+    if (modalElement) {
+      new bootstrap.Modal(modalElement).show();
+    }
+  }
   
   
   
@@ -191,51 +228,56 @@ export class NewAppointmentComponent implements OnInit {
   updateAvailableTimes(): void {
     if (!this.appointmentObj.stylist || !this.appointmentObj.appointmentDate) return;
   
-    const selectedDate = this.appointmentObj.appointmentDate;
-    const stylistId = this.appointmentObj.stylist;
-  
-    const date = new Date(selectedDate);
+    const date = new Date(this.appointmentObj.appointmentDate);
     const day = date.getDay(); // 0 = vasárnap, 6 = szombat
   
-    // Magyar ünnepnapok (2025)
+    // Ünnepnapok 2025-re
     const holidays = [
-      '2025-01-01', // Újév
-      '2025-03-15', // Nemzeti ünnep
-      '2025-04-18', // Nagypéntek 
-      '2025-04-21', // Húsvét hétfő
-      '2025-05-01', // Munka ünnepe
-      '2025-06-09', // Pünkösd hétfő
-      '2025-08-20', // Alkotmány napja
-      '2025-10-23', // 1956-os forradalom
-      '2025-11-01', // Mindenszentek
-      '2025-12-24', // Szenteste
-      '2025-12-25', // Karácsony
-      '2025-12-26'  // Karácsony másnapja
+      '2025-01-01', '2025-03-15', '2025-04-18', '2025-04-21',
+      '2025-05-01', '2025-06-09', '2025-08-20', '2025-10-23',
+      '2025-11-01', '2025-12-24', '2025-12-25', '2025-12-26'
     ];
   
-    // Ha hétvége vagy ünnepnap, nem elérhető
+    const selectedDate = this.appointmentObj.appointmentDate;
+  
+    // Ha hétvége vagy ünnepnap, nem engedélyezett
     if (day === 0 || day === 6 || holidays.includes(selectedDate)) {
       this.availableTimes = [];
       console.warn('Ez a nap nem elérhető: hétvége vagy ünnepnap');
       return;
     }
   
-    console.log('Lekérés indul:', stylistId, selectedDate);
+    const stylistId = this.appointmentObj.stylist;
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
   
-    this.http.get<string[]>(`http://localhost:8000/api/booked-times/${stylistId}/${selectedDate}`).subscribe({
-      next: (bookedTimes: string[]) => {
-        console.log('Foglalások a szerverről:', bookedTimes);
-        this.availableTimes = this.generateTimes().filter(time =>
-          !bookedTimes.some(booked => booked.startsWith(time))
-        );
+    this.http.get<any>(`http://localhost:8000/api/whoisbooking?user_id_1=${stylistId}`, { headers }).subscribe({
+      next: (response) => {
+        console.log('Lekért foglalások:', response);
+  
+        const bookings = response.data || [];
+  
+        const bookedTimes = bookings
+          .filter((b: any) => b.booking_time.startsWith(selectedDate))
+          .map((b: any) => {
+            const timePart = b.booking_time.split(' ')[1].slice(0, 5); // pl: "09:00"
+            return timePart;
+          });
+  
+        console.log('Foglalások erre a napra:', bookedTimes);
+  
+        const allTimes = this.generateTimes();
+        this.availableTimes = allTimes.filter(time => !bookedTimes.includes(time));
         console.log('Szabad időpontok:', this.availableTimes);
       },
-      error: (err) => {
-        console.error('Hiba az API hívásban:', err);
-        this.availableTimes = [];
+      error: (error) => {
+        console.error('Hiba a foglalt idők lekérdezésekor:', error);
+        this.availableTimes = this.generateTimes();
       }
     });
   }
+  
+  
   
   
 

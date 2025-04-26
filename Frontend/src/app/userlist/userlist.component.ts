@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
-import { switchMap } from 'rxjs/operators';
-
-declare var bootstrap: any; // A Bootstrap modalokhoz szükséges
+declare var bootstrap: any;
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-userlist',
@@ -10,123 +9,99 @@ declare var bootstrap: any; // A Bootstrap modalokhoz szükséges
   styleUrls: ['./userlist.component.css']
 })
 export class UserlistComponent implements OnInit {
-  users: any[] = []; // A felhasználók listája
-  selectedUser: any = null; // A kiválasztott felhasználó, akit módosítani fogunk
-  actionType: string = ''; // A végrehajtandó művelet (feljogosítás vagy lefokozás)
-  modalTitle: string = ''; // A modal címe
-  modalMessage: string = ''; // A modal üzenete
-  successModalTitle: string = ''; // A sikeres művelet modal címke
-  successModalMessage: string = ''; // A sikeres művelet modal üzenete
+  users: any[] = [];
+  selectedUser: any;
+  selectedAction: string = '';
+  modalTitle: string = '';
+  modalMessage: string = '';
+  successModalTitle: string = '';
+  successModalMessage: string = '';
 
   constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
-    this.loadUsers(); // Felhasználók betöltése
+    this.loadUsers();
   }
 
-  loadUsers(): void {
+  loadUsers() {
     this.authService.getUsers().subscribe(
-      (response: any) => {
-        this.users = response; // Felhasználók adatainak beállítása
+      (data: any) => {
+        this.users = data;
       },
-      (error) => {
+      error => {
         console.error('Hiba a felhasználók betöltésekor', error);
       }
     );
   }
 
-  // Az admin szerepkör kiírása
-  getAdminRole(role: number): string {
-    switch (role) {
-      case 0: return 'Vendég';
-      case 1: return 'Fodrász';
-      case 2: return 'Admin';
-      default: return 'Ismeretlen';
-    }
-  }
-
-  // Feljogosítási vagy Lefokozási modal megnyitása
-  openModal(action: string, user: any): void {
-    this.selectedUser = user; // Kiválasztjuk a felhasználót
-    this.actionType = action; // Művelet típusa
-
-    // Modal tartalmának beállítása
+  openModal(action: string, user: any) {
+    this.selectedUser = user;
+    this.selectedAction = action;
     if (action === 'setAdmin') {
-      this.modalTitle = 'Feljogosítás';
-      this.modalMessage = `Biztosan feljogosítja ezt a felhasználót: ${user.name}?`;
+      this.modalTitle = 'Feljogosítás megerősítése';
+      this.modalMessage = `Biztosan feljogosítod ${user.name} felhasználót adminnak?`;
     } else if (action === 'demotivate') {
-      this.modalTitle = 'Lefokozás';
-      this.modalMessage = `Biztosan le szeretné fokozni ezt a felhasználót: ${user.name}?`;
+      this.modalTitle = 'Lefokozás megerősítése';
+      this.modalMessage = `Biztosan lefokozod ${user.name} felhasználót?`;
     }
-
-    // Megnyitjuk a kérdező modalt
-    const modal = new bootstrap.Modal(document.getElementById('actionModal'));
-    modal.show();
+    const actionModal = new bootstrap.Modal(document.getElementById('actionModal'));
+    actionModal.show();
   }
 
-  // Művelet megerősítése
-  confirmAction(): void {
-    if (this.actionType === 'setAdmin') {
-      this.setAdmin();
-    } else if (this.actionType === 'demotivate') {
-      this.demotivate();
+  closeModal() {
+    const actionModal = bootstrap.Modal.getInstance(document.getElementById('actionModal'));
+    if (actionModal) {
+      actionModal.hide();
     }
   }
 
-  // Feljogosítás
-  setAdmin(): void {
-    if (this.selectedUser) {
-      this.authService.setAdmin(this.selectedUser.id).pipe(
-        switchMap(() => this.authService.addEmployee(this.selectedUser.id))
-      ).subscribe(
-        () => {
-          this.successModalTitle = 'Feljogosítva';
-          this.successModalMessage = `A felhasználó: ${this.selectedUser.name} sikeresen feljogosítva és rögzítve dolgozóként!`;
-  
-          const actionModal = bootstrap.Modal.getInstance(document.getElementById('actionModal'));
-          actionModal.hide();
-  
-          const successModal = new bootstrap.Modal(document.getElementById('successModal'));
-          successModal.show();
-        },
-        (error) => {
-          console.error('Hiba történt a feljogosítás során', error);
-          alert('Hiba történt a feljogosítás során');
-        }
-      );
-    }
-  }
-  
-
-  // Lefokozás
-  demotivate(): void {
-    if (this.selectedUser) {
-      this.authService.demotivate(this.selectedUser.id).pipe(
-        switchMap(() => this.authService.removeEmployee(this.selectedUser.id))
-      ).subscribe(
-        () => {
-          this.successModalTitle = 'Lefokozva';
-          this.successModalMessage = `A felhasználó: ${this.selectedUser.name} sikeresen lefokozva és a dolgozók listájából eltávolítva`;
-  
-          const actionModal = bootstrap.Modal.getInstance(document.getElementById('actionModal'));
-          actionModal.hide();
-  
-          const successModal = new bootstrap.Modal(document.getElementById('successModal'));
-          successModal.show();
-        },
-        (error) => {
-          console.error('Hiba történt a lefokozás során', error);
-          alert('Hiba történt a lefokozás során');
-        }
-      );
-    }
-  }
-  
-
-  // Sikeres művelet modal bezárása
-  closeSuccessModal(): void {
+  closeSuccessModal() {
     const successModal = bootstrap.Modal.getInstance(document.getElementById('successModal'));
-    successModal.hide();
-    this.loadUsers(); // Felhasználók újratöltése
+    if (successModal) {
+      successModal.hide();
+    }
+  }
+
+  showSuccessModal(title: string, message: string) {
+    this.successModalTitle = title;
+    this.successModalMessage = message;
+    const successModal = new bootstrap.Modal(document.getElementById('successModal'));
+    successModal.show();
+  }
+
+  confirmAction() {
+    if (this.selectedAction === 'setAdmin') {
+      forkJoin([
+        this.authService.setAdmin(this.selectedUser.id),
+        this.authService.employee(this.selectedUser.id)
+      ]).subscribe(
+        ([adminResponse, employeeResponse]) => {
+          this.closeModal();
+          this.showSuccessModal('Siker!', 'A felhasználó admin jogosultságot kapott.');
+          this.loadUsers();
+        },
+        error => {
+          console.error('Hiba a feljogosítás során', error);
+        }
+      );
+    } else if (this.selectedAction === 'demotivate') {
+      forkJoin([
+        this.authService.demotivate(this.selectedUser.id),
+        this.authService.customer(this.selectedUser.id)
+      ]).subscribe(
+        ([demotivateResponse, customerResponse]) => {
+          this.closeModal();
+          this.showSuccessModal('Siker!', 'A felhasználó jogosultsága visszavonva.');
+          this.loadUsers();
+        },
+        error => {
+          console.error('Hiba a lefokozás során', error);
+        }
+      );
+    }
+  }
+
+  getAdminRole(admin: number): string {
+    return admin === 1 ? 'Admin' : 'Felhasználó';
   }
 }

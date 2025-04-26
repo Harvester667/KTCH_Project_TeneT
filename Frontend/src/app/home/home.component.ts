@@ -21,7 +21,6 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadUserData();
-    this.loadEmployees();
     // Feliratkozás a user$ observable-ra, így mindig naprakész adatokat kapunk
     this.authService.user$.subscribe(user => {
       if (user) {

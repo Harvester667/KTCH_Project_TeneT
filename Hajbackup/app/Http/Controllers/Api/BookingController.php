@@ -52,9 +52,18 @@ class BookingController extends ResponseController
     }
     
     public function addBooking(BookingRequest $request){
+        $exists = Booking::where('user_id_1', $request->user_id_1)
+        ->where('booking_time', $request->booking_time)
+        ->exists();
+
+    if ($exists) {
+        return response()->json(['message' => 'Erre az időpontra már van foglalás!'], 409); // 409 Conflict
+    }
         //Felhasználó validálása
         $request->validated();
         $active = true;
+
+        
 
         $booking = Booking::create([
             "booking_time" => $request["booking_time"],
@@ -136,17 +145,17 @@ class BookingController extends ResponseController
 
     public function delBooking( Request $request ){
 
-        Gate::before(function () {
+        // Gate::before(function () {
 
-            $user = auth("sanctum")->user();
-            if ($user->admin == 2) {
-                return true;
-            }
-        });
+        //     $user = auth("sanctum")->user();
+        //     if ($user->admin == 2 ) {
+        //         return true;
+        //     }
+        // });
 
-        if (!Gate::allows("admin")) {
-            return $this->sendError("Autentikációs hiba.", ["Nincs jogosultsága."], 401);
-        }
+        // if (!Gate::allows("admin")) {
+        //     return $this->sendError("Autentikációs hiba.", ["Nincs jogosultsága."], 401);
+        // }
 
         $booking = Booking::find( $request[ "id" ]);
         if(!$booking){ //Ellenőrizni kell, hogy van-e booking, mielőtt törölnénk

@@ -1,12 +1,13 @@
 <div class="container mt-4">
-  <h2>FOGLALÁSOK</h2>
+  <h2 class="text-center mb-4">Foglalásaim</h2>
+
   <!-- Admin jogosultság ellenőrzése -->
-  <div *ngIf="user.admin !== 0" class="mb-3 d-flex gap-2 flex-wrap">
+  <div *ngIf="user?.admin === 2 || user?.admin === 1" class="mb-3 d-flex gap-2 flex-wrap justify-content-center">
     <button class="btn btn-dark btn-sm" (click)="loadBookings('all')">Összes</button>
     <button class="btn btn-dark btn-sm" (click)="loadBookings('today')">Mai foglalások</button>
   </div>
 
-  <!-- Aktív foglalások kártyákon -->
+  <!-- Aktív foglalások -->
   <div *ngIf="allBookings && allBookings.length > 0; else noBookings">
     <div class="row">
       <ng-container *ngFor="let booking of allBookings">
@@ -14,19 +15,22 @@
           <div class="card h-100 position-relative"
                [ngStyle]="{ 'background-color': isLateBooking(booking) ? '#f8d7da' : '' }">
 
-            <!-- Törlés gomb, ha nem esedékes 2 napon belül -->
-            <button *ngIf="user.admin !== 0 || !isWithinTwoDays(booking.appointment_date)"
-              class="btn btn-danger position-absolute top-0 end-0 m-2 btn-sm"
-                (click)="deleteBooking(booking.booking_id)">
-                  X
-            </button>
+            <!-- Törlés gomb -->
+            <button *ngIf="canDeleteBooking(booking)"
+            class="btn btn-danger btn-sm position-absolute top-0 end-0 m-2"
+            (click)="deleteBooking(booking.id)">
+      X
+    </button>
+    
+    
 
             <div class="card-body">
-              <h5 class="card-title">{{ booking.customer_name }}</h5>
-              <p class="card-text mb-1"><strong>Fodrász:</strong> {{ booking.employee_name }}</p>
-              <p class="card-text mb-1"><strong>Dátum:</strong> {{ booking.appointment_date }}</p>
-              <p class="card-text mb-1"><strong>Időpont:</strong> {{ booking.appointment_time.slice(0,5) }}</p>
-              <p class="card-text"><strong>Szolgáltatás:</strong> {{ booking.service_name || 'N/A' }}</p>
+              <h5 class="card-title">{{ booking.customerName }}</h5>
+              <p class="card-text mb-1"><strong>Fodrász:</strong> {{ booking.employeeName }}</p>
+              <p class="card-text mb-1"><strong>Dátum:</strong> {{ booking.booking_time.split(' ')[0] }}</p>
+              <p class="card-text mb-1"><strong>Időpont:</strong> {{ booking.booking_time.split(' ')[1].slice(0,5) }}</p>
+              <p class="card-text"><strong>Szolgáltatás:</strong> {{ booking.serviceName || 'N/A' }}</p>
+              
             </div>
           </div>
         </div>
@@ -36,18 +40,20 @@
 
   <!-- Korábbi foglalások listázása -->
   <div *ngIf="filter === 'all' && pastBookings.length > 0" class="mt-5">
-    <h4>Korábbi foglalások</h4>
+    <h4 class="text-center mb-4">Korábbi foglalások</h4>
     <ul class="list-group">
       <li *ngFor="let booking of pastBookings" class="list-group-item">
-        <strong>{{ booking.customer_name }}</strong> – {{ booking.appointment_date }} {{ booking.appointment_time }} – 
-        {{ booking.service_name || 'N/A' }} ({{ booking.employee_name }})
+        <strong>{{ booking.customerName || 'Ismeretlen vendég' }}</strong> – 
+        {{ booking.booking_time?.split(' ')[0] }} {{ booking.booking_time?.split(' ')[1]?.slice(0,5) }} –
+        {{ booking.serviceName || 'N/A' }} ({{ booking.employeeName || 'Fodrász ismeretlen' }})
       </li>
     </ul>
   </div>
+  
 
   <!-- Ha nincs foglalás -->
   <ng-template #noBookings>
-    <p id="nincsfoglalas">Jelenleg nincs foglalás.</p>
+    <p class="text-center text-muted mt-5">Jelenleg nincs foglalás.</p>
   </ng-template>
 </div>
 
@@ -87,4 +93,3 @@
     </div>
   </div>
 </div>
-
