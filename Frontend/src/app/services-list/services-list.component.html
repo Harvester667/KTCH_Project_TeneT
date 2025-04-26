@@ -1,0 +1,120 @@
+<div class="container mt-4" id="servicecontainer">
+  <h2>SZOLGÁLTATÁSOK</h2>
+  <table class="table">
+    <thead class="thead">
+      <tr>
+        <th scope="col">Név</th>
+        <th scope="col">Ár</th>
+        <th scope="col">Műveletek</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let service of services">
+        <td>{{ service.service }}</td>
+        <td>{{ service.price ? (service.price | number: '1.0-0') + ' Ft' : 'Nincs ár' }}</td>
+        <td>
+          <button class="btn btn-dark btn-sm" (click)="editService(service)">Módosítás</button>
+          <button class="btn btn-danger btn-sm" (click)="deleteService(service)">Törlés</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+
+<!-- Új Szolgáltatás Modal -->
+<div class="modal fade" id="addServiceModal" tabindex="-1" aria-labelledby="addServiceModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addServiceModalLabel">Új szolgáltatás hozzáadása</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Bezárás"></button>
+      </div>
+      <div class="modal-body">
+        <form (submit)="addService()">
+          <div class="form-group">
+            <label for="newServiceName">Szolgáltatás neve</label>
+            <input type="text" id="newServiceName" class="form-control" [(ngModel)]="newService.service" name="newServiceName" required />
+          </div>
+          <div class="form-group mt-2">
+            <label for="newServicePrice">Ár (Ft)</label>
+            <input type="number" id="newServicePrice" class="form-control" [(ngModel)]="newService.price" name="newServicePrice" required />
+          </div>
+          <button type="submit" class="btn btn-dark btn-sm mt-3">Szolgáltatás hozzáadása</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Gomb a modal megnyitásához -->
+<button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#addServiceModal">
+  Új szolgáltatás felvétele
+</button>
+
+<!-- Szolgáltatás szerkesztése Modal -->
+<div *ngIf="editingService" class="modal fade" id="editServiceModal" tabindex="-1" aria-labelledby="editServiceModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editServiceModalLabel">Szolgáltatás szerkesztése</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Bezárás"></button>
+      </div>
+      <div class="modal-body">
+        <form (submit)="saveEditedService()">
+          <div class="form-group">
+            <label for="editServiceName">Szolgáltatás neve</label>
+            <input type="text" id="editServiceName" class="form-control" [(ngModel)]="editingService.service" name="editServiceName" required />
+          </div>
+          <div class="form-group mt-2">
+            <label for="editServicePrice">Ár (Ft)</label>
+            <input type="number" id="editServicePrice" class="form-control" [(ngModel)]="editingService.price" name="editServicePrice" required />
+          </div>
+          <button type="button" class="btn btn-dark btn-sm" (click)="saveEditedService()">Módosítás mentése</button>
+          <button type="button" class="btn btn-danger btn-sm" (click)="cancelEdit()">Mégsem</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Törlés megerősítés modal -->
+<div class="modal fade" id="deleteServiceModal" tabindex="-1" aria-labelledby="deleteServiceModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteServiceModalLabel">Szolgáltatás törlése</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Bezárás"></button>
+      </div>
+      <div class="modal-body">
+        Biztosan törölni szeretné az alábbi szolgáltatást?<br><strong>{{ serviceToDelete?.service }}</strong>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-dark btn-sm" (click)="confirmDelete()">Igen</button>
+        <button type="button" class="btn btn-danger btn-sm" data-bs-dismiss="modal">Mégsem</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Sikeres törlés modal -->
+<div class="modal fade" id="deleteSuccessModal" tabindex="-1" aria-labelledby="deleteSuccessModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteSuccessModalLabel">Törlés sikeres</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Bezárás"></button>
+      </div>
+      <div class="modal-body">
+        Szolgáltatás sikeresen törölve.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-dark btn-sm" data-bs-dismiss="modal">OK</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+

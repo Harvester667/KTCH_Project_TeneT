@@ -1,0 +1,63 @@
+<div class="container mt-4" id="servicecontainer">
+  <h2>FELHASZNÁLÓK</h2>
+  <table class="table">
+    <thead class="thead">
+      <tr>
+        <th>Név</th>
+        <th>E-mail</th>
+        <th>Szerepkör</th>
+        <th>Műveletek</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of users">
+        <td>{{ user.name }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ getAdminRole(user.admin) }}</td>
+        <td>
+          <!-- Feljogosítás gomb -->
+          <button *ngIf="user.admin === 0" (click)="openModal('setAdmin', user)" class="btn btn-dark btn-sm">Feljogosítás</button>
+          <!-- Lefokozás gomb -->
+          <button *ngIf="user.admin === 1" (click)="openModal('demotivate', user)" class="btn btn-dark btn-sm">Lefokozás</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Kérdező Modal -->
+<div class="modal fade" id="actionModal" tabindex="-1" aria-labelledby="actionModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="actionModalLabel">{{ modalTitle }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Bezárás"></button>
+      </div>
+      <div class="modal-body">
+        <p>{{ modalMessage }}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-dark btn-sm" (click)="confirmAction()">Igen</button>
+        <button type="button" class="btn btn-danger btn-sm" data-bs-dismiss="modal">Mégsem</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Sikeres művelet Modal -->
+<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="successModalLabel">{{ successModalTitle }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Bezárás"></button>
+      </div>
+      <div class="modal-body">
+        <p>{{ successModalMessage }}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-dark btn-sm" (click)="closeSuccessModal()">OK</button>
+      </div>
+    </div>
+  </div>
+</div>

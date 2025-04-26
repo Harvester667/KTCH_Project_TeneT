@@ -1,0 +1,54 @@
+<!-- Sikeres Bejelentkezés Modal -->
+<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="successModalLabel">Sikeres bejelentkezés!</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Kellemes időtöltést!
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-dark" data-bs-dismiss="modal">OK</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Sikertelen Bejelentkezés Modal -->
+<div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="errorModalLabel">Hiba a Bejelentkezésben</h5>
+        <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Hibás bejelentkezési adatok! Kérlek, ellenőrizd az e-mail címedet és jelszavadat!
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger btn-sm" data-bs-dismiss="modal">OK</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Bejelentkezés űrlap -->
+<div class="container d-flex justify-content-center" style="height: 100vh;">
+  <div class="login-form p-4 border rounded shadow">
+    <h2 class="text-center">BEJELENTKEZÉS</h2>
+    <form (ngSubmit)="onLogin()">
+      <div class="mb-3">
+        <label for="email" class="form-label">E-mail</label>
+        <input type="email" id="email" [(ngModel)]="loginObj.email" name="email" class="form-control" required />
+      </div>
+      <div class="mb-3">
+        <label for="password" class="form-label">Jelszó</label>
+        <input type="password" id="password" [(ngModel)]="loginObj.password" name="password" class="form-control" required />
+      </div>
+      <button type="submit" class="btn btn-dark btn-sm w-100">Bejelentkezés</button>
+    </form>
+  </div>
+</div>

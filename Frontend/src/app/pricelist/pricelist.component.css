@@ -1,0 +1,38 @@
+h2{
+    color:white;
+    text-align: center;
+    font-family: "DM Sans", sans-serif;
+    font-optical-sizing: auto;
+  }
+  h3{
+    color:white;
+  }
+  label{
+    color:white;
+  }
+  
+  .btn-dark:hover {
+    background-color: #00d9ff;
+    border-color: #00d9ff;
+    color: black;
+  }
+  
+  .btn-dark{
+    margin-right:3px;
+  }
+  
+  #editServicePrice{
+    margin-bottom:5px;
+  }
+  
+  table tbody tr td{
+    background-color: transparent !important;
+    color:white;
+    align-items: center;
+  }
+  
+  table tbody tr th{
+    background-color: transparent !important;
+    
+  }
+

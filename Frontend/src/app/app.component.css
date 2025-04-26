@@ -1,0 +1,75 @@
+@import url('https://fonts.googleapis.com/css2?family=Mea+Culpa&family=Rakkas&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap');
+
+
+
+h2{
+    font-family: "Special Gothic Expanded One", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    color: white;
+    font-size: 76px !important;
+}
+
+#mainheaderer {
+    background-color: #1f2020 !important;
+    background-size: 100% 100%;
+    background-position: center;
+    max-height: 30px;
+    
+  }
+
+.navbar{
+    margin-top:5px;
+    background-color: #1f2020 !important;
+    font-family: "DM Sans", sans-serif;
+    font-optical-sizing: auto;
+}
+
+.navbar-brand{
+    margin-left: 20px;
+    font-size: 30px;
+    font-family: "Special Gothic Expanded One", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    color: white;
+}
+
+#welcome{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width:100%;
+    margin-right:20px;
+    font-family: "DM Sans", sans-serif;
+    font-optical-sizing: auto;
+}
+
+#navbarSupportedContent{
+    margin-right:20px
+}
+
+.app-container {
+    max-width: 80%;
+    margin-top: 20px;
+    padding-top:0;
+    padding-left:0;
+    padding-right:0;
+    padding-bottom: 20px;
+    background-color: #1f2020;
+    background: linear-gradient(to bottom, #000000, #1b2222);
+  }
+
+  #welcome a {
+    color: white;
+    font-size:12px;
+    text-decoration: none;
+  }
+  
+  #welcome a:hover {
+    color: #00d9ff !important;
+  }
+
+  span{
+    font-size: 12px;
+  }

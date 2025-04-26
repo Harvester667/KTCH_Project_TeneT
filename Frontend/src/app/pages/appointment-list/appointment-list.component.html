@@ -1,0 +1,90 @@
+<div class="container mt-4">
+  <h2>FOGLALÁSOK</h2>
+  <!-- Admin jogosultság ellenőrzése -->
+  <div *ngIf="user.admin !== 0" class="mb-3 d-flex gap-2 flex-wrap">
+    <button class="btn btn-dark btn-sm" (click)="loadBookings('all')">Összes</button>
+    <button class="btn btn-dark btn-sm" (click)="loadBookings('today')">Mai foglalások</button>
+  </div>
+
+  <!-- Aktív foglalások kártyákon -->
+  <div *ngIf="allBookings && allBookings.length > 0; else noBookings">
+    <div class="row">
+      <ng-container *ngFor="let booking of allBookings">
+        <div class="col-12 col-sm-6 col-md-4 mb-4">
+          <div class="card h-100 position-relative"
+               [ngStyle]="{ 'background-color': isLateBooking(booking) ? '#f8d7da' : '' }">
+
+            <!-- Törlés gomb, ha nem esedékes 2 napon belül -->
+            <button *ngIf="user.admin !== 0 || !isWithinTwoDays(booking.appointment_date)"
+              class="btn btn-danger position-absolute top-0 end-0 m-2 btn-sm"
+                (click)="deleteBooking(booking.booking_id)">
+                  X
+            </button>
+
+            <div class="card-body">
+              <h5 class="card-title">{{ booking.customer_name }}</h5>
+              <p class="card-text mb-1"><strong>Fodrász:</strong> {{ booking.employee_name }}</p>
+              <p class="card-text mb-1"><strong>Dátum:</strong> {{ booking.appointment_date }}</p>
+              <p class="card-text mb-1"><strong>Időpont:</strong> {{ booking.appointment_time.slice(0,5) }}</p>
+              <p class="card-text"><strong>Szolgáltatás:</strong> {{ booking.service_name || 'N/A' }}</p>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+
+  <!-- Korábbi foglalások listázása -->
+  <div *ngIf="filter === 'all' && pastBookings.length > 0" class="mt-5">
+    <h4>Korábbi foglalások</h4>
+    <ul class="list-group">
+      <li *ngFor="let booking of pastBookings" class="list-group-item">
+        <strong>{{ booking.customer_name }}</strong> – {{ booking.appointment_date }} {{ booking.appointment_time }} – 
+        {{ booking.service_name || 'N/A' }} ({{ booking.employee_name }})
+      </li>
+    </ul>
+  </div>
+
+  <!-- Ha nincs foglalás -->
+  <ng-template #noBookings>
+    <p id="nincsfoglalas">Jelenleg nincs foglalás.</p>
+  </ng-template>
+</div>
+
+<!-- Delete Confirm Modal -->
+<div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteConfirmModalLabel">Biztosan törli a foglalást?</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Biztosan törölni szeretné a foglalást?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-dark btn-sm" (click)="confirmDelete()">Igen</button>
+        <button type="button" class="btn btn-danger btn-sm" data-bs-dismiss="modal">Mégsem</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Success Modal -->
+<div class="modal fade" id="deleteSuccessModal" tabindex="-1" aria-labelledby="deleteSuccessModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteSuccessModalLabel">Foglalás sikeresen törölve!</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        A foglalás sikeresen törlésre került.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-dark btn-sm" data-bs-dismiss="modal">OK</button>
+      </div>
+    </div>
+  </div>
+</div>
+
