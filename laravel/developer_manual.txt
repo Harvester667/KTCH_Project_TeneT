@@ -32,8 +32,7 @@ Egyéb
     PUT /inactivate: Felhasználó inaktiválása (auth: sanctum)
     DELETE /voldemort/{id}: Felhasználó törlése (auth: sanctum)
 
-UserController Részletezés
-Funkciók és Működés
+UserController
 1. Felhasználó Regisztráció
 
     Metódus: register
@@ -79,8 +78,7 @@ Funkciók és Működés
     HTTP Metódus: Nincs megadva, csak belső tesztelésre használják.
     Leírás: Visszaadja az összes személyes hozzáférési tokent az adatbázisból. (Ezt a metódust el kell távolítani a végleges verzióból.)
 
-ServiceController Részletezés
-Funkciók és Működés
+ServiceController
 1. Szolgáltatások Listázása
 
     Metódus: getServices
@@ -138,8 +136,7 @@ Funkciók és Működés
     Paraméter: serviceName (a szolgáltatás neve).
     Válasz: A megfelelő ID-t adja vissza, ha a szolgáltatás létezik.
 
-BookingController Részletezés
-Funkciók és Működés
+BookingController
 1. Foglalások Listázása
 
     Metódus: getBookings

@@ -35,19 +35,4 @@ class ServiceSeeder extends Seeder
             Log::error("Hiba az SQL végrehajtása során: " . $e->getMessage());
         }
     }
-    // public function run(): void
-    // {
-    //     $sql = file_get_contents( __DIR__."/services.sql" );
-
-    //     if( $sql === false ) {
-
-    //         Log::error( "Sikertelen beolvasás: ".$sqlFilePath );
-    //         return;
-    //     }
-
-    //     Log::info( "SQL file: ".$sql );
-
-    //     DB::unprepared( $sql );
-
-    //     Log::info( "ServiceSeeder lefutott." );    }
 }

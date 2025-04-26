@@ -36,14 +36,31 @@ class ProfileController extends ResponseController
         $request->validated();
 
         $user = auth("sanctum")->user();
-        $user->phone = $request->phone;
-        $user->gender = $request->gender; // itt már legyen validált érték: férfi/nő/szabadon választott.
-        $user->invoice_address = $request->invoice_address;
-        $user->invoice_postcode = $request->invoice_postcode;
-        $user->invoice_city = $request->invoice_city;
-        $user->birth_date = $request->birth_date;
-        $user->qualifications = $request->qualifications;
-        $user->description = $request->description;
+        
+        $fields = [
+            'phone',
+            'gender',
+            'invoice_address',
+            'invoice_postcode',
+            'invoice_city',
+            'birth_date',
+            'qualifications',
+            'description',
+        ];
+
+        foreach ($fields as $field) {
+            if ($request->filled($field)) {
+                $user->$field = $request->$field;
+            }
+        }
+        // $user->phone = $request->phone;
+        // $user->gender = $request->gender; // itt már legyen validált érték: férfi/nő/szabadon választott.
+        // $user->invoice_address = $request->invoice_address;
+        // $user->invoice_postcode = $request->invoice_postcode;
+        // $user->invoice_city = $request->invoice_city;
+        // $user->birth_date = $request->birth_date;
+        // $user->qualifications = $request->qualifications;
+        // $user->description = $request->description;
 
         $user->save();
 

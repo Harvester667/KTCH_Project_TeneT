@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Http\Resources\User as UserResource;
 use App\Http\Controllers\Api\ResponseController;
 use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\ModifyProfileRequest;
 use Illuminate\Support\Facades\Gate;
 // use Illuminate\Support\Facades\DB;
 
@@ -129,30 +130,73 @@ class AuthController extends ResponseController {
         return $this->sendResponse( $user->name, "Customer jog beállítva." );
     }
 
-    public function updateUser( Request $request ) {
+    public function modifyProfile( ModifyProfileRequest $request ) {
 
-        // Gate::before(function () {
+        Gate::before(function () {
 
-        //     $user = auth("sanctum")->user();
-        //     if ($user->admin == 2) {
-        //         return true;
-        //     }
-        // });
+            $user = auth("sanctum")->user();
+            if ($user->admin == 2) {
+                return true;
+            }
+        });
 
-        // if (!Gate::allows("admin")) {
-        //     return $this->sendError("Autentikációs hiba.", ["Nincs jogosultsága."], 401);
-        // }
+        if (!Gate::allows("admin")) {
+            return $this->sendError("Autentikációs hiba.", ["Nincs jogosultsága."], 401);
+        }
 
-        // $request->validated();
+        $request->validated();
 
-        $user = User::find( $request[ "id" ]);
-        $user->name = $request[ "name" ];
-        $user->email = $request[ "email" ];
-        $user->password = bcrypt( $request[ "password" ]);
 
-        $user->update();
+        $user = User::find($request["id"]);
 
-        return $this->sendResponse( $user, "Felhasználó frissítve." );
+        $fields = [
+            'name',
+            'email',
+            'phone',
+            'gender',
+            'invoice_address',
+            'invoice_postcode',
+            'invoice_city',
+            'birth_date',
+            'qualifications',
+            'description',
+        ];
+
+        foreach ($fields as $field) {
+            if ($request->filled($field)) {
+                $user->$field = $request->$field;
+            }
+        }
+
+        $passwordChanged = false;
+        // Speciális kezelés a jelszónál (kódolás szükséges)
+        if ($request->filled('password')) {
+            $user->password = bcrypt($request->password);
+            $passwordChanged = true;
+        }
+
+        $user->save();
+
+        // // $user = User::find( $request[ "id" ]);
+        // // $user->name = $request->name;
+        // // $user->email = $request->email;
+        // // $user->password = bcrypt( $request[ "password" ]);
+        // // $user->phone = $request->phone;
+        // // $user->gender = $request->gender;
+        // // $user->invoice_address = $request->invoice_address;
+        // // $user->invoice_postcode = $request->invoice_postcode;
+        // // $user->invoice_city = $request->invoice_city;
+        // // $user->birth_date = $request->birth_date;
+        // // $user->qualifications = $request->qualifications;
+        // // $user->description = $request->description;
+
+        // // $user->update();
+        $message = $passwordChanged
+        ? "Felhasználó adatai frissítve, jelszó módosítva."
+        : "Felhasználó adatai frissítve.";
+    
+        return $this->sendResponse($user, $message);
+        // return $this->sendResponse( $user, "Felhasználó frissítve." );
     }
 
     public function newUser( RegisterRequest $request ) {

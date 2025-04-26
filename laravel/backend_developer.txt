@@ -126,6 +126,37 @@ Route: /api/login
     //     return $tokens;
     // }
     
+    {
+	"success": false,
+	"message": "Beviteli hiba.",
+	"data": {
+		"phone": [
+			"The phone field must be a string."
+		],
+		"gender": [
+			"The selected gender is invalid."
+		],
+		"invoice_address": [
+			"The invoice address field must be a string."
+		],
+		"invoice_postcode": [
+			"The invoice postcode field must be an integer."
+		],
+		"invoice_city": [
+			"The invoice city field must be a string."
+		],
+		"birth_date": [
+			"The birth date field must match the format Y-m-d."
+		],
+		"qualifications": [
+			"The qualifications field must be a string."
+		],
+		"description": [
+			"The description field must be a string."
+		]
+	}
+}
+    
     
 	"name":"Staub József",
 	"email":"staubjoci@gmail.com",
@@ -137,13 +168,38 @@ Route: /api/login
 	"password":"Adult12345",
 	"confirm_password":"Adult12345"
 	
-	17|N4UgBL2usYtOHRh8RJxfVU0btCtT0MUP50SN7po3810ee9d9
+	18|DAu5H13nR0DXfoiv5DRmNP3DXXSHh9kcNOwrYnMF3265791a
 	
 	"name":"Pál-Szabó András",
 	"email":"andras.palszabo@gmail.com",
 	"password":"Adult12345",
 	"confirm_password":"Adult12345"
 	
+	{
+	"success": true,
+	"data": {
+		"id": 4,
+		"name": "Metz-Torgella Diana",
+		"email": "anid85@gmail.com",
+		"email_verified_at": null,
+		"created_at": "2025-04-24T14:19:34.000000Z",
+		"updated_at": "2025-04-25T12:03:21.000000Z",
+		"admin": 0,
+		"role": 0,
+		"active": 1,
+		"phone": "06708833850",
+		"gender": "nő",
+		"invoice_address": "Lakatos út",
+		"invoice_postcode": null,
+		"invoice_city": "Budapest",
+		"birth_date": "1985-07-19",
+		"qualifications": "fodrász",
+		"description": "Új fazonok vágása",
+		"login_counter": 0,
+		"banning_time": null
+	},
+	"message": "Profil adatok módosítva."
+}
 	"name":"Benzink Út",
 	"email":"kamu@gmail.com",
 	"password":"Adult12345",
@@ -165,8 +221,66 @@ Route: /api/login
 	"confirm_password":"Adult12345"
 	
 	"name":"Süki Gyöngyi",
-	"email":"sukigyongyi@gmail.com",
+	"email":"suki.gyongyi+laravel@gmail.com",
 	"password":"Adult12345",
 	"confirm_password":"Adult12345",
 	
 	5|CVwYjAxIOUuWT8kmFLopF2QjXbp23T6wh25ScYZ75b759d5e
+	
+	{
+	"phone":"206541232",
+	"birth_date":"1963-11-03",
+	"gender":"szabadon választott",
+	"invoice_address":"Fő út 3.",
+	"invoice_postcode":"3120",
+	"invoice_city":"Kerticsap",
+	"qualifications":"",
+	"description":""
+}
+
+		{
+			"id": 3,
+			"name": "Pete Orsolya",
+			"email": "pete.orsi@gmail.com",
+			"email_verified_at": null,
+			"created_at": "2025-04-24T12:04:54.000000Z",
+			"updated_at": "2025-04-24T14:13:58.000000Z",
+			"admin": 0,
+			"role": 0,
+			"active": 1,
+			"phone": "06308556235",
+			"gender": "nő",
+			"invoice_address": null,
+			"invoice_postcode": null,
+			"invoice_city": null,
+			"birth_date": "1979-06-15",
+			"qualifications": null,
+			"description": null,
+			"login_counter": 0,
+			"banning_time": null
+		}
+		
+	32|zYvgHZNWP1eBcIUQ7NFpfBFmYNPGsFgWlwmxuVR4203d9a28
+	
+	
+				"id": 4,
+			"name": "Metz-Torgella Diana",
+			"email": "anid85@gmail.com",
+			"email_verified_at": null,
+			"created_at": "2025-04-24T14:19:34.000000Z",
+			"updated_at": "2025-04-24T14:19:34.000000Z",
+			"admin": 0,
+			"role": 0,
+			"active": 1,
+			"phone": null,
+			"gender": null,
+			"invoice_address": null,
+			"invoice_postcode": null,
+			"invoice_city": null,
+			"birth_date": null,
+			"qualifications": null,
+			"description": null,
+			"login_counter": 0,
+			"banning_time": null
+		}
+		36|tClB00u4yjUTyNOsJrFCDuuntz2lvWqPfyYfbMvu0ec1f882

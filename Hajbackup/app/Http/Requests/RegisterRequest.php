@@ -45,6 +45,8 @@ class RegisterRequest extends FormRequest
             
             "email.required" => "Az email mező nem lehet üres.",
             "email.unique" => "Az email cím már foglalt.",
+            "email.email" => "Email@formátum.elvárt",
+
 
             "password.required" => "A jelszó mező nem lehet üres.",
             "password.min" => "A jelszó túl rövid.",

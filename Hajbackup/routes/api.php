@@ -38,7 +38,7 @@ Route::middleware( "auth:sanctum" )->group( function(){
     Route::get( "/getusers", [ AuthController::class, "getUsers" ]);
     Route::put( "/admin/{id}", [ AuthController::class, "setAdmin" ]);
     Route::put( "/polymorph/{id}", [ AuthController::class, "demotivate" ]);
-    Route::put( "/updateuser/{id}", [ AuthController::class, "updateUser" ]);
+    Route::put( "/modifyprofile/{id}", [ AuthController::class, "modifyProfile" ]);
     Route::put( "/toggleUserActive/{id}", [ AuthController::class, "toggleUserActive" ]);
     Route::delete( "/voldemort/{id}", [ AuthController::class, "avadaKedavra" ]);
     Route::post( "/newuser", [ AuthController::class, "newUser" ]);

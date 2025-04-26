@@ -27,7 +27,7 @@ class ServiceRequest extends FormRequest
             "service" => "sometimes|required",
             "duration"=>"sometimes|required|regex:/[0-9]/",
             "price"=>"sometimes|required|regex:/[0-9]/",
-            "description"=>"max:300",
+            "description"=>"sometimes|required|max:300",
             "active"=>"sometimes|required|regex:/[0-1]/"
         ];
     }
@@ -39,6 +39,7 @@ class ServiceRequest extends FormRequest
             "duration.regex" => "Csak szám elfogadható",
             "price.required" => "Az ár elvárt.",
             "price.regex" => "Csak szám elfogadható.",
+            "description.required" => "Kitöltése elvárt.",
             "description.max" => "300 karaktert meghaladó.",
             "active.required" => "Az aktiv mező kötelező.",
             "active.regex" => "Csak 0 vagy 1 elfogadott."

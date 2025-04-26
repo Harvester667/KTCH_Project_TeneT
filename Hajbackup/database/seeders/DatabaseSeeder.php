@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
     {
 
         $this->call([
-            ServiceSeeder::class,
+            DatabaseSeeder::class,
         ]);
         // User::_create([
         //     'name'=>'admin',

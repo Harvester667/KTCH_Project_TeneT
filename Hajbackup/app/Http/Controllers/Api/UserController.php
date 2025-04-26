@@ -83,7 +83,7 @@ class UserController extends ResponseController
 
                 ( new BannerController )->setLoginCounter( $request[ "email" ]);
 
-                return $this->sendError( "Autentikációs hiba.", [ "Hibás felhasználónév vagy jelszó.", "Hibák száma: " .$loginCounter+1], 401 ); 
+                return $this->sendError( "Autentikációs hiba.", [ "Hibás felhasználónév vagy jelszó.", "Hibák száma: " .($loginCounter)+1], 401 ); 
 
             }else {
 
@@ -94,7 +94,7 @@ class UserController extends ResponseController
                 if ($user) {
                     (new MailController)->sendMail($user->email, $user->name, $bannedTime);
                 }
-                // ( new MailController )->sendMail( $request[ "email" ], $bannedTime );
+                // ( new MailController )->sendMail( $request[ "email" ], $bannedTime ); //Amikor még csak a rendszergazda kapott értesítést.
 
                 $errorMessage = [ "message" => "Következő lehetőség: ", "time" => $bannedTime ];
 
@@ -105,9 +105,19 @@ class UserController extends ResponseController
 
     public function logout() {
 
+        //Megakadályozza kód további részének lefutását!
+        //Feladata, hogy a Carbon idejét, az applikáció és a default időzónákat kiírja.
+        ////Kód tesztelése közben nem stimmeltek az adatbázisban tárolt banned_time-ok, ezért kellett ez az ellenőrzés :)
+        // dd([
+        //     'now' => now()->toDateTimeString(),
+        //     'timezone' => config('app.timezone'),
+        //     'php_timezone' => date_default_timezone_get(),
+        // ]);
+
         auth( "sanctum" )->user()->currentAccessToken()->delete();
         $name = auth( "sanctum" )->user()->name;
 
         return $this->sendResponse( $name, "Sikeres kijelentkezés.");
+        
     }
 }
