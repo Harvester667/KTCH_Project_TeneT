@@ -46,9 +46,9 @@ class ServiceController extends ResponseController
 
         $service = new Service();
         $service->service = $request[ "service" ];
-        $service->duration = $request[ "duration" ];
+        // $service->duration = $request[ "duration" ];
         $service->price = $request[ "price" ];
-        $service->description = $request[ "description" ];
+        // $service->description = $request[ "description" ];
         $service->active = $request[ "active" ];
         $service->save();
 
@@ -77,16 +77,12 @@ class ServiceController extends ResponseController
             return $this->sendError("Adathiba", ["Nincs ilyen szolgáltatás."], 404);
         }
     
-        // // Jogosultság ellenőrzése (ha kell)
-        // if ($service->user_id_0 !== auth("sanctum")->user()->id) {
-        //     return $this->sendError("Hozzáférés megtagadva", ["Nem módosíthatod ezt a szolgáltatást."], 403);
-        // }
-    
         // Módosítás
         $service->fill($request->only(['service', 'duration', 'price', 'description']))->update();
 
         return $this->sendResponse(new ServiceResource($service), "Szolgáltatás módosítva.");
     }
+    // Az korábbi logika módosítva, hogy ne kelljen minden mezőt kitölteni.
     // public function updateService( ServiceRequest $request ){
     //     // Auth és jogosultsági ellenőrzés
     //     Gate::before(function () {

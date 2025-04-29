@@ -25,9 +25,9 @@ class ServiceRequest extends FormRequest
     {
         return [
             "service" => "sometimes|required",
-            "duration"=>"sometimes|required|regex:/[0-9]/",
+            // "duration"=>"sometimes|required|regex:/[0-9]/",
             "price"=>"sometimes|required|regex:/[0-9]/",
-            "description"=>"sometimes|required|max:300",
+            // "description"=>"sometimes|required|max:300",
             "active"=>"sometimes|required|regex:/[0-1]/"
         ];
     }
@@ -35,12 +35,12 @@ class ServiceRequest extends FormRequest
     public function messages(){
         return [
             "service.required" => "A szolgáltatás neve elvárt.",
-            "duration.required" => "Az időtartam elvárt.",
-            "duration.regex" => "Csak szám elfogadható",
+            // "duration.required" => "Az időtartam elvárt.",
+            // "duration.regex" => "Csak szám elfogadható",
             "price.required" => "Az ár elvárt.",
             "price.regex" => "Csak szám elfogadható.",
-            "description.required" => "Kitöltése elvárt.",
-            "description.max" => "300 karaktert meghaladó.",
+            // "description.required" => "Kitöltése elvárt.",
+            // "description.max" => "300 karaktert meghaladó.",
             "active.required" => "Az aktiv mező kötelező.",
             "active.regex" => "Csak 0 vagy 1 elfogadott."
         ];

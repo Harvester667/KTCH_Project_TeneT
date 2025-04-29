@@ -53,6 +53,7 @@ class ProfileController extends ResponseController
                 $user->$field = $request->$field;
             }
         }
+        // Az korábbi logika módosítva, hogy ne kelljen minden mezőt kitölteni.
         // $user->phone = $request->phone;
         // $user->gender = $request->gender; // itt már legyen validált érték: férfi/nő/szabadon választott.
         // $user->invoice_address = $request->invoice_address;

@@ -22,11 +22,12 @@ class AuthController extends ResponseController {
             if ($user->admin == 2) {
                 return true;
             }
+            return $this->sendError("Autentikációs hiba.", ["Nincs jogosultsága."], 401);
         });
 
-        if (!Gate::allows("admin")) {
-            return $this->sendError("Autentikációs hiba.", ["Nincs jogosultsága."], 401);
-        }
+        // if (!Gate::allows("admin")) {
+        //     return $this->sendError("Autentikációs hiba.", ["Nincs jogosultsága."], 401);
+        // }
 
         $users = User::all();
         return $this->sendResponse( $users, "Felhasználók betöltve." );

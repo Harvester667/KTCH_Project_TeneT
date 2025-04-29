@@ -19,40 +19,96 @@ class BookingController extends ResponseController
 
         return $this->sendResponse( BookingResource::collection( $bookings ), "Adatok betöltve.");
     }
-
-    public function whoIsBooking(Request $request) {
-        // $bookings = null;
-
-        // Foglalások lekérdezése többféle szűrési lehetőséggel
-        if (isset($request['user_id_0'])) {
-            $bookings = Booking::where('user_id_0', $request['user_id_0'])
-                              ->when(isset($request['booking_time']), function ($query) use ($request) {
-                                  return $query->where('booking_time', $request['booking_time']);
-                              })->get();
-        } elseif (isset($request['user_id_1'])) {
-            $bookings = Booking::where('user_id_1', $request['user_id_1'])
-                              ->when(isset($request['booking_time']), function ($query) use ($request) {
-                                  return $query->where('booking_time', $request['booking_time']);
-                              })->get();
-        } elseif (isset($request['booking_time'])) {
-            // Ha csak a booking_time van megadva
-            $bookings = Booking::where('booking_time', $request['booking_time'])->get();
-        } elseif (isset($request['active'])) {
-            // Ha csak az active van megadva
-            $bookings = Booking::where('active', $request['active'])->get();
-        } else {
-            return $this->sendError("Adathiba.", ["Kérjük, adja meg a vendég vagy az alkalmazott azonosítóját, vagy a foglalás idejét."], 400);
-        }
     
+    private function addBookingTimeFilter($query, $bookingTime)
+    {
+        if (strlen($bookingTime) === 10) {
+            return $query->whereDate('booking_time', $bookingTime);
+        } else {
+            return $query->where('booking_time', $bookingTime);
+        }
+    }
+
+        public function whoIsBooking(Request $request)
+    {
+        $query = Booking::query();
+
+        // Definiáljuk, hogy mely mezők alapján akarunk szűrni
+        $filters = [
+            'user_id_0',
+            'user_id_1',
+            'service_id',
+            'active',
+        ];
+
+        // Végigmegyünk az összes filteren és ha meg van adva, hozzáadjuk a query-hez
+        foreach ($filters as $field) {
+            if ($request->filled($field)) {
+                $query->where($field, $request[$field]);
+            }
+        }
+
+        // Külön kezeljük a booking_time-ot
+        if ($request->filled('booking_time')) {
+            $this->addBookingTimeFilter($query, $request['booking_time']);
+        }
+
+        $bookings = $query->get();
+
         if ($bookings->isEmpty()) {
             return $this->sendError("Adathiba.", ["Nincs ilyen foglalás."], 400);
         }
-    
+
         return $this->sendResponse(BookingResource::collection($bookings), "Foglalások betöltve.");
     }
     
+    // public function whoIsBooking(Request $request)
+    // {
+    //     $query = Booking::query();
+    
+    //     // Dinamikusan hozzáadjuk a szűrőfeltételeket
+    //     if (isset($request['user_id_0'])) {
+    //         $query->where('user_id_0', $request['user_id_0']);
+    //     }
+    
+    //     if (isset($request['user_id_1'])) {
+    //         $query->where('user_id_1', $request['user_id_1']);
+    //     }
+    
+    //     if (isset($request['service_id'])) {
+    //         $query->where('service_id', $request['service_id']);
+    //     }
+    
+    //     if (isset($request['active'])) {
+    //         $query->where('active', $request['active']);
+    //     }
+    
+    //     if (isset($request['booking_time'])) {
+    //         $this->addBookingTimeFilter($query, $request['booking_time']);
+    //     }
+    
+    //     $bookings = $query->get();
+    
+    //     if ($bookings->isEmpty()) {
+    //         return $this->sendError("Adathiba.", ["Nincs ilyen foglalás."], 400);
+    //     }
+    
+    //     return $this->sendResponse(BookingResource::collection($bookings), "A kiválasztott keresési értékeknek megfelelő foglalások betöltve.");
+    // }
+
+    
     public function addBooking(BookingRequest $request){
-        //Felhasználó validálása
+
+        //Ellenőrizzük, hogy van e foglalás az adott időpontra a fodrászhoz.
+        $exists = Booking::where('user_id_1', $request->user_id_1)
+        ->where('booking_time', $request->booking_time)
+        ->exists();
+
+        if ($exists) {
+            return response()->json(['message' => 'Erre az időpontra már van foglalás!'], 409); // 409 Conflict
+        }
+
+        //Adatok validálása
         $request->validated();
         $active = true;
 
@@ -67,6 +123,7 @@ class BookingController extends ResponseController
         return $this->sendResponse( new BookingResource( $booking ), "Foglalás rögzítve." );
     }
 
+    //Admin jogosultságú foglalás.
     public function forceBooking(BookingRequest $request){
         // Auth és jogosultsági ellenőrzés
         Gate::before(function () {
@@ -80,6 +137,15 @@ class BookingController extends ResponseController
             return $this->sendError("Autentikációs hiba.", ["Nincs jogosultsága."], 401);
         }
 
+        //Ellenőrizzük, hogy van e foglalás az adott időpontra a fodrászhoz.
+        $exists = Booking::where('user_id_1', $request->user_id_1)
+        ->where('booking_time', $request->booking_time)
+        ->exists();
+
+        if ($exists) {
+            return response()->json(['message' => 'Erre az időpontra már van foglalás!'], 409); // 409 Conflict
+        }
+
         $request->validated();
 
         $booking = new Booking();
@@ -90,7 +156,7 @@ class BookingController extends ResponseController
         $booking->active = $request[ "active" ];
         $booking->save();
 
-        return $this->sendResponse( new BookingResource( $booking ), "Új szolgáltatás rögzítve." );
+        return $this->sendResponse( new BookingResource( $booking ), "Új foglalás rögzítve." );
     }
 
     public function updateBooking(BookingRequest $request, $id) {
@@ -103,11 +169,6 @@ class BookingController extends ResponseController
         if (!$booking) {
             return $this->sendError("Adathiba", ["Nem található foglalás ezzel az azonosítóval."], 404);
         }
-    
-        // // Jogosultság ellenőrzése (ha kell)
-        // if ($booking->user_id_0 !== auth("sanctum")->user()->id) {
-        //     return $this->sendError("Hozzáférés megtagadva", ["Nem módosíthatod ezt a foglalást."], 403);
-        // }
     
         // Módosítás
         $booking->fill($request->only(['booking_time', 'user_id_0', 'service_id']))->update();
@@ -136,17 +197,17 @@ class BookingController extends ResponseController
 
     public function delBooking( Request $request ){
 
-        Gate::before(function () {
+        // Gate::before(function () {
 
-            $user = auth("sanctum")->user();
-            if ($user->admin == 2) {
-                return true;
-            }
-        });
+        //     $user = auth("sanctum")->user();
+        //     if ($user->admin == 2) {
+        //         return true;
+        //     }
+        // });
 
-        if (!Gate::allows("admin")) {
-            return $this->sendError("Autentikációs hiba.", ["Nincs jogosultsága."], 401);
-        }
+        // if (!Gate::allows("admin")) {
+        //     return $this->sendError("Autentikációs hiba.", ["Nincs jogosultsága."], 401);
+        // }
 
         $booking = Booking::find( $request[ "id" ]);
         if(!$booking){ //Ellenőrizni kell, hogy van-e booking, mielőtt törölnénk

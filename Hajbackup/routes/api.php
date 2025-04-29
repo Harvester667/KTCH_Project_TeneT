@@ -24,7 +24,7 @@ Route::middleware( "auth:sanctum" )->group( function(){
     Route::delete( "/delbooking/{id}", [ BookingController::class, "delBooking" ]);
     
     Route::post( "/addservice", [ ServiceController::class, "addService" ]);
-    Route::get( "/services", [ ServiceController::class, "getServices" ]);
+
     Route::patch("/updateservice/{id}", [ ServiceController::class, "updateService" ]);
     Route::put( "/toggleServiceActive/{id}", [ ServiceController::class, "toggleServiceActive" ]);
     Route::delete( "/delservice/{id}", [ ServiceController::class, "delService" ]);
@@ -41,7 +41,7 @@ Route::middleware( "auth:sanctum" )->group( function(){
     Route::put( "/modifyprofile/{id}", [ AuthController::class, "modifyProfile" ]);
     Route::put( "/toggleUserActive/{id}", [ AuthController::class, "toggleUserActive" ]);
     Route::delete( "/voldemort/{id}", [ AuthController::class, "avadaKedavra" ]);
-    Route::post( "/newuser", [ AuthController::class, "newUser" ]);
+    // Route::post( "/newuser", [ AuthController::class, "newUser" ]);
     Route::put( "/employee/{id}", [ AuthController::class, "employee" ]);
     Route::put( "/customer/{id}", [ AuthController::class, "customer" ]);
 
@@ -52,6 +52,8 @@ Route::middleware( "auth:sanctum" )->group( function(){
 
 Route::post( "/register", [ UserController::class, "register" ]);
 Route::post( "/login", [ UserController::class, "login" ]);
+
+Route::get( "/services", [ ServiceController::class, "getServices" ]);
 
 // Route::get("/services", [ServiceController::class, "getServices"]);
 // Route::get("/oneservice/{id}", [ServiceController::class, "getOneService"]);

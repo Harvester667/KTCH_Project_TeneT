@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('user_id_0')->constrained()->onDelete('cascade')->unsigned();
             $table->foreignId('service_id')->constrained()->onDelete('cascade')->unsigned();
             $table->dateTime('booking_time'); // Időpont
-            $table->boolean('active');
+            $table->boolean('active')->nullable();
             $table->timestamps();
         });
      }
