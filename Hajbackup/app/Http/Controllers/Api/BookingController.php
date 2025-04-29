@@ -118,7 +118,7 @@ class BookingController extends ResponseController
             "user_id_0" => auth("sanctum")->user()->id,
             "service_id" => $request["service_id"],
             "active" => $active     
-    ]);
+        ]);
 
         return $this->sendResponse( new BookingResource( $booking ), "Foglalás rögzítve." );
     }

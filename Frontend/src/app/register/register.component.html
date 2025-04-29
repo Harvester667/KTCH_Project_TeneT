@@ -1,0 +1,70 @@
+
+    <div class="container d-flex justify-content-center" style="height: 100vh;">
+        <div class="row d-flex justify-content-center  h-100" id="mainbox">
+
+                        <div class="row justify-content-center" id="register">
+                            <div class="login-form p-4 border rounded shadow" id="regform">
+                                <h2 class="text-center">REGISZTRÁCIÓ</h2>
+                                <form class="mx-1 mx-md-4" (ngSubmit)="onRegister()">
+                                    <div class="mb-3">
+                                        <label for="name" class="form-label">Név</label>
+                                        <input type="text" id="name" name="name" [(ngModel)]="registrationObj.name" class="form-control" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="email" class="form-label">E-mail</label>
+                                        <input type="email" id="email" name="email" [(ngModel)]="registrationObj.email" class="form-control" required />
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="password" class="form-label">Jelszó</label>
+                                        <input type="password" id="password" name="password" [(ngModel)]="registrationObj.password" 
+                                               class="form-control" required />
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="passwordConfirmation" class="form-label">Jelszó megerősítése</label>
+                                        <input type="password" id="passwordConfirmation" name="passwordConfirmation" [(ngModel)]="registrationObj.confirm_password"
+                                               class="form-control" required />
+                                    </div>
+                                    
+                                    <button type="submit" class="btn btn-dark btn-sm w-100">Regisztrálok</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+<!-- Sikeres Regisztráció Modal -->
+<div class="modal fade" id="registerSuccessModal" tabindex="-1" aria-labelledby="registerSuccessModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="registerSuccessModalLabel">Sikeres regisztráció!</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Bezárás"></button>
+        </div>
+        <div class="modal-body">
+          Üdvözlünk! Most már bejelentkezhetsz.
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-dark" data-bs-dismiss="modal">OK</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Sikertelen Regisztráció Modal -->
+  <div class="modal fade" id="registerErrorModal" tabindex="-1" aria-labelledby="registerErrorModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="registerErrorModalLabel">Hiba a regisztráció során</h5>
+          <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal" aria-label="Bezárás"></button>
+        </div>
+        <div class="modal-body">
+          Kérlek, tölts ki minden mezőt helyesen!
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger btn-sm" data-bs-dismiss="modal">OK</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+

@@ -1,0 +1,18 @@
+<div class="container mt-4">
+    <h2>ÁRLISTA</h2>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Szolgáltatás</th>
+          <th scope="col">Ár</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let service of services" id="ttr">
+          <td>{{ service.service }}</td>
+          <td>{{ service.price ? (service.price | number: '1.0-0') + ' Ft' : 'Nincs ár' }}</td>
+          <td>
+          </td>
+        </tr>
+      </tbody>
+    </table>

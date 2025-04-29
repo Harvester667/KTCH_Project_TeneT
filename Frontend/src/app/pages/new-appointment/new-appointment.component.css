@@ -1,0 +1,53 @@
+/* A foglalás gomb hover színe */
+.btn-dark:hover {
+  background-color: #00d9ff;
+  border-color: #00d9ff;
+  color: black;
+}
+
+/* A foglalás űrlap stílusa */
+.booking-form {
+  max-width: 500px;
+  width: 100%;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.container {
+  padding: 0;
+}
+
+h2 {
+  color: white;
+  font-family: "DM Sans", sans-serif;
+  font-optical-sizing: auto;
+}
+
+label {
+  color: white;
+
+}#hal{
+    background-color: transparent;
+    box-shadow: none !important;
+    border: none !important;
+}
+
+#cim{
+  color:white;
+}
+
+#nincsfodrasz{
+  color: white
+}
+
+#cim{
+  font-family: "DM Sans", sans-serif !important;
+  font-optical-sizing: auto;
+}
+
+h2{
+  font-family: "DM Sans", sans-serif !important;
+  font-style: bold;
+  font-optical-sizing: auto;
+  text-align: center;
+}

@@ -21,7 +21,7 @@ Route::middleware( "auth:sanctum" )->group( function(){
     Route::get( "/whoisbooking", [ BookingController::class, "whoIsBooking" ]);
     Route::post( "/forcebooking", [ BookingController::class, "forceBooking" ]);
     Route::put( "/toggleBookingActive/{id}", [ BookingController::class, "toggleBookingActive" ]); 
-    Route::delete( "/delbooking/{id}", [ BookingController::class, "delBooking" ]);
+
     
     Route::post( "/addservice", [ ServiceController::class, "addService" ]);
 
@@ -35,7 +35,7 @@ Route::middleware( "auth:sanctum" )->group( function(){
 
     Route::post( "/logout", [ UserController::class, "logout" ]);
 
-    Route::get( "/getusers", [ AuthController::class, "getUsers" ]);
+
     Route::put( "/admin/{id}", [ AuthController::class, "setAdmin" ]);
     Route::put( "/polymorph/{id}", [ AuthController::class, "demotivate" ]);
     Route::put( "/modifyprofile/{id}", [ AuthController::class, "modifyProfile" ]);
@@ -52,6 +52,9 @@ Route::middleware( "auth:sanctum" )->group( function(){
 
 Route::post( "/register", [ UserController::class, "register" ]);
 Route::post( "/login", [ UserController::class, "login" ]);
+Route::get( "/getusers", [ AuthController::class, "getUsers" ]);
+Route::get( "/services", [ ServiceController::class, "getServices" ]);
+Route::delete( "/delbooking/{id}", [ BookingController::class, "delBooking" ]);
 
 Route::get( "/services", [ ServiceController::class, "getServices" ]);
 

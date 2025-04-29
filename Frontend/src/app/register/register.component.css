@@ -1,0 +1,42 @@
+#mainbox{
+    margin-top: 10px;
+    max-width: 400px;
+    width:100%;
+    border:none !important;
+    box-shadow: none !important;
+
+}
+
+#regform{
+    width: 100%;
+    border:none !important;
+    box-shadow: none !important;
+}
+
+h2{
+    color:white;
+    font-family: "DM Sans", sans-serif;
+    font-optical-sizing: auto;
+}
+
+label{
+    color:white;
+    font-family: "DM Sans", sans-serif;
+    font-optical-sizing: auto;
+}
+
+/* A bejelentkezés gomb hover színe */
+.btn-dark:hover {
+    background-color: #00d9ff;
+    border-color: #00d9ff;
+    color: black;
+    font-family: "DM Sans", sans-serif;
+    font-optical-sizing: auto;
+  }
+
+.btn-dark{
+    font-family: "DM Sans", sans-serif;
+    font-optical-sizing: auto;
+}
+
+

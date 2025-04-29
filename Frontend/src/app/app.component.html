@@ -1,0 +1,60 @@
+<div class="container-fluid app-container">
+<div id="mainheaderer" class="mainheader d-flex justify-content-between align-items-center p-3 bg-dark text-white">
+ 
+
+  <!-- Jobb oldal: Bejelentkezés / Kijelentkezés -->
+  <div class="d-flex align-items-center w-100" id="welcome">
+    <ng-container *ngIf="!authService.isLoggedIn(); else loggedInTemplate">
+      <a class="text-white me-2" routerLink="/login">Bejelentkezés</a>
+      <a class="text-white" routerLink="/register">Regisztráció</a>
+    </ng-container>
+  
+    <ng-template #loggedInTemplate>
+      <span class="me-3 text-white">Üdv, {{ user?.name }}</span>
+      <!-- Kijelentkezés link -->
+      <a class="text-white" (click)="logout()">Kijelentkezés</a>
+    </ng-template>
+  </div>
+  
+</div>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <!-- Bal oldal: HAIRDRESS AIR -->
+    <a class="navbar-brand" routerLink="/home">HAIRDRESS AIR</a>
+
+    <!-- Menügombok -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/new">Új foglalás</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/list">Foglalások</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/pricelist">Árlista</a>
+        </li>
+        <li class="nav-item" *ngIf="user?.admin === 2">
+          <a class="nav-link" routerLink="/superadmin">Felhasználók</a>
+        </li>
+        <li class="nav-item" *ngIf="user?.admin === 2">
+          <a class="nav-link" routerLink="/services">Szolgáltatások</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Tartalom -->
+<div class="container-fluid">
+
+  <router-outlet></router-outlet>
+</div>
+</div>
