@@ -102,6 +102,6 @@ export class UserlistComponent implements OnInit {
   }
 
   getAdminRole(admin: number): string {
-    return admin === 1 ? 'Admin' : 'Felhasználó';
+    return admin === 1 || admin === 2? 'Admin' : 'Felhasználó';
   }
 }
